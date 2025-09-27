@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { GetFileUploadSignedUrlRequest } from 'generative-ai-use-cases';
+import { GetFileUploadSignedUrlRequest } from '../../types/src/index';
 
 export const handler = async (
   event: APIGatewayProxyEvent
@@ -13,7 +13,7 @@ export const handler = async (
     const uuid = uuidv4();
 
     const client = new S3Client({});
-    // The upload destination is XXXXX/image.png format. The file can be downloaded with the correct file name when downloaded.
+    // アップロード先はXXXXX/image.png形式。ダウンロード時に正しいファイル名でダウンロードできる。
     const command = new PutObjectCommand({
       Bucket: process.env.BUCKET_NAME,
       Key: `${uuid}/${filename}`,

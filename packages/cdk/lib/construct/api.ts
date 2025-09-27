@@ -26,13 +26,14 @@ import {
   BucketEncryption,
   HttpMethods,
 } from 'aws-cdk-lib/aws-s3';
-import { Agent, AgentMap, ModelConfiguration } from 'generative-ai-use-cases';
+import { Agent, AgentMap } from '../../../types/src/message.d';
+import { ModelConfiguration } from '../../../types/src/model.d';
 import {
   BEDROCK_IMAGE_GEN_MODELS,
   BEDROCK_VIDEO_GEN_MODELS,
   BEDROCK_RERANKING_MODELS,
   BEDROCK_TEXT_MODELS,
-} from '@generative-ai-use-cases/common';
+} from '../../../common/src/index';
 import { allowS3AccessWithSourceIpCondition } from '../utils/s3-access-policy';
 import { LAMBDA_RUNTIME_NODEJS } from '../../consts';
 import {
@@ -42,7 +43,7 @@ import {
 } from 'aws-cdk-lib/aws-ec2';
 
 export interface BackendApiProps {
-  // Context Params
+  // コンテキストパラメータ
   readonly modelRegion: string;
   readonly modelIds: ModelConfiguration[];
   readonly imageGenerationModelIds: ModelConfiguration[];
@@ -57,10 +58,10 @@ export interface BackendApiProps {
   readonly allowedIpV6AddressRanges?: string[] | null;
   readonly additionalS3Buckets?: Bucket[];
 
-  // Resource
-  readonly userPool: UserPool;
-  readonly idPool: IdentityPool;
-  readonly userPoolClient: UserPoolClient;
+  // リソース
+  readonly userPool?: UserPool;
+  readonly idPool?: IdentityPool;
+  readonly userPoolClient?: UserPoolClient;
   readonly table: Table;
   readonly statsTable: Table;
   readonly knowledgeBaseId?: string;
@@ -68,7 +69,7 @@ export interface BackendApiProps {
   readonly guardrailIdentify?: string;
   readonly guardrailVersion?: string;
 
-  // Closed network
+  // クローズドネットワーク
   readonly vpc?: IVpc;
   readonly securityGroups?: ISecurityGroup[];
   readonly apiGatewayVpcEndpoint?: InterfaceVpcEndpoint;
@@ -78,7 +79,7 @@ export interface BackendApiProps {
 export class Api extends Construct {
   readonly api: RestApi;
   readonly predictStreamFunction: NodejsFunction;
-  readonly invokeFlowFunction: NodejsFunction;
+  // readonly invokeFlowFunction: NodejsFunction; // LocalStackでは使用しない
   readonly optimizePromptFunction: NodejsFunction;
   readonly modelRegion: string;
   readonly modelIds: ModelConfiguration[];
@@ -112,7 +113,7 @@ export class Api extends Construct {
     } = props;
     const agents: Agent[] = [...(props.agents ?? []), ...props.customAgents];
 
-    // Validate Model Names
+    // モデル名の検証
     for (const model of modelIds) {
       if (!BEDROCK_TEXT_MODELS.includes(model.modelId)) {
         throw new Error(`Unsupported Model Name: ${model.modelId}`);
@@ -135,7 +136,7 @@ export class Api extends Construct {
       throw new Error(`Unsupported Model Name: ${rerankingModelId}`);
     }
 
-    // We don't support using the same model ID accross multiple regions
+    // 複数のリージョンで同じモデルIDを使用することはサポートしていない
     const duplicateModelIds = new Set(
       [...modelIds, ...imageGenerationModelIds, ...videoGenerationModelIds]
         .map((m) => m.modelId)
@@ -148,7 +149,7 @@ export class Api extends Construct {
       );
     }
 
-    // Agent Map
+    // エージェントマップ
     const agentMap: AgentMap = {};
     for (const agent of agents) {
       agentMap[agent.displayName] = {
@@ -157,7 +158,7 @@ export class Api extends Construct {
       };
     }
 
-    // S3 (File Bucket)
+    // S3（ファイルバケット）
     const fileBucket = new Bucket(this, 'FileBucket', {
       encryption: BucketEncryption.S3_MANAGED,
       removalPolicy: RemovalPolicy.DESTROY,
@@ -173,7 +174,7 @@ export class Api extends Construct {
       maxAge: 3000,
     });
 
-    // Lambda
+    // Lambda関数
     const predictFunction = new NodejsFunction(this, 'Predict', {
       runtime: LAMBDA_RUNTIME_NODEJS,
       entry: './lambda/predict.ts',
@@ -192,7 +193,7 @@ export class Api extends Construct {
           : {}),
       },
       bundling: {
-        nodeModules: ['@aws-sdk/client-bedrock-runtime'],
+        nodeModules: [],
       },
       vpc,
       securityGroups,
@@ -204,8 +205,8 @@ export class Api extends Construct {
       timeout: Duration.minutes(15),
       memorySize: 256,
       environment: {
-        USER_POOL_ID: userPool.userPoolId,
-        USER_POOL_CLIENT_ID: userPoolClient.userPoolClientId,
+        USER_POOL_ID: userPool?.userPoolId ?? '',
+        USER_POOL_CLIENT_ID: userPoolClient?.userPoolClientId ?? '',
         USER_POOL_PROXY_ENDPOINT: props.cognitoUserPoolProxyEndpoint ?? '',
         MODEL_REGION: modelRegion,
         MODEL_IDS: JSON.stringify(modelIds),
@@ -225,44 +226,41 @@ export class Api extends Construct {
         RERANKING_MODEL_ID: rerankingModelId ?? '',
       },
       bundling: {
-        nodeModules: [
-          '@aws-sdk/client-bedrock-runtime',
-          '@aws-sdk/client-bedrock-agent-runtime',
-          // The default version of client-sagemaker-runtime does not support StreamingResponse, so specify the version in package.json for bundling
-          '@aws-sdk/client-sagemaker-runtime',
-        ],
+        nodeModules: [],
       },
       vpc,
       securityGroups,
     });
     fileBucket.grantReadWrite(predictStreamFunction);
-    predictStreamFunction.grantInvoke(idPool.authenticatedRole);
+    if (idPool) {
+      predictStreamFunction.grantInvoke(idPool.authenticatedRole);
+    }
 
-    // Add Flow Lambda Function
-    const invokeFlowFunction = new NodejsFunction(this, 'InvokeFlow', {
-      runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: './lambda/invokeFlow.ts',
-      timeout: Duration.minutes(15),
-      bundling: {
-        nodeModules: [
-          '@aws-sdk/client-bedrock-runtime',
-          '@aws-sdk/client-bedrock-agent-runtime',
-        ],
-      },
-      environment: {
-        MODEL_REGION: modelRegion,
-      },
-      vpc,
-      securityGroups,
-    });
-    invokeFlowFunction.grantInvoke(idPool.authenticatedRole);
+    // フローLambda関数を追加（LocalStackでは使用しない）
+    // const invokeFlowFunction = new NodejsFunction(this, 'InvokeFlow', {
+    //   runtime: LAMBDA_RUNTIME_NODEJS,
+    //   entry: './lambda/invokeFlow.ts',
+    //   timeout: Duration.minutes(15),
+    //   bundling: {
+    //     nodeModules: [
+    //       '@aws-sdk/client-bedrock-runtime',
+    //       '@aws-sdk/client-bedrock-agent-runtime',
+    //     ],
+    //   },
+    //   environment: {
+    //     MODEL_REGION: modelRegion,
+    //   },
+    //   vpc,
+    //   securityGroups,
+    // });
+    // invokeFlowFunction.grantInvoke(idPool.authenticatedRole);
 
     const predictTitleFunction = new NodejsFunction(this, 'PredictTitle', {
       runtime: LAMBDA_RUNTIME_NODEJS,
       entry: './lambda/predictTitle.ts',
       timeout: Duration.minutes(15),
       bundling: {
-        nodeModules: ['@aws-sdk/client-bedrock-runtime'],
+        nodeModules: [],
       },
       environment: {
         TABLE_NAME: table.tableName,
@@ -283,135 +281,138 @@ export class Api extends Construct {
     });
     table.grantWriteData(predictTitleFunction);
 
-    const generateImageFunction = new NodejsFunction(this, 'GenerateImage', {
-      runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: './lambda/generateImage.ts',
-      timeout: Duration.minutes(15),
-      environment: {
-        MODEL_REGION: modelRegion,
-        MODEL_IDS: JSON.stringify(modelIds),
-        IMAGE_GENERATION_MODEL_IDS: JSON.stringify(imageGenerationModelIds),
-        VIDEO_GENERATION_MODEL_IDS: JSON.stringify(videoGenerationModelIds),
-        CROSS_ACCOUNT_BEDROCK_ROLE_ARN: crossAccountBedrockRoleArn ?? '',
-      },
-      bundling: {
-        nodeModules: ['@aws-sdk/client-bedrock-runtime'],
-      },
-      vpc,
-      securityGroups,
-    });
+    // 画像生成機能（LocalStackでは使用しない）
+    // const generateImageFunction = new NodejsFunction(this, 'GenerateImage', {
+    //   runtime: LAMBDA_RUNTIME_NODEJS,
+    //   entry: './lambda/generateImage.ts',
+    //   timeout: Duration.minutes(15),
+    //   environment: {
+    //     MODEL_REGION: modelRegion,
+    //     MODEL_IDS: JSON.stringify(modelIds),
+    //     IMAGE_GENERATION_MODEL_IDS: JSON.stringify(imageGenerationModelIds),
+    //     VIDEO_GENERATION_MODEL_IDS: JSON.stringify(videoGenerationModelIds),
+    //     CROSS_ACCOUNT_BEDROCK_ROLE_ARN: crossAccountBedrockRoleArn ?? '',
+    //   },
+    //   bundling: {
+    //     nodeModules: ['@aws-sdk/client-bedrock-runtime'],
+    //   },
+    //   vpc,
+    //   securityGroups,
+    // });
 
-    const generateVideoFunction = new NodejsFunction(this, 'GenerateVideo', {
-      runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: './lambda/generateVideo.ts',
-      timeout: Duration.minutes(15),
-      environment: {
-        MODEL_REGION: modelRegion,
-        MODEL_IDS: JSON.stringify(modelIds),
-        IMAGE_GENERATION_MODEL_IDS: JSON.stringify(imageGenerationModelIds),
-        VIDEO_GENERATION_MODEL_IDS: JSON.stringify(videoGenerationModelIds),
-        VIDEO_BUCKET_OWNER: Stack.of(this).account,
-        VIDEO_BUCKET_REGION_MAP: JSON.stringify(props.videoBucketRegionMap),
-        CROSS_ACCOUNT_BEDROCK_ROLE_ARN: crossAccountBedrockRoleArn ?? '',
-        BUCKET_NAME: fileBucket.bucketName,
-        TABLE_NAME: table.tableName,
-      },
-      bundling: {
-        nodeModules: ['@aws-sdk/client-bedrock-runtime'],
-      },
-      vpc,
-      securityGroups,
-    });
-    for (const region of Object.keys(props.videoBucketRegionMap)) {
-      const bucketName = props.videoBucketRegionMap[region];
-      generateVideoFunction.role?.addToPrincipalPolicy(
-        new PolicyStatement({
-          effect: Effect.ALLOW,
-          actions: ['s3:PutObject'],
-          resources: [
-            `arn:aws:s3:::${bucketName}`,
-            `arn:aws:s3:::${bucketName}/*`,
-          ],
-        })
-      );
-    }
-    table.grantWriteData(generateVideoFunction);
+    // 動画生成機能（LocalStackでは使用しない）
+    // const generateVideoFunction = new NodejsFunction(this, 'GenerateVideo', {
+    //   runtime: LAMBDA_RUNTIME_NODEJS,
+    //   entry: './lambda/generateVideo.ts',
+    //   timeout: Duration.minutes(15),
+    //   environment: {
+    //     MODEL_REGION: modelRegion,
+    //     MODEL_IDS: JSON.stringify(modelIds),
+    //     IMAGE_GENERATION_MODEL_IDS: JSON.stringify(imageGenerationModelIds),
+    //     VIDEO_GENERATION_MODEL_IDS: JSON.stringify(videoGenerationModelIds),
+    //     VIDEO_BUCKET_OWNER: Stack.of(this).account,
+    //     VIDEO_BUCKET_REGION_MAP: JSON.stringify(props.videoBucketRegionMap),
+    //     CROSS_ACCOUNT_BEDROCK_ROLE_ARN: crossAccountBedrockRoleArn ?? '',
+    //     BUCKET_NAME: fileBucket.bucketName,
+    //     TABLE_NAME: table.tableName,
+    //   },
+    //   bundling: {
+    //     nodeModules: ['@aws-sdk/client-bedrock-runtime'],
+    //   },
+    //   vpc,
+    //   securityGroups,
+    // });
+    // for (const region of Object.keys(props.videoBucketRegionMap)) {
+    //   const bucketName = props.videoBucketRegionMap[region];
+    //   generateVideoFunction.role?.addToPrincipalPolicy(
+    //     new PolicyStatement({
+    //       effect: Effect.ALLOW,
+    //       actions: ['s3:PutObject'],
+    //       resources: [
+    //         `arn:aws:s3:::${bucketName}`,
+    //         `arn:aws:s3:::${bucketName}/*`,
+    //       ],
+    //     })
+    //   );
+    // }
+    // table.grantWriteData(generateVideoFunction);
 
-    const copyVideoJob = new NodejsFunction(this, 'CopyVideoJob', {
-      runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: './lambda/copyVideoJob.ts',
-      timeout: Duration.minutes(15),
-      memorySize: 512,
-      environment: {
-        MODEL_REGION: modelRegion,
-        MODEL_IDS: JSON.stringify(modelIds),
-        IMAGE_GENERATION_MODEL_IDS: JSON.stringify(imageGenerationModelIds),
-        VIDEO_GENERATION_MODEL_IDS: JSON.stringify(videoGenerationModelIds),
-        VIDEO_BUCKET_REGION_MAP: JSON.stringify(props.videoBucketRegionMap),
-        CROSS_ACCOUNT_BEDROCK_ROLE_ARN: crossAccountBedrockRoleArn ?? '',
-        BUCKET_NAME: fileBucket.bucketName,
-        TABLE_NAME: table.tableName,
-      },
-      bundling: {
-        nodeModules: ['@aws-sdk/client-bedrock-runtime'],
-      },
-      vpc,
-      securityGroups,
-    });
-    for (const region of Object.keys(props.videoBucketRegionMap)) {
-      const bucketName = props.videoBucketRegionMap[region];
-      copyVideoJob.role?.addToPrincipalPolicy(
-        new PolicyStatement({
-          effect: Effect.ALLOW,
-          actions: ['s3:GetObject', 's3:DeleteObject', 's3:ListBucket'],
-          resources: [
-            `arn:aws:s3:::${bucketName}`,
-            `arn:aws:s3:::${bucketName}/*`,
-          ],
-        })
-      );
-    }
-    fileBucket.grantWrite(copyVideoJob);
-    table.grantWriteData(copyVideoJob);
+    // LocalStackでは動画関連機能を使用しない
+    // const copyVideoJob = new NodejsFunction(this, 'CopyVideoJob', {
+    //   runtime: LAMBDA_RUNTIME_NODEJS,
+    //   entry: './lambda/copyVideoJob.ts',
+    //   timeout: Duration.minutes(15),
+    //   memorySize: 512,
+    //   environment: {
+    //     MODEL_REGION: modelRegion,
+    //     MODEL_IDS: JSON.stringify(modelIds),
+    //     IMAGE_GENERATION_MODEL_IDS: JSON.stringify(imageGenerationModelIds),
+    //     VIDEO_GENERATION_MODEL_IDS: JSON.stringify(videoGenerationModelIds),
+    //     VIDEO_BUCKET_REGION_MAP: JSON.stringify(props.videoBucketRegionMap),
+    //     CROSS_ACCOUNT_BEDROCK_ROLE_ARN: crossAccountBedrockRoleArn ?? '',
+    //     BUCKET_NAME: fileBucket.bucketName,
+    //     TABLE_NAME: table.tableName,
+    //   },
+    //   bundling: {
+    //     nodeModules: ['@aws-sdk/client-bedrock-runtime'],
+    //   },
+    //   vpc,
+    //   securityGroups,
+    // });
+    // for (const region of Object.keys(props.videoBucketRegionMap)) {
+    //   const bucketName = props.videoBucketRegionMap[region];
+    //   copyVideoJob.role?.addToPrincipalPolicy(
+    //     new PolicyStatement({
+    //       effect: Effect.ALLOW,
+    //       actions: ['s3:GetObject', 's3:DeleteObject', 's3:ListBucket'],
+    //       resources: [
+    //         `arn:aws:s3:::${bucketName}`,
+    //         `arn:aws:s3:::${bucketName}/*`,
+    //       ],
+    //     })
+    //   );
+    // }
+    // fileBucket.grantWrite(copyVideoJob);
+    // table.grantWriteData(copyVideoJob);
 
-    const listVideoJobs = new NodejsFunction(this, 'ListVideoJobs', {
-      runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: './lambda/listVideoJobs.ts',
-      timeout: Duration.minutes(15),
-      environment: {
-        MODEL_REGION: modelRegion,
-        MODEL_IDS: JSON.stringify(modelIds),
-        IMAGE_GENERATION_MODEL_IDS: JSON.stringify(imageGenerationModelIds),
-        VIDEO_GENERATION_MODEL_IDS: JSON.stringify(videoGenerationModelIds),
-        VIDEO_BUCKET_REGION_MAP: JSON.stringify(props.videoBucketRegionMap),
-        CROSS_ACCOUNT_BEDROCK_ROLE_ARN: crossAccountBedrockRoleArn ?? '',
-        BUCKET_NAME: fileBucket.bucketName,
-        TABLE_NAME: table.tableName,
-        COPY_VIDEO_JOB_FUNCTION_ARN: copyVideoJob.functionArn,
-      },
-      bundling: {
-        nodeModules: ['@aws-sdk/client-bedrock-runtime'],
-      },
-      vpc,
-      securityGroups,
-    });
-    table.grantReadWriteData(listVideoJobs);
-    copyVideoJob.grantInvoke(listVideoJobs);
+    // const listVideoJobs = new NodejsFunction(this, 'ListVideoJobs', {
+    //   runtime: LAMBDA_RUNTIME_NODEJS,
+    //   entry: './lambda/listVideoJobs.ts',
+    //   timeout: Duration.minutes(15),
+    //   environment: {
+    //     MODEL_REGION: modelRegion,
+    //     MODEL_IDS: JSON.stringify(modelIds),
+    //     IMAGE_GENERATION_MODEL_IDS: JSON.stringify(imageGenerationModelIds),
+    //     VIDEO_GENERATION_MODEL_IDS: JSON.stringify(videoGenerationModelIds),
+    //     VIDEO_BUCKET_REGION_MAP: JSON.stringify(props.videoBucketRegionMap),
+    //     CROSS_ACCOUNT_BEDROCK_ROLE_ARN: crossAccountBedrockRoleArn ?? '',
+    //     BUCKET_NAME: fileBucket.bucketName,
+    //     TABLE_NAME: table.tableName,
+    //     COPY_VIDEO_JOB_FUNCTION_ARN: copyVideoJob.functionArn,
+    //   },
+    //   bundling: {
+    //     nodeModules: ['@aws-sdk/client-bedrock-runtime'],
+    //   },
+    //   vpc,
+    //   securityGroups,
+    // });
+    // table.grantReadWriteData(listVideoJobs);
+    // copyVideoJob.grantInvoke(listVideoJobs);
 
-    const deleteVideoJob = new NodejsFunction(this, 'DeleteVideoJob', {
-      runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: './lambda/deleteVideoJob.ts',
-      timeout: Duration.minutes(15),
-      environment: {
-        MODEL_IDS: JSON.stringify(modelIds),
-        IMAGE_GENERATION_MODEL_IDS: JSON.stringify(imageGenerationModelIds),
-        VIDEO_GENERATION_MODEL_IDS: JSON.stringify(videoGenerationModelIds),
-        TABLE_NAME: table.tableName,
-      },
-      vpc,
-      securityGroups,
-    });
-    table.grantWriteData(deleteVideoJob);
+    // const deleteVideoJob = new NodejsFunction(this, 'DeleteVideoJob', {
+    //   runtime: LAMBDA_RUNTIME_NODEJS,
+    //   entry: './lambda/deleteVideoJob.ts',
+    //   timeout: Duration.minutes(15),
+    //   environment: {
+    //     MODEL_IDS: JSON.stringify(modelIds),
+    //     IMAGE_GENERATION_MODEL_IDS: JSON.stringify(imageGenerationModelIds),
+    //     VIDEO_GENERATION_MODEL_IDS: JSON.stringify(videoGenerationModelIds),
+    //     TABLE_NAME: table.tableName,
+    //   },
+    //   vpc,
+    //   securityGroups,
+    // });
+    // table.grantWriteData(deleteVideoJob);
 
     const optimizePromptFunction = new NodejsFunction(
       this,
@@ -421,7 +422,7 @@ export class Api extends Construct {
         entry: './lambda/optimizePrompt.ts',
         timeout: Duration.minutes(15),
         bundling: {
-          nodeModules: ['@aws-sdk/client-bedrock-agent-runtime'],
+          nodeModules: [],
         },
         environment: {
           MODEL_REGION: modelRegion,
@@ -430,7 +431,9 @@ export class Api extends Construct {
         securityGroups,
       }
     );
-    optimizePromptFunction.grantInvoke(idPool.authenticatedRole);
+    if (idPool) {
+      optimizePromptFunction.grantInvoke(idPool.authenticatedRole);
+    }
 
     const getSignedUrlFunction = new NodejsFunction(this, 'GetSignedUrl', {
       runtime: LAMBDA_RUNTIME_NODEJS,
@@ -442,7 +445,7 @@ export class Api extends Construct {
       vpc,
       securityGroups,
     });
-    // Grant S3 write permissions with source IP condition
+    // 送信元IP条件付きでS3書き込み権限を付与
     if (getSignedUrlFunction.role) {
       allowS3AccessWithSourceIpCondition(
         fileBucket.bucketName,
@@ -470,9 +473,9 @@ export class Api extends Construct {
         securityGroups,
       }
     );
-    // Grant S3 read permissions with source IP condition
+    // 送信元IP条件付きでS3読み込み権限を付与
     if (getFileDownloadSignedUrlFunction.role) {
-      // Default bucket permissions
+      // デフォルトバケット権限
       allowS3AccessWithSourceIpCondition(
         fileBucket.bucketName,
         getFileDownloadSignedUrlFunction.role,
@@ -483,7 +486,7 @@ export class Api extends Construct {
         }
       );
 
-      // Additional buckets permissions (AgentCore, external buckets, etc.)
+      // 追加バケット権限（AgentCore、外部バケットなど）
       if (props.additionalS3Buckets) {
         props.additionalS3Buckets.forEach((bucket) => {
           allowS3AccessWithSourceIpCondition(
@@ -499,9 +502,10 @@ export class Api extends Construct {
       }
     }
 
-    // If SageMaker Endpoint exists, grant permission
-    if (endpointNames.length > 0) {
-      // SageMaker Policy
+    // LocalStackではSageMakerエンドポイントも使用しない
+    // SageMakerエンドポイントが存在する場合、アクセス許可を付与
+    if (false && endpointNames.length > 0) { // LocalStackでは無効化
+      // SageMakerポリシー
       const sagemakerPolicy = new PolicyStatement({
         effect: Effect.ALLOW,
         actions: ['sagemaker:DescribeEndpoint', 'sagemaker:InvokeEndpoint'],
@@ -515,18 +519,15 @@ export class Api extends Construct {
       predictFunction.role?.addToPrincipalPolicy(sagemakerPolicy);
       predictStreamFunction.role?.addToPrincipalPolicy(sagemakerPolicy);
       predictTitleFunction.role?.addToPrincipalPolicy(sagemakerPolicy);
-      generateImageFunction.role?.addToPrincipalPolicy(sagemakerPolicy);
-      generateVideoFunction.role?.addToPrincipalPolicy(sagemakerPolicy);
-      listVideoJobs.role?.addToPrincipalPolicy(sagemakerPolicy);
-      invokeFlowFunction.role?.addToPrincipalPolicy(sagemakerPolicy);
+      // generateImageFunction.role?.addToPrincipalPolicy(sagemakerPolicy); // LocalStackでは使用しない
+      // generateVideoFunction.role?.addToPrincipalPolicy(sagemakerPolicy); // LocalStackでは使用しない
+      // listVideoJobs.role?.addToPrincipalPolicy(sagemakerPolicy); // LocalStackでは使用しない
+      // invokeFlowFunction.role?.addToPrincipalPolicy(sagemakerPolicy); // LocalStackでは使用しない
     }
 
-    // Bedrock is always granted permission
-    // Bedrock Policy
-    if (
-      typeof crossAccountBedrockRoleArn !== 'string' ||
-      crossAccountBedrockRoleArn === ''
-    ) {
+    // LocalStackではBedrockサービスは使用しない
+    // Bedrockポリシーはスキップ
+    if (false) { // LocalStackでは無効化
       const bedrockPolicy = new PolicyStatement({
         effect: Effect.ALLOW,
         resources: ['*'],
@@ -535,40 +536,42 @@ export class Api extends Construct {
       predictStreamFunction.role?.addToPrincipalPolicy(bedrockPolicy);
       predictFunction.role?.addToPrincipalPolicy(bedrockPolicy);
       predictTitleFunction.role?.addToPrincipalPolicy(bedrockPolicy);
-      generateImageFunction.role?.addToPrincipalPolicy(bedrockPolicy);
-      generateVideoFunction.role?.addToPrincipalPolicy(bedrockPolicy);
-      listVideoJobs.role?.addToPrincipalPolicy(bedrockPolicy);
-      invokeFlowFunction.role?.addToPrincipalPolicy(bedrockPolicy);
+      // generateImageFunction.role?.addToPrincipalPolicy(bedrockPolicy); // LocalStackでは使用しない
+      // generateVideoFunction.role?.addToPrincipalPolicy(bedrockPolicy); // LocalStackでは使用しない
+      // listVideoJobs.role?.addToPrincipalPolicy(bedrockPolicy); // LocalStackでは使用しない
+      // invokeFlowFunction.role?.addToPrincipalPolicy(bedrockPolicy); // LocalStackでは使用しない
       optimizePromptFunction.role?.addToPrincipalPolicy(bedrockPolicy);
-    } else {
-      // Policy for when crossAccountBedrockRoleArn is specified
-      const logsPolicy = new PolicyStatement({
-        effect: Effect.ALLOW,
-        actions: ['logs:*'],
-        resources: ['*'],
-      });
-      const assumeRolePolicy = new PolicyStatement({
-        effect: Effect.ALLOW,
-        actions: ['sts:AssumeRole'],
-        resources: [crossAccountBedrockRoleArn],
-      });
-      predictStreamFunction.role?.addToPrincipalPolicy(logsPolicy);
-      predictFunction.role?.addToPrincipalPolicy(logsPolicy);
-      predictTitleFunction.role?.addToPrincipalPolicy(logsPolicy);
-      generateImageFunction.role?.addToPrincipalPolicy(logsPolicy);
-      generateVideoFunction.role?.addToPrincipalPolicy(logsPolicy);
-      listVideoJobs.role?.addToPrincipalPolicy(logsPolicy);
-      predictStreamFunction.role?.addToPrincipalPolicy(assumeRolePolicy);
-      predictFunction.role?.addToPrincipalPolicy(assumeRolePolicy);
-      predictTitleFunction.role?.addToPrincipalPolicy(assumeRolePolicy);
-      generateImageFunction.role?.addToPrincipalPolicy(assumeRolePolicy);
-      generateVideoFunction.role?.addToPrincipalPolicy(assumeRolePolicy);
-      listVideoJobs.role?.addToPrincipalPolicy(assumeRolePolicy);
-      // To get pre-signed URL from S3 in different account
-      getFileDownloadSignedUrlFunction.role?.addToPrincipalPolicy(
-        assumeRolePolicy
-      );
     }
+    // LocalStackではクロスアカウントBedrockロールも使用しない
+    // } else {
+    //   // crossAccountBedrockRoleArnが指定されている場合のポリシー
+    //   const logsPolicy = new PolicyStatement({
+    //     effect: Effect.ALLOW,
+    //     actions: ['logs:*'],
+    //     resources: ['*'],
+    //   });
+    //   const assumeRolePolicy = new PolicyStatement({
+    //     effect: Effect.ALLOW,
+    //     actions: ['sts:AssumeRole'],
+    //     resources: [crossAccountBedrockRoleArn],
+    //   });
+    //   predictStreamFunction.role?.addToPrincipalPolicy(logsPolicy);
+    //   predictFunction.role?.addToPrincipalPolicy(logsPolicy);
+    //   predictTitleFunction.role?.addToPrincipalPolicy(logsPolicy);
+    //   // generateImageFunction.role?.addToPrincipalPolicy(logsPolicy); // LocalStackでは使用しない
+    //   // generateVideoFunction.role?.addToPrincipalPolicy(logsPolicy); // LocalStackでは使用しない
+    //   // listVideoJobs.role?.addToPrincipalPolicy(logsPolicy); // LocalStackでは使用しない
+    //   predictStreamFunction.role?.addToPrincipalPolicy(assumeRolePolicy);
+    //   predictFunction.role?.addToPrincipalPolicy(assumeRolePolicy);
+    //   predictTitleFunction.role?.addToPrincipalPolicy(assumeRolePolicy);
+    //   // generateImageFunction.role?.addToPrincipalPolicy(assumeRolePolicy); // LocalStackでは使用しない
+    //   // generateVideoFunction.role?.addToPrincipalPolicy(assumeRolePolicy); // LocalStackでは使用しない
+    //   // listVideoJobs.role?.addToPrincipalPolicy(assumeRolePolicy); // LocalStackでは使用しない
+    //   // 別アカウントのS3から事前署名付きURLを取得するため
+    //   getFileDownloadSignedUrlFunction.role?.addToPrincipalPolicy(
+    //     assumeRolePolicy
+    //   );
+    // }
 
     const createChatFunction = new NodejsFunction(this, 'CreateChat', {
       runtime: LAMBDA_RUNTIME_NODEJS,
@@ -673,13 +676,14 @@ export class Api extends Construct {
     });
     table.grantReadWriteData(updateFeedbackFunction);
 
-    const getWebTextFunction = new NodejsFunction(this, 'GetWebText', {
-      runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: './lambda/getWebText.ts',
-      timeout: Duration.minutes(15),
-      vpc,
-      securityGroups,
-    });
+    // LocalStackではWebText機能を使用しない
+    // const getWebTextFunction = new NodejsFunction(this, 'GetWebText', {
+    //   runtime: LAMBDA_RUNTIME_NODEJS,
+    //   entry: './lambda/getWebText.ts',
+    //   timeout: Duration.minutes(15),
+    //   vpc,
+    //   securityGroups,
+    // });
 
     const createShareId = new NodejsFunction(this, 'CreateShareId', {
       runtime: LAMBDA_RUNTIME_NODEJS,
@@ -805,7 +809,7 @@ export class Api extends Construct {
     });
     fileBucket.grantDelete(deleteFileFunction);
 
-    // Lambda function for getting token usage
+    // トークン使用量取得のためのLambda関数
     const getTokenUsageFunction = new NodejsFunction(this, 'GetTokenUsage', {
       runtime: LAMBDA_RUNTIME_NODEJS,
       entry: './lambda/getTokenUsage.ts',
@@ -820,14 +824,14 @@ export class Api extends Construct {
     props.statsTable.grantReadData(getTokenUsageFunction);
 
     // API Gateway
-    const authorizer = new CognitoUserPoolsAuthorizer(this, 'Authorizer', {
+    const authorizer = userPool ? new CognitoUserPoolsAuthorizer(this, 'Authorizer', {
       cognitoUserPools: [userPool],
-    });
+    }) : undefined;
 
-    const commonAuthorizerProps = {
+    const commonAuthorizerProps = userPool ? {
       authorizationType: AuthorizationType.COGNITO,
       authorizer,
-    };
+    } : {};
 
     const api = new RestApi(this, 'Api', {
       deployOptions: {
@@ -838,7 +842,7 @@ export class Api extends Construct {
         allowMethods: Cors.ALL_METHODS,
       },
       cloudWatchRole: true,
-      defaultMethodOptions: commonAuthorizerProps,
+      defaultMethodOptions: userPool ? commonAuthorizerProps : undefined,
       endpointConfiguration: vpc
         ? {
             types: [EndpointType.PRIVATE],
@@ -886,7 +890,7 @@ export class Api extends Construct {
     predictResource.addMethod(
       'POST',
       new LambdaIntegration(predictFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     // POST: /predict/title
@@ -894,7 +898,7 @@ export class Api extends Construct {
     predictTitleResource.addMethod(
       'POST',
       new LambdaIntegration(predictTitleFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     const chatsResource = api.root.addResource('chats');
@@ -903,14 +907,14 @@ export class Api extends Construct {
     chatsResource.addMethod(
       'POST',
       new LambdaIntegration(createChatFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     // GET: /chats
     chatsResource.addMethod(
       'GET',
       new LambdaIntegration(listChatsFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     const chatResource = chatsResource.addResource('{chatId}');
@@ -919,14 +923,14 @@ export class Api extends Construct {
     chatResource.addMethod(
       'GET',
       new LambdaIntegration(findChatbyIdFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     // DELETE: /chats/{chatId}
     chatResource.addMethod(
       'DELETE',
       new LambdaIntegration(deleteChatFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     const titleResource = chatResource.addResource('title');
@@ -935,7 +939,7 @@ export class Api extends Construct {
     titleResource.addMethod(
       'PUT',
       new LambdaIntegration(updateChatTitleFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     const messagesResource = chatResource.addResource('messages');
@@ -944,14 +948,14 @@ export class Api extends Construct {
     messagesResource.addMethod(
       'GET',
       new LambdaIntegration(listMessagesFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     // POST: /chats/{chatId}/messages
     messagesResource.addMethod(
       'POST',
       new LambdaIntegration(createMessagesFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     const systemContextsResource = api.root.addResource('systemcontexts');
@@ -960,14 +964,14 @@ export class Api extends Construct {
     systemContextsResource.addMethod(
       'POST',
       new LambdaIntegration(createSystemContextFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     // GET: /systemcontexts
     systemContextsResource.addMethod(
       'GET',
       new LambdaIntegration(listSystemContextsFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     const systemContextResource =
@@ -977,7 +981,7 @@ export class Api extends Construct {
     systemContextResource.addMethod(
       'DELETE',
       new LambdaIntegration(deleteSystemContextFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     const systemContextTitleResource =
@@ -987,7 +991,7 @@ export class Api extends Construct {
     systemContextTitleResource.addMethod(
       'PUT',
       new LambdaIntegration(updateSystemContextTitleFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     const feedbacksResource = chatResource.addResource('feedbacks');
@@ -996,48 +1000,52 @@ export class Api extends Construct {
     feedbacksResource.addMethod(
       'POST',
       new LambdaIntegration(updateFeedbackFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
-    const imageResource = api.root.addResource('image');
-    const imageGenerateResource = imageResource.addResource('generate');
-    // POST: /image/generate
-    imageGenerateResource.addMethod(
-      'POST',
-      new LambdaIntegration(generateImageFunction),
-      commonAuthorizerProps
-    );
+    // LocalStackでは画像生成機能を使用しない
+    // const imageResource = api.root.addResource('image');
+    // const imageGenerateResource = imageResource.addResource('generate');
+    // // POST: /image/generate
+    // imageGenerateResource.addMethod(
+    //   'POST',
+    //   new LambdaIntegration(generateImageFunction),
+    //   commonAuthorizerProps
+    // );
 
-    const videoResource = api.root.addResource('video');
-    const videoGenerateResource = videoResource.addResource('generate');
-    // POST: /video/generate
-    videoGenerateResource.addMethod(
-      'POST',
-      new LambdaIntegration(generateVideoFunction),
-      commonAuthorizerProps
-    );
+    // LocalStackでは動画生成機能を使用しない
+    // const videoResource = api.root.addResource('video');
+    // const videoGenerateResource = videoResource.addResource('generate');
+    // // POST: /video/generate
+    // videoGenerateResource.addMethod(
+    //   'POST',
+    //   new LambdaIntegration(generateVideoFunction),
+    //   commonAuthorizerProps
+    // );
+    // LocalStackでは動画生成機能を使用しない
     // GET: /video/generate
-    videoGenerateResource.addMethod(
-      'GET',
-      new LambdaIntegration(listVideoJobs),
-      commonAuthorizerProps
-    );
-    const videoJobResource = videoGenerateResource.addResource('{createdDate}');
-    // DELETE: /video/generate/{createdDate}
-    videoJobResource.addMethod(
-      'DELETE',
-      new LambdaIntegration(deleteVideoJob),
-      commonAuthorizerProps
-    );
+    // videoGenerateResource.addMethod(
+    //   'GET',
+    //   new LambdaIntegration(listVideoJobs),
+    //   commonAuthorizerProps
+    // );
+    // const videoJobResource = videoGenerateResource.addResource('{createdDate}');
+    // // DELETE: /video/generate/{createdDate}
+    // videoJobResource.addMethod(
+    //   'DELETE',
+    //   new LambdaIntegration(deleteVideoJob),
+    //   commonAuthorizerProps
+    // );
 
+    // LocalStackではWebText機能を使用しない
     // Used in the web content extraction use case
-    const webTextResource = api.root.addResource('web-text');
-    // GET: /web-text
-    webTextResource.addMethod(
-      'GET',
-      new LambdaIntegration(getWebTextFunction),
-      commonAuthorizerProps
-    );
+    // const webTextResource = api.root.addResource('web-text');
+    // // GET: /web-text
+    // webTextResource.addMethod(
+    //   'GET',
+    //   new LambdaIntegration(getWebTextFunction),
+    //   commonAuthorizerProps
+    // );
 
     const shareResource = api.root.addResource('shares');
     const shareChatIdResource = shareResource
@@ -1047,13 +1055,13 @@ export class Api extends Construct {
     shareChatIdResource.addMethod(
       'GET',
       new LambdaIntegration(findShareId),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
     // POST: /shares/chat/{chatId}
     shareChatIdResource.addMethod(
       'POST',
       new LambdaIntegration(createShareId),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
     const shareShareIdResource = shareResource
       .addResource('share')
@@ -1062,13 +1070,13 @@ export class Api extends Construct {
     shareShareIdResource.addMethod(
       'GET',
       new LambdaIntegration(getSharedChat),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
     // DELETE: /shares/share/{shareId}
     shareShareIdResource.addMethod(
       'DELETE',
       new LambdaIntegration(deleteShareId),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     const fileResource = api.root.addResource('file');
@@ -1077,13 +1085,13 @@ export class Api extends Construct {
     urlResource.addMethod(
       'POST',
       new LambdaIntegration(getSignedUrlFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
     // Get: /file/url
     urlResource.addMethod(
       'GET',
       new LambdaIntegration(getFileDownloadSignedUrlFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
     // DELETE: /file/{fileName}
     fileResource
@@ -1091,7 +1099,7 @@ export class Api extends Construct {
       .addMethod(
         'DELETE',
         new LambdaIntegration(deleteFileFunction),
-        commonAuthorizerProps
+        userPool ? commonAuthorizerProps : undefined
       );
 
     // GET: /token-usage
@@ -1099,12 +1107,12 @@ export class Api extends Construct {
     tokenUsageResource.addMethod(
       'GET',
       new LambdaIntegration(getTokenUsageFunction),
-      commonAuthorizerProps
+      userPool ? commonAuthorizerProps : undefined
     );
 
     this.api = api;
     this.predictStreamFunction = predictStreamFunction;
-    this.invokeFlowFunction = invokeFlowFunction;
+    // this.invokeFlowFunction = invokeFlowFunction; // LocalStackでは使用しない
     this.optimizePromptFunction = optimizePromptFunction;
     this.modelRegion = modelRegion;
     this.modelIds = modelIds;

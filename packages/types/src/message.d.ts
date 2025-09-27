@@ -1,4 +1,4 @@
-import { SupportedMimeType } from '@generative-ai-use-cases/common';
+import { SupportedMimeType } from '../../common/src/index';
 import { PrimaryKey } from './base';
 import { AdditionalModelRequestFields } from './text';
 

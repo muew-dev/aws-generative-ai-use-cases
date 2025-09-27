@@ -1,8 +1,8 @@
 import {
   FeatureFlags,
-  PromptCacheField,
   ModelMetadata,
-} from 'generative-ai-use-cases';
+} from '../../../types/src/model.d';
+import { PromptCacheField } from '../../../types/src/text.d';
 
 // Manage Model Feature
 // https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-supported-models-features.html

@@ -9,7 +9,7 @@ export const handler = async (
       event.requestContext.authorizer!.claims['cognito:username'];
     const chatId = event.pathParameters!.chatId!;
 
-    // Authorization check: Verify if the specified chat belongs to the user
+    // 認可チェック: 指定されたチャットがユーザーに属しているかを確認
     const chat = await findChatById(userId, chatId);
     if (chat === null) {
       return {

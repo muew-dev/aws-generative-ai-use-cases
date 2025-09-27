@@ -1,11 +1,11 @@
 import { aggregateTokenUsage } from './repository';
-import { GetTokenUsageEvent } from 'generative-ai-use-cases';
+import { GetTokenUsageEvent } from '../../types/src/index';
 
 export const handler = async (event: GetTokenUsageEvent) => {
   try {
     console.log('Getting token usage statistics', { event });
 
-    // Get user ID from Cognito
+    // CognitoからユーザーIDを取得
     const userId = event.requestContext.authorizer!.claims['cognito:username'];
     const { startDate, endDate } = event.queryStringParameters || {};
 
@@ -22,7 +22,7 @@ export const handler = async (event: GetTokenUsageEvent) => {
       };
     }
 
-    // Get aggregated data for the specified period
+    // 指定された期間の集計データを取得
     const stats = await aggregateTokenUsage(startDate, endDate, [userId]);
 
     return {

@@ -52,7 +52,7 @@ export class CommonWebAcl extends Construct {
       priority,
       ...commonRulePropreties(name),
       statement: {
-        // The condition between rules is OR, so specify AND condition within the same rule
+        // ルール間の条件はORなので、同じルール内でAND条件を指定
         andStatement: {
           statements: [
             {
@@ -79,7 +79,7 @@ export class CommonWebAcl extends Construct {
     const hasAllowedCountryCodes =
       props.allowedCountryCodes && props.allowedCountryCodes.length > 0;
 
-    // Define rules for IP v4 and v6 respectively
+    // IP v4とv6のルールをそれぞれ定義
     if (hasAllowedIpV4) {
       const wafIPv4Set = new CfnIPSet(this, `IPv4Set${id}`, {
         ipAddressVersion: 'IPV4',
@@ -87,7 +87,7 @@ export class CommonWebAcl extends Construct {
         addresses: props.allowedIpV4AddressRanges ?? [],
       });
       if (hasAllowedCountryCodes) {
-        // If you want to perform Geo restriction, specify AND condition with IP restriction
+        // Geo制限を実行したい場合は、IP制限とAND条件で指定
         rules.push(
           generateIpSetAndGeoMatchRule(
             1,
@@ -110,7 +110,7 @@ export class CommonWebAcl extends Construct {
         addresses: props.allowedIpV6AddressRanges ?? [],
       });
       if (hasAllowedCountryCodes) {
-        // If you want to perform Geo restriction, specify AND condition with IP restriction
+        // Geo制限を実行したい場合は、IP制限とAND条件で指定
         rules.push(
           generateIpSetAndGeoMatchRule(
             2,
@@ -126,7 +126,7 @@ export class CommonWebAcl extends Construct {
       }
     }
 
-    // If there is no IP restriction and only Geo restriction, define the Geo restriction rule
+    // IP制限がなくGeo制限のみの場合、Geo制限ルールを定義
     if (!hasAllowedIpV4 && !hasAllowedIpV6 && hasAllowedCountryCodes) {
       const name = `GeoMatchRule${id}`;
       rules.push({

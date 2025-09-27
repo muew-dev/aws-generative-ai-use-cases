@@ -69,7 +69,7 @@ export class CognitoPrivateProxy extends Construct {
     const wellKnownResource = userPoolResource.addResource('.well-known');
     const jwksResource = wellKnownResource.addResource('jwks.json');
 
-    // Add GET method to the root resource to serve jwtks.json
+    // jwtks.jsonを提供するためにルートリソースにGETメソッドを追加
     jwksResource.addMethod(
       'GET',
       new agw.HttpIntegration(
@@ -102,7 +102,7 @@ export class CognitoPrivateProxy extends Construct {
       }
     );
 
-    // Add POST method to the root resource to proxy Cognito UserPool requests
+    // Cognito UserPoolリクエストをプロキシするためにルートリソースにPOSTメソッドを追加
     this.cognitoUserPoolProxyApi.root.addMethod(
       'POST',
       new agw.HttpIntegration(cognitoUserPoolEndpoint, {
@@ -154,7 +154,7 @@ export class CognitoPrivateProxy extends Construct {
       }
     );
 
-    // Create private API Gateway for Cognito Identity Pool proxy with enhanced logging
+    // 拡張ログ機能付きCognito Identity Poolプロキシ用のプライベートAPI Gatewayを作成
     this.cognitoIdPoolProxyApi = new agw.RestApi(
       this,
       'CognitoIdPoolProxyApi',
@@ -200,7 +200,7 @@ export class CognitoPrivateProxy extends Construct {
       }
     );
 
-    // Add POST method to the root resource to proxy Cognito Identity PPool requests
+    // Cognito Identity PoolリクエストをプロキシするためにルートリソースにPOSTメソッドを追加
     this.cognitoIdPoolProxyApi.root.addMethod(
       'POST',
       new agw.HttpIntegration(cognitoIdPoolEndpoint, {

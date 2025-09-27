@@ -30,7 +30,7 @@ export class Database extends Construct {
       },
     });
 
-    // Stats table for token usage statistics
+    // トークン使用統計のための統計テーブル
     const statsTable = new ddb.Table(this, 'StatsTable', {
       partitionKey: {
         name: 'id',

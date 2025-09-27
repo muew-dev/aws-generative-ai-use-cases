@@ -8,7 +8,7 @@ import {
   ListUseCasesResponse,
   ListFavoriteUseCasesResponse,
   ListRecentlyUsedUseCasesResponse,
-} from 'generative-ai-use-cases';
+} from '../../../../types/src/index';
 import {
   DeleteCommand,
   DynamoDBDocumentClient,
@@ -27,16 +27,16 @@ const USECASE_ID_INDEX_NAME: string = process.env.USECASE_ID_INDEX_NAME!;
 const dynamoDb = new DynamoDBClient({});
 const dynamoDbDocument = DynamoDBDocumentClient.from(dynamoDb);
 
-// Max number of recently used use cases
-// Actually, it becomes RECENTLY_USED_SAVE_LIMIT + 1 in some cases
-// See the updateRecentlyUsedUseCase function for details
+// 最近使用されたユースケースの最大数
+// 実際には、場合によってはRECENTLY_USED_SAVE_LIMIT + 1になる
+// 詳細はupdateRecentlyUsedUseCase関数を参照
 const RECENTLY_USED_SAVE_LIMIT = 100;
 
 const getUserIdFromKey = (key: string): string => {
   return key.split('#').slice(1).join('#');
 };
 
-// Create a query command to get use case by useCaseId
+// useCaseIdでユースケースを取得するためのクエリコマンドを作成
 const createFindUseCaseByUseCaseIdCommand = (useCaseId: string) =>
   new QueryCommand({
     TableName: USECASE_TABLE_NAME,
@@ -53,7 +53,7 @@ const createFindUseCaseByUseCaseIdCommand = (useCaseId: string) =>
     },
   });
 
-// Get use case by useCaseId
+// useCaseIdでユースケースを取得
 const innerFindUseCaseByUseCaseId = async (
   useCaseId: string
 ): Promise<UseCaseInTable | null> => {
@@ -62,7 +62,7 @@ const innerFindUseCaseByUseCaseId = async (
   return (useCaseInTable.Items?.[0] as UseCaseInTable) || null;
 };
 
-// Get use case list by userId
+// userIdでユースケース一覧を取得
 const innerFindUseCasesByUserId = async (
   userId: string,
   _exclusiveStartKey?: string
@@ -84,7 +84,7 @@ const innerFindUseCasesByUserId = async (
         ':dataTypePrefix': 'useCase',
       },
       ScanIndexForward: false,
-      Limit: 30, // Number of my use cases per page
+      Limit: 30, // ページごとのマイユースケース数
       ExclusiveStartKey: exclusiveStartKey,
     })
   );
@@ -99,11 +99,11 @@ const innerFindUseCasesByUserId = async (
   };
 };
 
-// Get use case list from useCaseId array
+// useCaseId配列からユースケース一覧を取得
 const innerFindUseCasesByUseCaseIds = async (
   useCaseIds: string[]
 ): Promise<UseCaseInTable[]> => {
-  // Run multiple queries in parallel
+  // 複数のクエリを並列実行
   const useCasesInTable: QueryCommandOutput[] = await Promise.all(
     useCaseIds.map((useCaseId) =>
       dynamoDb.send(createFindUseCaseByUseCaseIdCommand(useCaseId))
@@ -115,7 +115,7 @@ const innerFindUseCasesByUseCaseIds = async (
   );
 };
 
-// Get list of specific data type (favorite, recently used) by userId (all)
+// userIdで特定のデータタイプ（お気に入り、最近使用）の一覧を取得（全件）
 const innerFindCommonsByUserIdAndDataType = async (
   userId: string,
   dataTypePrefix: string
@@ -140,7 +140,7 @@ const innerFindCommonsByUserIdAndDataType = async (
   return (commons.Items || []) as UseCaseCommon[];
 };
 
-// Get list of specific data type (favorite, recently used) by userId (pagination supported)
+// userIdで特定のデータタイプ（お気に入り、最近使用）の一覧を取得（ページネーション対応）
 const innerFindCommonsByUserIdAndDataTypePagniation = async (
   userId: string,
   dataTypePrefix: string,
@@ -163,7 +163,7 @@ const innerFindCommonsByUserIdAndDataTypePagniation = async (
         ':dataTypePrefix': dataTypePrefix,
       },
       ScanIndexForward: false,
-      Limit: 20, // Number of favorites/recently used per page
+      Limit: 20, // ページごとのお気に入り/最近使用数
       ExclusiveStartKey: exclusiveStartKey,
     })
   );
@@ -176,7 +176,7 @@ const innerFindCommonsByUserIdAndDataTypePagniation = async (
   };
 };
 
-// Get all data (body, favorite, recently used) related to useCaseId
+// useCaseIdに関連する全データ（本体、お気に入り、最近使用）を取得
 const innerFindCommonsByUseCaseId = async (
   useCaseId: string
 ): Promise<UseCaseCommon[]> => {
@@ -245,7 +245,7 @@ export const getUseCase = async (
   const isMyUseCase = getUserIdFromKey(useCaseInTable.id) === userId;
   const isShared = useCaseInTable.isShared;
 
-  // If it is not my use case and not shared, do not get it
+  // 自分のユースケースではなく、共有されていない場合は取得しない
   if (!isMyUseCase && !isShared) {
     return null;
   }
@@ -396,7 +396,7 @@ export const listFavoriteUseCases = async (
     };
   });
 
-  // My use case or shared
+  // マイユースケースまたは共有
   const useCasesAsOutputFiltered = useCasesAsOutput.filter((u) => {
     return u.isMyUseCase || u.isShared;
   });
@@ -411,14 +411,14 @@ export const toggleFavorite = async (
   userId: string,
   useCaseId: string
 ): Promise<IsFavorite> => {
-  // Get my favorite list and check if it is already registered
-  // MEMO: If the number of favorites is large, it may overflow from the list
+  // マイお気に入り一覧を取得し、既に登録されているかチェック
+  // MEMO: お気に入り数が大量の場合、リストから溢れる可能性がある
   const commons = await innerFindCommonsByUserIdAndDataType(userId, 'favorite');
   const useCaseIds = commons.map((c) => c.useCaseId);
   const index = useCaseIds.indexOf(useCaseId);
 
   if (index >= 0) {
-    // Unfavorite
+    // お気に入り解除
     const common = commons[index];
 
     await dynamoDbDocument.send(
@@ -433,7 +433,7 @@ export const toggleFavorite = async (
 
     return { isFavorite: false };
   } else {
-    // Register favorite
+    // お気に入り登録
     await dynamoDbDocument.send(
       new PutCommand({
         TableName: USECASE_TABLE_NAME,
@@ -499,9 +499,9 @@ export const listRecentlyUsedUseCases = async (
   const useCaseIds = commons.map((c) => c.useCaseId);
 
   const [useCasesInTable, favorites] = await Promise.all([
-    // List user's use cases
+    // ユーザーのユースケース一覧
     innerFindUseCasesByUseCaseIds(useCaseIds),
-    // List user's favorites
+    // ユーザーのお気に入り一覧
     innerFindCommonsByUserIdAndDataType(userId, 'favorite'),
   ]);
   const favoritesUseCaseIds = new Set(favorites.map((f) => f.useCaseId));
@@ -514,7 +514,7 @@ export const listRecentlyUsedUseCases = async (
     };
   });
 
-  // Own or shared
+  // 自分のものまたは共有
   const useCasesAsOutputFiltered = useCasesAsOutput.filter((u) => {
     return u.isMyUseCase || u.isShared;
   });
@@ -531,13 +531,13 @@ export const updateRecentlyUsedUseCase = async (
 ): Promise<void> => {
   const itemsToDelete: UseCaseCommon[] = [];
 
-  // Scan is running for recently used use case data
+  // 最近使用されたユースケースデータのスキャンを実行
   const commons = await innerFindCommonsByUserIdAndDataType(
     userId,
     'recentlyUsed'
   );
 
-  // Max number of recently used use cases
+  // 最近使用されたユースケースの最大数
   if (commons.length > RECENTLY_USED_SAVE_LIMIT) {
     itemsToDelete.push(...commons.slice(RECENTLY_USED_SAVE_LIMIT));
   }
@@ -545,13 +545,13 @@ export const updateRecentlyUsedUseCase = async (
   const useCaseIds = commons.map((c) => c.useCaseId);
   const index = useCaseIds.indexOf(useCaseId);
 
-  // If there is an older history for the same use case, it is a deletion target
+  // 同じユースケースの古い履歴がある場合、削除対象とする
   if (0 <= index && index <= RECENTLY_USED_SAVE_LIMIT - 1) {
     itemsToDelete.push(commons[index]);
   }
 
-  // Delete and add at the same time
-  // If a new history is added (no existing history), the number of histories will be RECENTLY_USED_SAVE_LIMIT + 1, but this is acceptable
+  // 削除と追加を同時に実行
+  // 新しい履歴が追加された場合（既存の履歴がない）、履歴数はRECENTLY_USED_SAVE_LIMIT + 1になるが、これは許容範囲
   await dynamoDbDocument.send(
     new TransactWriteCommand({
       TransactItems: [

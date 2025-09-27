@@ -23,7 +23,7 @@ export interface ClosedWebProps {
   readonly vpc: IVpc;
   readonly subnetIds?: string[] | null;
   readonly isSageMakerStudio: boolean;
-  // For HTTPS listener
+  // HTTPSリスナー用
   readonly hostedZone?: PrivateHostedZone;
   readonly certificateArn?: string | null;
 }

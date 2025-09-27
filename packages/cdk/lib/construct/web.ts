@@ -17,8 +17,6 @@ import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { ICertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import {
-  AgentCoreConfiguration,
-  Flow,
   HiddenUseCases,
   ModelConfiguration,
 } from 'generative-ai-use-cases';
@@ -33,7 +31,6 @@ export interface WebProps {
   readonly ragEnabled: boolean;
   readonly ragKnowledgeBaseEnabled: boolean;
   readonly agentEnabled: boolean;
-  readonly flows?: Flow[];
   readonly flowStreamFunctionArn: string;
   readonly optimizePromptFunctionArn: string;
   readonly selfSignUpEnabled: boolean;
@@ -62,10 +59,6 @@ export interface WebProps {
   readonly webBucket?: s3.Bucket;
   readonly cognitoUserPoolProxyEndpoint?: string;
   readonly cognitoIdentityPoolProxyEndpoint?: string;
-  readonly agentCoreEnabled: boolean;
-  readonly agentCoreGenericRuntime?: AgentCoreConfiguration;
-  readonly agentCoreExternalRuntimes: AgentCoreConfiguration[];
-  readonly agentCoreRegion?: string;
 }
 
 export class Web extends Construct {
@@ -93,23 +86,23 @@ export class Web extends Construct {
         : '';
       const csp = `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; media-src 'self' blob: https://*.amazonaws.com; connect-src 'self' https://*.amazonaws.com https://*.amazoncognito.com wss://*.amazonaws.com:* https://*.on.aws https://raw.githubusercontent.com https://api.github.com${cspSaml}; font-src 'self' https://fonts.gstatic.com data:; object-src 'none'; frame-ancestors 'none'; frame-src 'self' https://www.youtube.com/;`;
 
-      // Create Response Headers Policy for security headers
+      // セキュリティヘッダー用のレスポンスヘッダーポリシーを作成
       const responseHeadersPolicy = new ResponseHeadersPolicy(
         this,
         'SecurityHeadersPolicy',
         {
           securityHeadersBehavior: {
-            // Content Security Policy configuration
+            // Content Security Policy設定
             contentSecurityPolicy: {
               contentSecurityPolicy: csp,
               override: true,
             },
-            // Clickjacking protection
+            // クリックジャッキング保護
             frameOptions: {
               frameOption: HeadersFrameOption.DENY,
               override: true,
             },
-            // Other security headers
+            // その他のセキュリティヘッダー
             strictTransportSecurity: {
               accessControlMaxAge: Duration.days(365 * 2),
               includeSubdomains: true,
@@ -180,7 +173,7 @@ export class Web extends Construct {
         props.domainName &&
         props.hostedZoneId
       ) {
-        // DNS record for custom domain
+        // カスタムドメイン用のDNSレコード
         const hostedZone = HostedZone.fromHostedZoneAttributes(
           this,
           'HostedZone',
@@ -213,7 +206,7 @@ export class Web extends Construct {
       distribution = cloudFrontWebDistribution;
       webBucket = s3BucketInterface;
     } else {
-      // Closed network
+      // クローズドネットワーク
       webBucket = props.webBucket!;
       this.webUrl = 'CLOSED_NETWORK_MODE';
     }
@@ -249,7 +242,7 @@ export class Web extends Construct {
       outputSourceDirectory: './packages/web/dist',
       buildCommands: ['npm ci', 'npm run web:build'],
       buildEnvironment: {
-        NODE_OPTIONS: '--max-old-space-size=4096', // Memory for CodeBuild at deployment
+        NODE_OPTIONS: '--max-old-space-size=4096', // デプロイ時のCodeBuild用メモリ
         VITE_APP_API_ENDPOINT: props.apiEndpointUrl,
         VITE_APP_REGION: Stack.of(this).region,
         VITE_APP_USER_POOL_ID: props.userPoolId,
@@ -260,7 +253,7 @@ export class Web extends Construct {
         VITE_APP_RAG_KNOWLEDGE_BASE_ENABLED:
           props.ragKnowledgeBaseEnabled.toString(),
         VITE_APP_AGENT_ENABLED: props.agentEnabled.toString(),
-        VITE_APP_FLOWS: JSON.stringify(props.flows || []),
+        VITE_APP_FLOWS: JSON.stringify([]),
         VITE_APP_FLOW_STREAM_FUNCTION_ARN: props.flowStreamFunctionArn,
         VITE_APP_OPTIMIZE_PROMPT_FUNCTION_ARN: props.optimizePromptFunctionArn,
         VITE_APP_SELF_SIGN_UP_ENABLED: props.selfSignUpEnabled.toString(),
@@ -290,16 +283,12 @@ export class Web extends Construct {
           props.cognitoUserPoolProxyEndpoint ?? '',
         VITE_APP_COGNITO_IDENTITY_POOL_PROXY_ENDPOINT:
           props.cognitoIdentityPoolProxyEndpoint ?? '',
-        VITE_APP_AGENT_CORE_ENABLED: props.agentCoreEnabled.toString(),
-        VITE_APP_AGENT_CORE_GENERIC_RUNTIME: JSON.stringify(
-          props.agentCoreGenericRuntime
-        ),
-        VITE_APP_AGENT_CORE_EXTERNAL_RUNTIMES: JSON.stringify(
-          props.agentCoreExternalRuntimes
-        ),
+        VITE_APP_AGENT_CORE_ENABLED: 'false',
+        VITE_APP_AGENT_CORE_GENERIC_RUNTIME: JSON.stringify(undefined),
+        VITE_APP_AGENT_CORE_EXTERNAL_RUNTIMES: JSON.stringify([]),
       },
     });
-    // Enhance computing resources
+    // コンピューティングリソースを強化
     (
       build.node.findChild('Project').node.defaultChild as CfnResource
     ).addPropertyOverride('Environment.ComputeType', ComputeType.MEDIUM);

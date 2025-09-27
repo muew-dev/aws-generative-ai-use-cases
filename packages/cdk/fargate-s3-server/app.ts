@@ -30,7 +30,7 @@ app.get('{*key}', async (req: Request, res: Response) => {
       Key: key,
     });
 
-    // Check the existance of the key
+    // キーの存在確認
     await s3Client.send(headCommand);
 
     const getCommand = new GetObjectCommand({

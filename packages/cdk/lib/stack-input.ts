@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-// Base schema without refine
+// refineなしのベーススキーマ
 const baseStackInputSchema = z.object({
   account: z.string().default(process.env.CDK_DEFAULT_ACCOUNT ?? ''),
   region: z.string().default(process.env.CDK_DEFAULT_REGION ?? 'us-east-1'),
@@ -197,10 +197,10 @@ const baseStackInputSchema = z.object({
   closedNetworkCreateResolverEndpoint: z.boolean().default(true),
 });
 
-// Common Validator with refine
+// refine付きの共通バリデーター
 export const stackInputSchema = baseStackInputSchema.refine(
   (data) => {
-    // If searchApiKey is provided, searchEngine must also be provided
+    // searchApiKeyが提供されている場合、searchEngineも提供される必要がある
     if (data.searchApiKey && !data.searchEngine) {
       return false;
     }
@@ -212,7 +212,7 @@ export const stackInputSchema = baseStackInputSchema.refine(
   }
 );
 
-// schema after conversion
+// 変換後のスキーマ
 export const processedStackInputSchema = baseStackInputSchema.extend({
   modelIds: z.array(
     z.object({
@@ -248,7 +248,7 @@ export const processedStackInputSchema = baseStackInputSchema.extend({
       region: z.string(),
     })
   ),
-  // Processed agentCoreRegion (null -> modelRegion)
+  // 処理済みagentCoreRegion (null -> modelRegion)
   agentCoreRegion: z.string(),
 });
 

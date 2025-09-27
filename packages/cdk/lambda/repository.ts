@@ -8,7 +8,7 @@ import {
   UpdateFeedbackRequest,
   ListChatsResponse,
   TokenUsageStats,
-} from 'generative-ai-use-cases';
+} from '../../types/src/index';
 import * as crypto from 'crypto';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
@@ -126,7 +126,7 @@ export const listChats = async (
         ':id': userId,
       },
       ScanIndexForward: false,
-      Limit: 100, // Return the list of chats in 100 items at a time
+      Limit: 100, // チャットのリストを一度に100件ずつ返す
       ExclusiveStartKey: exclusiveStartKey,
     })
   );
@@ -204,7 +204,7 @@ export const listMessages = async (
   return res.Items as RecordedMessage[];
 };
 
-// Update token usage
+// トークン使用量を更新
 async function updateTokenUsage(message: RecordedMessage): Promise<void> {
   if (!message.metadata?.usage) {
     return;
@@ -224,7 +224,7 @@ async function updateTokenUsage(message: RecordedMessage): Promise<void> {
   };
 
   try {
-    // Try to update with shallow nesting structure
+    // 浅いネスト構造で更新を試みる
     await dynamoDbDocument.send(
       new UpdateCommand({
         TableName: STATS_TABLE_NAME,
@@ -270,11 +270,11 @@ async function updateTokenUsage(message: RecordedMessage): Promise<void> {
     );
   } catch (updateError) {
     console.log(
-      'Record does not exist, creating initial structure:',
+      'レコードが存在しません、初期構造を作成しています:',
       updateError
     );
     try {
-      // Create record with complete object structure (without condition)
+      // 完全なオブジェクト構造でレコードを作成（条件なし）
       await dynamoDbDocument.send(
         new UpdateCommand({
           TableName: STATS_TABLE_NAME,
@@ -359,7 +359,7 @@ export const batchCreateMessages = async (
     }
   );
 
-  // Save messages
+  // メッセージを保存
   await dynamoDbDocument.send(
     new BatchWriteCommand({
       RequestItems: {
@@ -374,7 +374,7 @@ export const batchCreateMessages = async (
     })
   );
 
-  // Update token usage in parallel
+  // トークン使用量を並列で更新
   await Promise.all(items.map(updateTokenUsage));
 
   return items;
@@ -447,7 +447,7 @@ export const deleteChat = async (
   _userId: string,
   _chatId: string
 ): Promise<void> => {
-  // Delete Chat
+  // チャットを削除
   const chatItem = await findChatById(_userId, _chatId);
   await dynamoDbDocument.send(
     new DeleteCommand({
@@ -459,7 +459,7 @@ export const deleteChat = async (
     })
   );
 
-  // Delete Messages
+  // メッセージを削除
   const messageItems = await listMessages(_chatId);
   await dynamoDbDocument.send(
     new BatchWriteCommand({
@@ -507,7 +507,7 @@ export const deleteSystemContext = async (
   _userId: string,
   _systemContextId: string
 ): Promise<void> => {
-  // Delete System Context
+  // システムコンテキストを削除
   const systemContext = await findSystemContextById(_userId, _systemContextId);
   await dynamoDbDocument.send(
     new DeleteCommand({
@@ -623,8 +623,8 @@ export const findShareId = async (
 export const deleteShareId = async (_shareId: string): Promise<void> => {
   const userIdAndChatId = await findUserIdAndChatId(_shareId);
   const share = await findShareId(
-    // SAML authentication includes # in userId
-    // Example: user#EntraID_hogehoge.com#EXT#@hogehoge.onmicrosoft.com
+    // SAML認証ではuser Idに#が含まれる
+    // 例: user#EntraID_hogehoge.com#EXT#@hogehoge.onmicrosoft.com
     userIdAndChatId!.userId.split('#').slice(1).join('#'),
     userIdAndChatId!.chatId.split('#')[1]
   );
@@ -666,12 +666,12 @@ export const aggregateTokenUsage = async (
   }
 
   try {
-    // Initialize all dates in the date range
+    // 日付範囲内のすべての日付を初期化
     const start = new Date(startDate);
     const end = new Date(endDate);
     const statsMap = new Map<string, TokenUsageStats>();
 
-    // Create keys for BatchGetItem
+    // BatchGetItem用のキーを作成
     const keys = [];
     const currentDate = new Date(start);
     while (currentDate <= end) {
@@ -694,15 +694,15 @@ export const aggregateTokenUsage = async (
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    // BatchGetItem supports up to 100 items per request
-    // Split keys into chunks if necessary
+    // BatchGetItemはリクエストあたり最大100アイテムをサポート
+    // 必要に応じてキーをチャンクに分割
     const chunkSize = 100;
     const keyChunks = [];
     for (let i = 0; i < keys.length; i += chunkSize) {
       keyChunks.push(keys.slice(i, i + chunkSize));
     }
 
-    // Execute BatchGetItem for each chunk
+    // 各チャンクに対してBatchGetItemを実行
     const batchPromises = keyChunks.map((chunk) =>
       dynamoDbDocument.send(
         new BatchGetCommand({
@@ -717,7 +717,7 @@ export const aggregateTokenUsage = async (
 
     const batchResults = await Promise.all(batchPromises);
 
-    // Update the map with the retrieved data
+    // 取得したデータでマップを更新
     batchResults.forEach((result) => {
       result.Responses?.[STATS_TABLE_NAME]?.forEach((item) => {
         const stats = item as TokenUsageStats;
@@ -727,7 +727,7 @@ export const aggregateTokenUsage = async (
       });
     });
 
-    // Convert to array and sort
+    // 配列に変換してソート
     return Array.from(statsMap.values()).sort((a, b) =>
       a.date.localeCompare(b.date)
     );

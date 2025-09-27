@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { UpdateSystemContextTitleRequest } from 'generative-ai-use-cases';
+import { UpdateSystemContextTitleRequest } from '../../types/src/index';
 import { updateSystemContextTitle } from './repository';
 
 export const handler = async (

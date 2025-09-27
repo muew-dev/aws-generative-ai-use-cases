@@ -25,13 +25,13 @@ const updateStatus = async (event, status, reason, physicalResourceId) => {
     },
   });
 
-  // For recording failures
+  // 失敗の記録用
   console.log(res);
   console.log(await res.text());
 };
 
 exports.handler = async (event, context) => {
-  // For recording failures
+  // 失敗の記録用
   console.log(event);
 
   const props = event.ResourceProperties;
@@ -52,7 +52,7 @@ exports.handler = async (event, context) => {
   try {
     switch (event.RequestType) {
       case 'Create':
-        // parse number/boolean props
+        // 数値/ブールプロパティをパース
         const vectorDimension = Number(props.vectorDimension);
         const ragKnowledgeBaseBinaryVector =
           props.ragKnowledgeBaseBinaryVector.toLowerCase() === 'true';
@@ -111,7 +111,7 @@ exports.handler = async (event, context) => {
             },
           },
         });
-        await sleep(60 * 1000); // sleep 60s to confirm the creation
+        await sleep(60 * 1000); // 作成を確認するために60秒待機
         await updateStatus(
           event,
           'SUCCESS',

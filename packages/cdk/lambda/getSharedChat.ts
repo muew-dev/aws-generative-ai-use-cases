@@ -23,8 +23,8 @@ export const handler = async (
     const chatId = res.chatId;
 
     const chat = await findChatById(
-      // SAML authentication includes # in userId
-      // Example: user#EntraID_hogehoge.com#EXT#@hogehoge.onmicrosoft.com
+      // SAML認証ではuser Idに#が含まれる
+      // 例: user#EntraID_hogehoge.com#EXT#@hogehoge.onmicrosoft.com
       userId.split('#').slice(1).join('#'),
       chatId.split('#')[1]
     );

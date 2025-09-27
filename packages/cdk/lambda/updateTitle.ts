@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { UpdateTitleRequest } from 'generative-ai-use-cases';
+import { UpdateTitleRequest } from '../../types/src/index';
 import { findChatById, setChatTitle } from './repository';
 
 export const handler = async (

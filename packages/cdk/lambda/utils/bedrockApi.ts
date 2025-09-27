@@ -19,7 +19,7 @@ import {
   Model,
   StreamingChunk,
   UnrecordedMessage,
-} from 'generative-ai-use-cases';
+} from '../../../types/src/index';
 import {
   BEDROCK_TEXT_GEN_MODELS,
   BEDROCK_IMAGE_GEN_MODELS,
@@ -148,7 +148,7 @@ const bedrockApi: Omit<ApiInterface, 'invokeFlow'> = {
             text: '',
             stopReason: response.messageStop.stopReason,
           });
-          // Metadata comes after the stopReason, so we need to keep loop
+          // メタデータはstopReasonの後に来るため、ループを継続する必要がある
         }
       }
     } catch (e) {
@@ -181,7 +181,7 @@ const bedrockApi: Omit<ApiInterface, 'invokeFlow'> = {
     const region = model.region || MODEL_REGION;
     const client = await initBedrockRuntimeClient({ region });
 
-    // Image generation using Stable Diffusion or Titan Image Generator is not supported for the Converse API, so InvokeModelCommand is used.
+    // Stable DiffusionまたはTitan Image Generatorを使用した画像生成はConverse APIでサポートされていないため、InvokeModelCommandを使用
     const modelIdOrArn = getInferenceProfileArn(model.modelId) || model.modelId;
     const command = new InvokeModelCommand({
       modelId: modelIdOrArn,
@@ -212,7 +212,7 @@ const bedrockApi: Omit<ApiInterface, 'invokeFlow'> = {
       outputDataConfig: {
         s3OutputDataConfig: {
           s3Uri: `s3://${tmpOutputBucket}`,
-          bucketOwner: process.env.VIDEO_BUCKET_OWNER, // Required for cross-account access
+          bucketOwner: process.env.VIDEO_BUCKET_OWNER, // クロスアカウントアクセスに必要
         },
       },
     });

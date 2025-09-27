@@ -1,15 +1,7 @@
 export * from './api';
-export * from './auth';
-export * from './web';
+// export * from './auth';  // LocalStackでは使用しない
+// export * from './web';   // LocalStackでは使用しない
 export * from './database';
-export * from './rag';
-export * from './transcribe';
-export * from './common-web-acl';
-export * from './agent';
-export * from './rag-knowledge-base';
+// export * from './common-web-acl';  // LocalStackでは使用しない
 export * from './guardrail';
-export * from './speech-to-speech';
-export * from './mcp-api';
-export * from './closedNetwork';
-export * from './agent-core';
-export * from './generic-agent-core';
+// export * from './closedNetwork';   // LocalStackでは使用しない

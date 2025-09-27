@@ -30,7 +30,7 @@ export class Auth extends Construct {
     super(scope, id);
 
     const userPool = new UserPool(this, 'UserPool', {
-      // If SAML authentication is enabled, do not use self-sign-up with UserPool. Be aware of security.
+      // SAML認証が有効な場合、UserPoolでのセルフサインアップは使用しない。セキュリティに注意。
       selfSignUpEnabled: props.samlAuthEnabled
         ? false
         : props.selfSignUpEnabled,
@@ -101,7 +101,7 @@ export class Auth extends Construct {
       })
     );
 
-    // Lambda
+    // Lambda関数
     if (props.allowedSignUpEmailDomains) {
       const checkEmailDomainFunction = new NodejsFunction(
         this,

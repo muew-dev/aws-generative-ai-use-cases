@@ -9,20 +9,10 @@ import {
   PiChatsCircle,
   PiPenNib,
   PiTranslate,
-  PiImages,
-  PiVideoLight,
   PiSpeakerHighBold,
   PiGear,
   PiGlobe,
   PiX,
-  PiRobot,
-  PiVideoCamera,
-  PiFlowArrow,
-  PiMagicWand,
-  PiMicrophoneBold,
-  PiTreeStructure,
-  PiNotebook,
-  PiGraph,
 } from 'react-icons/pi';
 import { Outlet } from 'react-router-dom';
 import Drawer, { ItemProps } from './components/Drawer';
@@ -34,25 +24,11 @@ import PopupInterUseCasesDemo from './components/PopupInterUseCasesDemo';
 import useInterUseCases from './hooks/useInterUseCases';
 import { MODELS } from './hooks/useModel';
 import useScreen from './hooks/useScreen';
-import { optimizePromptEnabled } from './hooks/useOptimizePrompt';
 import useUseCases from './hooks/useUseCases';
 import { useTranslation } from 'react-i18next';
 
-const ragEnabled: boolean = import.meta.env.VITE_APP_RAG_ENABLED === 'true';
-const ragKnowledgeBaseEnabled: boolean =
-  import.meta.env.VITE_APP_RAG_KNOWLEDGE_BASE_ENABLED === 'true';
-const agentEnabled: boolean = import.meta.env.VITE_APP_AGENT_ENABLED === 'true';
-const inlineAgents: boolean = import.meta.env.VITE_APP_INLINE_AGENTS === 'true';
-const mcpEnabled: boolean = import.meta.env.VITE_APP_MCP_ENABLED === 'true';
-const agentCoreEnabled: boolean =
-  import.meta.env.VITE_APP_AGENT_CORE_ENABLED === 'true';
 const {
   visionEnabled,
-  imageGenModelIds,
-  videoGenModelIds,
-  speechToSpeechModelIds,
-  agentNames,
-  flowChatEnabled,
 } = MODELS;
 
 // Extract :chatId from /chat/:chatId format
@@ -93,77 +69,6 @@ const App: React.FC = () => {
       icon: <PiChatsCircle />,
       display: 'usecase' as const,
     },
-    ragEnabled
-      ? {
-          label: t('navigation.ragChat'),
-          to: '/rag',
-          icon: <PiChatCircleText />,
-          display: 'usecase' as const,
-          sub: 'Amazon Kendra',
-        }
-      : null,
-    ragKnowledgeBaseEnabled
-      ? {
-          label: t('navigation.ragChat'),
-          to: '/rag-knowledge-base',
-          icon: <PiChatCircleText />,
-          display: 'usecase' as const,
-          sub: 'Knowledge Base',
-        }
-      : null,
-    agentEnabled && !inlineAgents
-      ? {
-          label: t('navigation.agentChat'),
-          to: '/agent',
-          icon: <PiRobot />,
-          display: 'usecase' as const,
-        }
-      : null,
-    ...(agentEnabled && inlineAgents
-      ? agentNames.map((name: string) => {
-          return {
-            label: name,
-            to: `/agent/${name}`,
-            icon: <PiRobot />,
-            display: 'usecase' as const,
-            sub: 'Agent',
-          };
-        })
-      : []),
-    mcpEnabled
-      ? {
-          label: t('mcp_chat.title'),
-          to: '/mcp',
-          icon: <PiGraph />,
-          display: 'usecase' as const,
-          sub: 'Deprecated',
-        }
-      : null,
-    agentCoreEnabled
-      ? {
-          label: t('agent_core.title'),
-          to: '/agent-core',
-          icon: <PiRobot />,
-          display: 'usecase' as const,
-          sub: 'Experimental',
-        }
-      : null,
-    flowChatEnabled
-      ? {
-          label: t('navigation.flowChat'),
-          to: '/flow-chat',
-          icon: <PiFlowArrow />,
-          display: 'usecase' as const,
-        }
-      : null,
-    speechToSpeechModelIds.length > 0 && enabled('voiceChat')
-      ? {
-          label: t('navigation.voiceChat'),
-          to: '/voice-chat',
-          icon: <PiMicrophoneBold />,
-          display: 'usecase' as const,
-        }
-      : null,
     enabled('generate')
       ? {
           label: t('navigation.textGeneration'),
@@ -177,14 +82,6 @@ const App: React.FC = () => {
           label: t('navigation.summary'),
           to: '/summarize',
           icon: <PiNote />,
-          display: 'usecase' as const,
-        }
-      : null,
-    enabled('meetingMinutes')
-      ? {
-          label: t('navigation.meetingMinutes'),
-          to: '/meeting-minutes',
-          icon: <PiNotebook />,
           display: 'usecase' as const,
         }
       : null,
@@ -202,60 +99,6 @@ const App: React.FC = () => {
           to: '/translate',
           icon: <PiTranslate />,
           display: 'usecase' as const,
-        }
-      : null,
-    enabled('webContent')
-      ? {
-          label: t('navigation.webContentExtraction'),
-          to: '/web-content',
-          icon: <PiGlobe />,
-          display: 'usecase' as const,
-        }
-      : null,
-    imageGenModelIds.length > 0 && enabled('image')
-      ? {
-          label: t('navigation.imageGeneration'),
-          to: '/image',
-          icon: <PiImages />,
-          display: 'usecase' as const,
-        }
-      : null,
-    videoGenModelIds.length > 0 && enabled('video')
-      ? {
-          label: t('navigation.videoGeneration'),
-          to: '/video',
-          icon: <PiVideoLight />,
-          display: 'usecase' as const,
-        }
-      : null,
-    visionEnabled && enabled('videoAnalyzer')
-      ? {
-          label: t('navigation.videoAnalysis'),
-          to: '/video-analyzer',
-          icon: <PiVideoCamera />,
-          display: 'usecase' as const,
-        }
-      : null,
-    enabled('diagram')
-      ? {
-          label: t('navigation.diagramGeneration'),
-          to: '/diagram',
-          icon: <PiTreeStructure />,
-          display: 'usecase' as const,
-        }
-      : null,
-    {
-      label: t('navigation.speechRecognition'),
-      to: '/transcribe',
-      icon: <PiSpeakerHighBold />,
-      display: 'tool' as const,
-    },
-    optimizePromptEnabled
-      ? {
-          label: t('navigation.promptOptimization'),
-          to: '/optimize',
-          icon: <PiMagicWand />,
-          display: 'tool' as const,
         }
       : null,
   ].flatMap((i) => (i !== null ? [i] : []));

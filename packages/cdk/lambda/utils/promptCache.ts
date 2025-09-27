@@ -6,7 +6,7 @@ import {
 import {
   CRI_PREFIX_PATTERN,
   SUPPORTED_CACHE_FIELDS,
-} from '@generative-ai-use-cases/common';
+} from '../../../common/src/index';
 
 const CACHE_POINT = {
   cachePoint: { type: 'default' },
@@ -17,7 +17,7 @@ const SYSTEM_CACHE_POINT = {
 } as SystemContentBlock.CachePointMember;
 
 const getSupportedCacheFields = (modelId: string) => {
-  // Remove CRI prefix
+  // CRIプレフィックスを削除
   const baseModelId = modelId.replace(CRI_PREFIX_PATTERN, '');
   return SUPPORTED_CACHE_FIELDS[baseModelId] || [];
 };
@@ -31,7 +31,7 @@ export const applyAutoCacheToMessages = (
     return messages;
   }
 
-  // Insert cachePoint into the last two user messages (for cache read and write respectively)
+  // 最後の2つのユーザーメッセージにcachePointを挿入（それぞれキャッシュ読み取りと書き込み用）
   const isToolsSupported = cacheFields.includes('tools');
   const cachableIndices = messages
     .map((message, index) => ({ message, index }))
@@ -39,7 +39,7 @@ export const applyAutoCacheToMessages = (
     .filter(
       ({ message }) =>
         isToolsSupported ||
-        // For Amazon Nova, placing cachePoint after toolResult is not supported
+        // Amazon Novaでは、toolResultの後にcachePointを配置することはサポートされていない
         !message.content?.some((block) => block.toolResult)
     )
     .slice(-2)
@@ -48,7 +48,7 @@ export const applyAutoCacheToMessages = (
   return messages.map((message, index) => {
     if (
       !cachableIndices.includes(index) ||
-      message.content?.at(-1)?.cachePoint // Already inserted
+      message.content?.at(-1)?.cachePoint // 既に挿入済み
     ) {
       return message;
     }
@@ -67,7 +67,7 @@ export const applyAutoCacheToSystem = (
   if (
     !cacheFields.includes('system') ||
     system.length === 0 ||
-    system.at(-1)?.cachePoint // Already inserted
+    system.at(-1)?.cachePoint // 既に挿入済み
   ) {
     return system;
   }

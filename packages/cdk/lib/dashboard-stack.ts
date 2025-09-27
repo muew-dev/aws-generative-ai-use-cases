@@ -22,9 +22,9 @@ export class DashboardStack extends Stack {
 
     const params = props.params;
 
-    // LogGroup for Bedrock logs
+    // Bedrockログ用のLogGroup
     const logGroup = new logs.LogGroup(this, 'LogGroup', {
-      // Retain logs for 1 year
+      // ログを1年間保持
       retention: logs.RetentionDays.ONE_YEAR,
     });
 
@@ -144,7 +144,7 @@ export class DashboardStack extends Stack {
       })
     );
 
-    // Extract logs from the output
+    // 出力からログを抽出
     dashboard.addWidgets(
       new cw.LogQueryWidget({
         title: 'Prompt Logs',

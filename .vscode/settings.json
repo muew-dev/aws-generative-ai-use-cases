@@ -11,5 +11,23 @@
   ],
   "i18n-ally.namespace": true,
   "i18n-ally.pathMatcher": "{namespace}/{locale}.{ext}",
-  "i18n-ally.defaultNamespace": "translation"
+  "i18n-ally.defaultNamespace": "translation",
+  "cSpell.words": [
+    "cdklocal",
+    "localstack",
+    "LOCALSTACK",
+    "eventstream",
+    "fileb",
+    "KEEPALIVE",
+    "testuser",
+    "nodenv",
+    "chpwd",
+    "dryrun",
+    "devw",
+    "devww",
+    "hotswap",
+    "buildw",
+    "mkdocs",
+    "nhelper"
+  ]
 }

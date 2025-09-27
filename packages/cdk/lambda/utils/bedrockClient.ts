@@ -13,17 +13,17 @@ import {
   BedrockAgentClientConfig,
 } from '@aws-sdk/client-bedrock-agent';
 
-// Temporary credentials for cross-account access
+// クロスアカウントアクセス用の一時認証情報
 const stsClient = new STSClient();
 let temporaryCredentials: Credentials | undefined;
 
-// Store Bedrock clients
+// Bedrockクライアントを保存
 const bedrockRuntimeClient: Record<string, BedrockRuntimeClient> = {};
 const bedrockAgentClient: Record<string, BedrockAgentClient> = {};
 const bedrockAgentRuntimeClient: Record<string, BedrockAgentRuntimeClient> = {};
 const knowledgeBaseS3Client: Record<string, S3Client> = {};
 
-// Function to get temporary credentials from STS
+// STSから一時認証情報を取得する関数
 const assumeRole = async (crossAccountBedrockRoleArn: string) => {
   const command = new AssumeRoleCommand({
     RoleArn: crossAccountBedrockRoleArn,
@@ -42,21 +42,21 @@ const assumeRole = async (crossAccountBedrockRoleArn: string) => {
   }
 };
 
-// Check if the temporary credentials will expire within 1 minute
+// 一時認証情報が1分以内に期限切れするかチェック
 const isCredentialRefreshRequired = () => {
   return (
-    !temporaryCredentials?.Expiration || // expiration is undefined
-    temporaryCredentials.Expiration.getTime() - Date.now() < 60_000 // expiration is less than 1 minute
+    !temporaryCredentials?.Expiration || // 期限が未定義
+    temporaryCredentials.Expiration.getTime() - Date.now() < 60_000 // 期限が1分未満
   );
 };
 
-// Get AWS credentials for cross account access.
-// Assume the specified role and check if the obtained temporary credentials are valid.
-// This allows access to AWS resources in a different AWS account.
+// クロスアカウントアクセス用のAWS認証情報を取得
+// 指定されたロールを仮定し、取得した一時認証情報が有効かチェック
+// これにより、異なAWSアカウントのAWSリソースへのアクセスが可能
 const getCrossAccountCredentials = async (
   crossAccountBedrockRoleArn: string
 ) => {
-  // Get temporary credentials from STS and initialize the client
+  // STSから一時認証情報を取得し、クライアントを初期化
   if (isCredentialRefreshRequired()) {
     await assumeRole(crossAccountBedrockRoleArn);
   }
@@ -80,7 +80,7 @@ const getCrossAccountCredentials = async (
 export const initBedrockRuntimeClient = async (
   config: BedrockRuntimeClientConfig & { region: string }
 ) => {
-  // Use cross-account role
+  // クロスアカウントロールを使用
   if (process.env.CROSS_ACCOUNT_BEDROCK_ROLE_ARN) {
     return new BedrockRuntimeClient({
       ...(await getCrossAccountCredentials(
@@ -89,7 +89,7 @@ export const initBedrockRuntimeClient = async (
       ...config,
     });
   }
-  // Use Lambda execution role
+  // Lambda実行ロールを使用
   if (!(config.region in bedrockRuntimeClient)) {
     bedrockRuntimeClient[config.region] = new BedrockRuntimeClient(config);
   }
@@ -99,7 +99,7 @@ export const initBedrockRuntimeClient = async (
 export const initBedrockAgentClient = async (
   config: BedrockAgentClientConfig & { region: string }
 ) => {
-  // Use cross-account role
+  // クロスアカウントロールを使用
   if (process.env.CROSS_ACCOUNT_BEDROCK_ROLE_ARN) {
     return new BedrockAgentClient({
       ...(await getCrossAccountCredentials(
@@ -108,7 +108,7 @@ export const initBedrockAgentClient = async (
       ...config,
     });
   }
-  // Use Lambda execution role
+  // Lambda実行ロールを使用
   if (!(config.region in bedrockAgentClient)) {
     bedrockAgentClient[config.region] = new BedrockAgentClient(config);
   }
@@ -118,7 +118,7 @@ export const initBedrockAgentClient = async (
 export const initBedrockAgentRuntimeClient = async (
   config: BedrockAgentRuntimeClientConfig & { region: string }
 ) => {
-  // Use cross-account role
+  // クロスアカウントロールを使用
   if (process.env.CROSS_ACCOUNT_BEDROCK_ROLE_ARN) {
     return new BedrockAgentRuntimeClient({
       ...(await getCrossAccountCredentials(
@@ -127,7 +127,7 @@ export const initBedrockAgentRuntimeClient = async (
       ...config,
     });
   }
-  // Use Lambda execution role
+  // Lambda実行ロールを使用
   if (!(config.region in bedrockAgentRuntimeClient)) {
     bedrockAgentRuntimeClient[config.region] = new BedrockAgentRuntimeClient(
       config
@@ -139,7 +139,7 @@ export const initBedrockAgentRuntimeClient = async (
 export const initKnowledgeBaseS3Client = async (
   config: S3ClientConfig & { region: string }
 ) => {
-  // Use cross-account role (to get pre-signed URLs for S3 objects in a different account)
+  // クロスアカウントロールを使用 (to get pre-signed URLs for S3 objects in a different account)
   if (process.env.CROSS_ACCOUNT_BEDROCK_ROLE_ARN) {
     return new S3Client({
       ...(await getCrossAccountCredentials(
@@ -148,7 +148,7 @@ export const initKnowledgeBaseS3Client = async (
       ...config,
     });
   }
-  // Use Lambda execution role
+  // Lambda実行ロールを使用
   if (!(config.region in knowledgeBaseS3Client)) {
     knowledgeBaseS3Client[config.region] = new S3Client(config);
   }

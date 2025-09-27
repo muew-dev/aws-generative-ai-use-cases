@@ -18,6 +18,11 @@
     "cdk:deploy:quick": "npm -w packages/cdk run cdk deploy -- --all --asset-parallelism --asset-prebuild=false --concurrency 3 --method=direct --require-approval never --force",
     "cdk:deploy:quick:hotswap": "npm -w packages/cdk run cdk deploy -- --all --asset-parallelism --asset-prebuild=false --concurrency 3 --method=direct --require-approval never --force --hotswap",
     "cdk:destroy": "npm -w packages/cdk run cdk destroy -- --all",
+    "cdk:localstack:bootstrap": "cd packages/cdk && source ../../.env && cdklocal bootstrap",
+    "cdk:localstack:deploy": "cd packages/cdk && source ../../.env && cdklocal deploy --all --require-approval never",
+    "cdk:localstack:destroy": "cd packages/cdk && source ../../.env && cdklocal destroy --all --force",
+    "cdk:localstack:diff": "cd packages/cdk && source ../../.env && cdklocal diff",
+    "cdk:localstack:synth": "cd packages/cdk && source ../../.env && cdklocal synth",
     "cdk:lint": "npm -w packages/cdk run lint",
     "cdk:lambda-build-dryrun": "npm -w packages/cdk run lambda-build-dryrun",
     "cdk:test": "npm -w packages/cdk run test",
@@ -47,5 +52,9 @@
     "**/*": [
       "sh -c 'npm run lint'"
     ]
+  },
+  "engines": {
+    "node": ">=20.19.5",
+    "npm": ">=10.8.2"
   }
 }

@@ -56,7 +56,7 @@ export class Resolver extends Construct {
 
     // https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-route53resolver-resolverendpoint.html#cfn-route53resolver-resolverendpoint-ipaddresses
     if (ipAddresses.length < 2) {
-      throw new Error('Need at least 2 isolated subnets in different AZs.');
+      throw new Error('異なるAZに少なくとも2つの分離されたサブネットが必要です。');
     }
 
     const resolverEndpoint = new CfnResolverEndpoint(this, 'InbountEndpoint', {

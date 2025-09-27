@@ -11,7 +11,7 @@ exports.handler = async (event, context) => {
   try {
     const { collectionId, region, accountId, tag } = event.ResourceProperties;
 
-    // Skip for Delete operation
+    // 削除操作の場合はスキップ
     if (event.RequestType === 'Delete') {
       return await sendResponse(
         event,
@@ -22,17 +22,17 @@ exports.handler = async (event, context) => {
       );
     }
 
-    // Create OpenSearch Serverless client
+    // OpenSearch Serverlessクライアントを作成
     const ossClient = new OpenSearchServerlessClient({ region });
     const collectionArn = `arn:aws:aoss:${region}:${accountId}:collection/${collectionId}`;
 
-    // Check if we need to apply or remove tags
+    // タグを適用または削除する必要があるかチェック
     if (tag && tag.value) {
       console.log(
         `Applying tags to collection ${collectionId}: ${JSON.stringify(tag)}`
       );
 
-      // Apply tags
+      // タグを適用
       const command = new TagResourceCommand({
         resourceArn: collectionArn,
         tags: [tag],
@@ -43,12 +43,12 @@ exports.handler = async (event, context) => {
       console.log(`response: ${JSON.stringify(res)}`);
       console.log(`Successfully applied tags to ${collectionArn}`);
     } else {
-      // If tagValue is unset, we need to check if the tag exists and remove it
+      // tagValueが設定されていない場合、タグが存在するかチェックして削除
       console.log(
         `Checking for existing tags on collection ${collectionId} with key ${tag.key}`
       );
 
-      // First, list existing tags
+      // まず、既存のタグを一覧取得
       const listTagsCommand = new ListTagsForResourceCommand({
         resourceArn: collectionArn,
       });
@@ -56,7 +56,7 @@ exports.handler = async (event, context) => {
       const existingTags = await ossClient.send(listTagsCommand);
       console.log(`Existing tags: ${JSON.stringify(existingTags)}`);
 
-      // Check if our tag key exists
+      // 対象のタグキーが存在するかチェック
       const tagExists =
         existingTags.tags && existingTags.tags.some((t) => t.key === tag.key);
 
@@ -65,7 +65,7 @@ exports.handler = async (event, context) => {
           `Removing tag with key ${tag.key} from collection ${collectionId}`
         );
 
-        // Remove the tag
+        // タグを削除
         const untagCommand = new UntagResourceCommand({
           resourceArn: collectionArn,
           tagKeys: [tag.key],
@@ -102,7 +102,7 @@ exports.handler = async (event, context) => {
   }
 };
 
-// Function to send response to CloudFormation
+// CloudFormationにレスポンスを送信する関数
 async function sendResponse(event, context, status, data, physicalId) {
   const responseBody = JSON.stringify({
     Status: status,

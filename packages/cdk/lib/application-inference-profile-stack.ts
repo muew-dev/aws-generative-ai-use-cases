@@ -24,7 +24,7 @@ export class ApplicationInferenceProfileStack extends Stack {
 
     const createInferenceProfiles = (modelIds: typeof params.modelIds) => {
       for (const modelId of modelIds) {
-        // Inference Profile is not supported Cross Region Inference
+        // Inference Profileはクロスリージョン推論をサポートしていない
         if (
           modelId.region === currentRegion &&
           !modelId.modelId.startsWith('us.') &&

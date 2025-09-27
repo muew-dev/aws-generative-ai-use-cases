@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  localstack:
+    container_name: 'localstack-genu'
+    image: localstack/localstack:3.0
+    ports:
+      - '127.0.0.1:4566:4566' # LocalStack Gateway
+      - '127.0.0.1:4510-4559:4510-4559' # external services port range
+    environment:
+      - DEBUG=1
+      - LAMBDA_EXECUTOR=docker-reuse
+      - LAMBDA_REMOVE_CONTAINERS=true
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      # Lambda関数のデバッグ用設定
+      - LAMBDA_DOCKER_NETWORK=bridge
+      - LAMBDA_RUNTIME_ENVIRONMENT_TIMEOUT=60
+    volumes:
+      - '${LOCALSTACK_VOLUME_DIR:-./localstack-data}:/var/lib/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      # Lambda関数のソースコードをマウント（ホットリロード用）
+      - '${PWD}/packages/cdk/lambda:/opt/code/lambda:ro'

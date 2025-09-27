@@ -4,47 +4,47 @@ import {
   stackInputSchema,
   ProcessedStackInput,
 } from './lib/stack-input';
-import { ModelConfiguration } from 'generative-ai-use-cases';
+import { ModelConfiguration } from '../types/src/model.d';
 
-// Get parameters from CDK Context
+// CDK Contextからパラメータを取得
 const getContext = (app: cdk.App): StackInput => {
   const params = stackInputSchema.parse(app.node.getAllContext());
   return params;
 };
 
-// If you want to define parameters directly
+// パラメータを直接定義したい場合
 const envs: Record<string, Partial<StackInput>> = {
-  // If you want to define an anonymous environment, uncomment the following and the content of cdk.json will be ignored.
-  // If you want to define an anonymous environment in parameter.ts, uncomment the following and the content of cdk.json will be ignored.
+  // 匿名環境を定義したい場合は、以下のコメントアウトを外してください。cdk.jsonの内容は無視されます。
+  // parameter.tsで匿名環境を定義したい場合は、以下のコメントアウトを外してください。cdk.jsonの内容は無視されます。
   // '': {
-  //   // Parameters for anonymous environment
-  //   // If you want to override the default settings, add the following
+  //   // 匿名環境用のパラメータ
+  //   // デフォルト設定を上書きしたい場合は、以下を追加してください
   // },
   dev: {
-    // Parameters for development environment
+    // 開発環境用のパラメータ
   },
   staging: {
-    // Parameters for staging environment
+    // ステージング環境用のパラメータ
   },
   prod: {
-    // Parameters for production environment
+    // 本番環境用のパラメータ
   },
-  // If you need other environments, customize them as needed
+  // 他の環境が必要な場合は、必要に応じてカスタマイズしてください
 };
 
-// For backward compatibility, get parameters from CDK Context > parameter.ts
+// 後方互換性のため、CDK Context > parameter.tsからパラメータを取得
 export const getParams = (app: cdk.App): ProcessedStackInput => {
-  // By default, get parameters from CDK Context
+  // デフォルトでは、CDK Contextからパラメータを取得
   let params = getContext(app);
 
-  // If the env matches the ones defined in envs, use the parameters in envs instead of the ones in context
+  // envがenvsで定義されているものと一致する場合、contextではなくenvsのパラメータを使用
   if (envs[params.env]) {
     params = stackInputSchema.parse({
       ...envs[params.env],
       env: params.env,
     });
   }
-  // Make the format of modelIds, imageGenerationModelIds consistent
+  // modelIds、imageGenerationModelIdsの形式を統一
   const convertToModelConfiguration = (
     models: (string | ModelConfiguration)[],
     defaultRegion: string
@@ -75,7 +75,7 @@ export const getParams = (app: cdk.App): ProcessedStackInput => {
       params.endpointNames,
       params.modelRegion
     ),
-    // Process agentCoreRegion: null -> modelRegion
+    // agentCoreRegionを処理: null -> modelRegion
     agentCoreRegion: params.agentCoreRegion || params.modelRegion,
   };
 };

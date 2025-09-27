@@ -9,7 +9,7 @@ const app = new cdk.App();
 const params = getParams(app);
 if (params.tagValue) {
   cdk.Tags.of(app).add(TAG_KEY, params.tagValue, {
-    // Exclude OpenSearchServerless Collection from tagging
+    // OpenSearchServerless Collectionをタグ付けから除外
     excludeResourceTypes: ['AWS::OpenSearchServerless::Collection'],
   });
 }

@@ -6,7 +6,7 @@ import {
   OptimizePromptCommandInput,
   OptimizePromptCommand,
 } from '@aws-sdk/client-bedrock-agent-runtime';
-import { OptimizePromptRequest } from 'generative-ai-use-cases';
+import { OptimizePromptRequest } from '../../../types/src/index';
 
 const client = new BedrockAgentRuntimeClient({
   region: process.env.MODEL_REGION,
@@ -41,7 +41,7 @@ const bedrockOptimizePrompt = {
           }
 
           if (event.analyzePromptEvent?.message) {
-            // Do nothing for now
+            // 今のところ何もしない
           }
         }
       }
@@ -50,7 +50,7 @@ const bedrockOptimizePrompt = {
         e instanceof ThrottlingException ||
         e instanceof ServiceQuotaExceededException
       ) {
-        // All of the following are JSON.stringify according to the OptimizePrompt response
+        // 以下のすべてはOptimizePromptレスポンスに従ってJSON.stringifyされる
         yield JSON.stringify(
           'The server is currently experiencing high access. Please try again later.'
         );

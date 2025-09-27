@@ -66,7 +66,7 @@ export class UseCaseBuilder extends Construct {
 
     const commonPath = './lambda/useCaseBuilder';
 
-    // Add UseCaseBuilder related APIs
+    // UseCaseBuilder関連のAPIを追加
     const listUseCasesFunction = new NodejsFunction(this, 'ListUseCases', {
       ...commonProperty,
       memorySize: 512,

@@ -16,8 +16,8 @@ export class Guardrail extends Construct {
         'Detected output that is prohibited. Please start the conversation from the beginning or contact the administrator.',
       name: `Guardrail-${suffix}`,
       sensitiveInformationPolicyConfig: {
-        // NAME, DRIVER_ID is not working in Japan, so do not set it
-        // CA_*, US_*, UK_* are country-specific, so do not set it
+        // NAME、DRIVER_IDは日本では機能しないため設定しない
+        // CA_*、US_*、UK_*は国固有のため設定しない
         piiEntitiesConfig: [
           { action: 'BLOCK', type: 'AGE' },
           { action: 'BLOCK', type: 'AWS_ACCESS_KEY' },

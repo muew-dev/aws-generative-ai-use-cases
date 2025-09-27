@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { UpdateFeedbackRequest } from 'generative-ai-use-cases';
+import { UpdateFeedbackRequest } from '../../types/src/index';
 import { listMessages, updateFeedback } from './repository';
 
 export const handler = async (
@@ -11,15 +11,15 @@ export const handler = async (
     const userId: string =
       event.requestContext.authorizer!.claims['cognito:username'];
 
-    // Authorization check: verify that this message belongs to the user's chat
+    // 認可チェック: このメッセージがユーザーのチャットに属していることを確認
     const messages = await listMessages(chatId);
 
-    // Find a message that matches the createdDate (message ID) in the request
+    // リクエストのcreatedDate（メッセージID）と一致するメッセージを検索
     const targetMessage = messages.find(
       (m) => m.createdDate === req.createdDate
     );
 
-    // Return 403 if the message doesn't exist or doesn't belong to the user
+    // メッセージが存在しないか、ユーザーに属していない場合は403を返す
     if (!targetMessage || targetMessage.userId !== `user#${userId}`) {
       console.warn(
         `Authorization error: User ${userId} attempted to provide feedback on message ${req.createdDate} in chat ${chatId} belonging to another user`

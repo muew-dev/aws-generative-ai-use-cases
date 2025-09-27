@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { CreateMessagesRequest, ExtraData } from 'generative-ai-use-cases';
+import { CreateMessagesRequest, ExtraData } from '../../types/src/index';
 import { batchCreateMessages, findChatById } from './repository';
 
 const FILE_UPLOAD_BUCKET_NAME = process.env.BUCKET_NAME!;
@@ -19,7 +19,7 @@ export const handler = async (
       event.requestContext.authorizer!.claims['cognito:username'];
     const chatId = event.pathParameters!.chatId!;
 
-    // Authorization check: Verify if the specified chat belongs to the user
+    // 認可チェック: 指定されたチャットがユーザーに属しているかを確認
     const chat = await findChatById(userId, chatId);
     if (chat === null) {
       return {

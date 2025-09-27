@@ -9,55 +9,26 @@ import {
   PiChatsCircle,
   PiTranslate,
   PiGlobe,
-  PiImages,
-  PiVideoLight,
-  PiNotebook,
   PiPen,
-  PiRobot,
-  PiVideoCamera,
-  PiFlowArrow,
-  PiTreeStructure,
   PiPenNib,
-  PiMicrophoneBold,
-  PiGraph,
 } from 'react-icons/pi';
 import AwsIcon from '../assets/aws.svg?react';
 import useInterUseCases from '../hooks/useInterUseCases';
 import {
-  AgentPageQueryParams,
   ChatPageQueryParams,
-  GenerateImagePageQueryParams,
-  GenerateVideoPageQueryParams,
   GenerateTextPageQueryParams,
   InterUseCaseParams,
-  RagPageQueryParams,
   SummarizePageQueryParams,
   TranslatePageQueryParams,
   WebContentPageQueryParams,
-  VideoAnalyzerPageQueryParams,
-  DiagramPageQueryParams,
-  McpPageQueryParams,
 } from '../@types/navigate';
 import queryString from 'query-string';
 import { MODELS } from '../hooks/useModel';
 import useUseCases from '../hooks/useUseCases';
 import { useTranslation } from 'react-i18next';
 
-const ragEnabled: boolean = import.meta.env.VITE_APP_RAG_ENABLED === 'true';
-const ragKnowledgeBaseEnabled: boolean =
-  import.meta.env.VITE_APP_RAG_KNOWLEDGE_BASE_ENABLED === 'true';
-const agentEnabled: boolean = import.meta.env.VITE_APP_AGENT_ENABLED === 'true';
-const agentCoreEnabled: boolean =
-  import.meta.env.VITE_APP_AGENT_CORE_ENABLED === 'true';
-const inlineAgents: boolean = import.meta.env.VITE_APP_INLINE_AGENTS === 'true';
-const mcpEnabled: boolean = import.meta.env.VITE_APP_MCP_ENABLED === 'true';
 const {
-  imageGenModelIds,
-  videoGenModelIds,
-  speechToSpeechModelIds,
   visionEnabled,
-  flowChatEnabled,
-  agentNames,
 } = MODELS;
 
 const LandingPage: React.FC = () => {
@@ -74,46 +45,6 @@ const LandingPage: React.FC = () => {
     navigate(`/chat?${queryString.stringify(params)}`);
   };
 
-  const demoRag = () => {
-    const params: RagPageQueryParams = {
-      content: t('landing.demo.rag.content'),
-    };
-    navigate(`/rag?${queryString.stringify(params)}`);
-  };
-
-  const demoRagKnowledgeBase = () => {
-    const params: RagPageQueryParams = {
-      content: t('landing.demo.rag.content'),
-    };
-    navigate(`/rag-knowledge-base?${queryString.stringify(params)}`);
-  };
-
-  const demoAgent = () => {
-    if (agentNames.includes('CodeInterpreter')) {
-      const params: AgentPageQueryParams = {
-        modelId: 'CodeInterpreter',
-        content: t('landing.demo.agent.content'),
-      };
-      navigate(`/agent?${queryString.stringify(params)}`);
-    } else {
-      navigate(`/agent`);
-    }
-  };
-
-  const demoAgentCore = () => {
-    navigate(`/agent-core`);
-  };
-
-  const demoMcp = () => {
-    const params: McpPageQueryParams = {
-      content: t('landing.demo.mcp.content'),
-    };
-    navigate(`/mcp?${queryString.stringify(params)}`);
-  };
-
-  const demoVoiceChat = () => {
-    navigate('/voice-chat');
-  };
 
   const demoGenerate = () => {
     const params: GenerateTextPageQueryParams = {
@@ -152,37 +83,6 @@ const LandingPage: React.FC = () => {
     navigate(`/web-content?${queryString.stringify(params)}`);
   };
 
-  const demoGenerateImage = () => {
-    const params: GenerateImagePageQueryParams = {
-      content: t('landing.demo.image.content'),
-    };
-    navigate(`/image?${queryString.stringify(params)}`);
-  };
-
-  const demoGenerateVideo = () => {
-    const params: GenerateVideoPageQueryParams = {
-      prompt: 'A banana is dancing in the middle of the ocean',
-    };
-    navigate(`/video?${queryString.stringify(params)}`);
-  };
-
-  const demoVideoAnalyzer = () => {
-    const params: VideoAnalyzerPageQueryParams = {
-      content: t('landing.demo.video.content'),
-    };
-    navigate(`/video-analyzer?${queryString.stringify(params)}`);
-  };
-
-  const demoGenerateDiagram = () => {
-    const params: DiagramPageQueryParams = {
-      content: t('landing.demo.diagram.content'),
-    };
-    navigate(`/diagram?${queryString.stringify(params)}`);
-  };
-
-  const demoMeetingMinutes = () => {
-    navigate('/meeting-minutes');
-  };
 
   const demoBlog = () => {
     setIsShow(true);
@@ -222,18 +122,6 @@ const LandingPage: React.FC = () => {
             value: '{text}',
           },
         } as InterUseCaseParams<SummarizePageQueryParams>,
-      },
-      {
-        title: t('useCaseBuilder.blog.generate_thumbnail'),
-        description: t('useCaseBuilder.blog.generate_thumbnail_description'),
-        path: 'image',
-        params: {
-          content: {
-            value: t('useCaseBuilder.blog.generate_thumbnail_content', {
-              summarizedSentence: '{summarizedSentence}',
-            }),
-          },
-        } as InterUseCaseParams<GenerateImagePageQueryParams>,
       },
     ]);
   };
@@ -275,9 +163,6 @@ const LandingPage: React.FC = () => {
     ]);
   };
 
-  const demoFlowChat = () => {
-    navigate(`/flow-chat`);
-  };
 
   return (
     <div className="pb-24">
@@ -304,64 +189,6 @@ const LandingPage: React.FC = () => {
           icon={<PiChatsCircle />}
           description={t('landing.use_cases.chat.description')}
         />
-        {ragEnabled && (
-          <CardDemo
-            label={t('landing.use_cases.rag_chat.title')}
-            sub={t('landing.use_cases.rag_chat.sub_kendra')}
-            onClickDemo={demoRag}
-            icon={<PiChatCircleText />}
-            description={t('landing.use_cases.rag_chat.description_kendra')}
-          />
-        )}
-        {ragKnowledgeBaseEnabled && (
-          <CardDemo
-            label={t('landing.use_cases.rag_chat.title')}
-            sub={t('landing.use_cases.rag_chat.sub_kb')}
-            onClickDemo={demoRagKnowledgeBase}
-            icon={<PiChatCircleText />}
-            description={t('landing.use_cases.rag_chat.description_kb')}
-          />
-        )}
-        {agentEnabled && !inlineAgents && (
-          <CardDemo
-            label={t('landing.use_cases.agent_chat.title')}
-            onClickDemo={demoAgent}
-            icon={<PiRobot />}
-            description={t('landing.use_cases.agent_chat.description')}
-          />
-        )}
-        {agentCoreEnabled && (
-          <CardDemo
-            label={t('landing.use_cases.agent_core.title')}
-            onClickDemo={demoAgentCore}
-            icon={<PiRobot />}
-            description={t('landing.use_cases.agent_core.description')}
-          />
-        )}
-        {mcpEnabled && (
-          <CardDemo
-            label={t('landing.use_cases.mcp_chat.title')}
-            onClickDemo={demoMcp}
-            icon={<PiGraph />}
-            description={t('landing.use_cases.mcp_chat.description')}
-          />
-        )}
-        {flowChatEnabled && (
-          <CardDemo
-            label={t('landing.use_cases.flow_chat.title')}
-            onClickDemo={demoFlowChat}
-            icon={<PiFlowArrow />}
-            description={t('landing.use_cases.flow_chat.description')}
-          />
-        )}
-        {speechToSpeechModelIds.length > 0 && enabled('voiceChat') && (
-          <CardDemo
-            label={t('landing.use_cases.voice_chat.title')}
-            onClickDemo={demoVoiceChat}
-            icon={<PiMicrophoneBold />}
-            description={t('landing.use_cases.voice_chat.description')}
-          />
-        )}
         {enabled('generate') && (
           <CardDemo
             label={t('landing.use_cases.generate_text.title')}
@@ -376,14 +203,6 @@ const LandingPage: React.FC = () => {
             onClickDemo={demoSummarize}
             icon={<PiNote />}
             description={t('landing.use_cases.summarize.description')}
-          />
-        )}
-        {enabled('meetingMinutes') && (
-          <CardDemo
-            label={t('landing.use_cases.meeting-minutes.title')}
-            onClickDemo={demoMeetingMinutes}
-            icon={<PiNotebook />}
-            description={t('landing.use_cases.meeting-minutes.description')}
           />
         )}
         {enabled('writer') && (
@@ -410,44 +229,12 @@ const LandingPage: React.FC = () => {
             description={t('landing.use_cases.web_content.description')}
           />
         )}
-        {imageGenModelIds.length > 0 && enabled('image') && (
-          <CardDemo
-            label={t('landing.use_cases.image.title')}
-            onClickDemo={demoGenerateImage}
-            icon={<PiImages />}
-            description={t('landing.use_cases.image.description')}
-          />
-        )}
-        {videoGenModelIds.length > 0 && enabled('video') && (
-          <CardDemo
-            label={t('landing.use_cases.video-generation.title')}
-            onClickDemo={demoGenerateVideo}
-            icon={<PiVideoLight />}
-            description={t('landing.use_cases.video-generation.description')}
-          />
-        )}
-        {visionEnabled && enabled('videoAnalyzer') && (
-          <CardDemo
-            label={t('landing.use_cases.video-analysis.title')}
-            onClickDemo={demoVideoAnalyzer}
-            icon={<PiVideoCamera />}
-            description={t('landing.use_cases.video-analysis.description')}
-          />
-        )}
-        {enabled('diagram') && (
-          <CardDemo
-            label={t('landing.use_cases.diagram.title')}
-            onClickDemo={demoGenerateDiagram}
-            icon={<PiTreeStructure />}
-            description={t('landing.use_cases.diagram.description')}
-          />
-        )}
       </div>
 
       {
         // If any use case integration is enabled, display it
         // Blog article creation
-        (enabled('webContent', 'generate', 'summarize', 'image') ||
+        (enabled('webContent', 'generate', 'summarize') ||
           // Meeting report creation
           enabled('generate')) && (
           <>
@@ -456,7 +243,7 @@ const LandingPage: React.FC = () => {
             </h1>
 
             <div className="mx-4 grid gap-x-20 gap-y-5 md:grid-cols-1 xl:mx-20 xl:grid-cols-2">
-              {enabled('webContent', 'generate', 'summarize', 'image') && (
+              {enabled('webContent', 'generate', 'summarize') && (
                 <CardDemo
                   label={t('landing.use_cases_integration.blog.title')}
                   onClickDemo={demoBlog}

@@ -16,7 +16,7 @@ import {
   AmazonAdvancedImageParams,
   StreamingChunk,
   Metadata,
-} from 'generative-ai-use-cases';
+} from '../../../types/src/index';
 import {
   ConverseCommandInput,
   ConverseCommandOutput,
@@ -25,14 +25,14 @@ import {
   ConversationRole,
   ContentBlock,
 } from '@aws-sdk/client-bedrock-runtime';
-import { modelMetadata } from '@generative-ai-use-cases/common';
+import { modelMetadata } from '../../../common/src/index';
 import {
   applyAutoCacheToMessages,
   applyAutoCacheToSystem,
 } from './promptCache';
 import { getFormatFromMimeType, getMimeTypeFromFileName } from './media';
 
-// Default Models
+// デフォルトモデル
 
 const modelIds: ModelConfiguration[] = (
   JSON.parse(process.env.MODEL_IDS || '[]') as ModelConfiguration[]
@@ -45,7 +45,7 @@ const modelIds: ModelConfiguration[] = (
     }),
   }))
   .filter((model) => model.modelId);
-// If there is a lightweight model among the available models, prioritize the lightweight model.
+// 利用可能なモデルの中に軽量モデルがある場合、軽量モデルを優先
 const lightWeightModelIds = modelIds.filter(
   (model: ModelConfiguration) => modelMetadata[model.modelId].flags.light
 );
@@ -107,7 +107,7 @@ export const defaultVideoGenerationModel: Model = {
   }),
 };
 
-// Model Params
+// モデルパラメータ
 
 const CLAUDE_3_5_DEFAULT_PARAMS: ConverseInferenceParams = {
   inferenceConfig: {
@@ -126,8 +126,8 @@ const CLAUDE_DEFAULT_PARAMS: ConverseInferenceParams = {
 };
 
 const TITAN_TEXT_DEFAULT_PARAMS: ConverseInferenceParams = {
-  // Converse API only accepts 3000, instead of 3072, which is described in the doc.
-  // If 3072 is accepted, revert to 3072.
+  // Converse APIはドキュメント記載の3072ではなく3000のみ受け付ける
+  // 3072が受け付けられるようになれば、3072に戻す
   // https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-titan-text.html
   inferenceConfig: {
     maxTokens: 3000,
@@ -175,7 +175,7 @@ const NOVA_DEFAULT_PARAMS: ConverseInferenceParams = {
     temperature: 0.7,
     topP: 0.9,
   },
-  // There are no additional costs for cache writes with Amazon Nova models
+  // Amazon Novaモデルではキャッシュ書き込みに追加料金はかからない
   promptCachingConfig: {
     autoCacheFields: {
       system: true,
@@ -259,7 +259,7 @@ const USECASE_DEFAULT_PARAMS: UsecaseConverseInferenceParams = {
   },
 };
 
-// Guardrail Settings
+// ガードレール設定
 const createGuardrailConfig = (): GuardrailConverseConfigParams | undefined => {
   if (
     process.env.GUARDRAIL_IDENTIFIER !== undefined &&
@@ -268,7 +268,7 @@ const createGuardrailConfig = (): GuardrailConverseConfigParams | undefined => {
     return {
       guardrailIdentifier: process.env.GUARDRAIL_IDENTIFIER,
       guardrailVersion: process.env.GUARDRAIL_VERSION,
-      // Outputs become heavy and there is no way to check the trace on the app side, so disabled is hard-coded
+      // 出力が重くなり、アプリ側でトレースを確認する方法がないため、disabledをハードコード
       trace: 'disabled',
     };
   }

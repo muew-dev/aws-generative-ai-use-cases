@@ -3,7 +3,7 @@ import {
   InvokeEndpointCommand,
   InvokeEndpointWithResponseStreamCommand,
 } from '@aws-sdk/client-sagemaker-runtime';
-import { ApiInterface, UnrecordedMessage } from 'generative-ai-use-cases';
+import { ApiInterface, UnrecordedMessage } from '../../../types/src/index';
 import { streamingChunk } from './streamingChunk';
 
 const client = new SageMakerRuntimeClient({
@@ -15,7 +15,7 @@ const createBodyText = (
   messages: UnrecordedMessage[],
   stream: boolean
 ): string => {
-  // Convert messages to the format expected by SageMaker endpoint
+  // SageMakerエンドポイントが期待する形式にメッセージを変換
   const formattedMessages = messages.map((message) => ({
     role: message.role,
     content: message.content,
@@ -50,9 +50,9 @@ const sagemakerApi: ApiInterface = {
     const stream = (await client.send(command)).Body;
     if (!stream) return;
 
-    // Based on the Python example, the streaming response format is:
+    // Pythonの例に基づくと、ストリーミングレスポンスの形式は以下のとおり:
     // data:{"choices":[{"delta":{"content":"text"}}]}
-    // This logic handles the streaming response similar to the Python implementation
+    // このロジックはPython実装と同様にストリーミングレスポンスを処理
 
     let buffer = '';
     const startJson = Buffer.from('{');
@@ -62,7 +62,7 @@ const sagemakerApi: ApiInterface = {
 
       buffer += new TextDecoder().decode(chunk.PayloadPart.Bytes);
 
-      // Process complete lines ending with \n
+      // \nで終わる完全な行を処理
       if (!buffer.endsWith('\n')) continue;
 
       const lines = buffer.split('\n').filter((line) => line.trim() !== '');
@@ -70,7 +70,7 @@ const sagemakerApi: ApiInterface = {
       for (const line of lines) {
         if (line.includes(startJson.toString())) {
           try {
-            // Extract JSON from the line (similar to Python implementation)
+            // 行からJSONを抽出（Python実装と同様）
             const jsonStart = line.indexOf('{');
             if (jsonStart !== -1) {
               const jsonStr = line.substring(jsonStart);
@@ -86,7 +86,7 @@ const sagemakerApi: ApiInterface = {
               }
             }
           } catch (error) {
-            // Skip malformed JSON
+            // 不正なJSONをスキップ
             console.warn('Failed to parse streaming JSON:', error);
           }
         }

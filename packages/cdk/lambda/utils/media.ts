@@ -6,7 +6,7 @@ import {
 import {
   extensionToMimeType,
   SupportedMimeType,
-} from '@generative-ai-use-cases/common';
+} from '../../../common/src/index';
 
 const SupportedFormat = {
   ...DocumentFormat,

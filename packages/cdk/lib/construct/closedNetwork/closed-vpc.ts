@@ -3,13 +3,13 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { PrivateHostedZone } from 'aws-cdk-lib/aws-route53';
 
 const VPC_ENDPOINTS: Record<string, ec2.InterfaceVpcEndpointAwsService> = {
-  // VPC Endpoints required by user side
+  // ユーザー側で必要なVPCエンドポイント
   ApiGateway: ec2.InterfaceVpcEndpointAwsService.APIGATEWAY,
   Lambda: ec2.InterfaceVpcEndpointAwsService.LAMBDA,
   Transcribe: ec2.InterfaceVpcEndpointAwsService.TRANSCRIBE,
   TranscribeStreaming: ec2.InterfaceVpcEndpointAwsService.TRANSCRIBE_STREAMING,
   Polly: ec2.InterfaceVpcEndpointAwsService.POLLY,
-  // VPC Endpoints required by app side
+  // アプリ側で必要なVPCエンドポイント
   Bedrock: ec2.InterfaceVpcEndpointAwsService.BEDROCK_RUNTIME,
   BedrockAgent: ec2.InterfaceVpcEndpointAwsService.BEDROCK_AGENT_RUNTIME,
   BedrockAgentApi: ec2.InterfaceVpcEndpointAwsService.BEDROCK_AGENT,

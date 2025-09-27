@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import {
   PredictTitleRequest,
   UnrecordedMessage,
-} from 'generative-ai-use-cases';
+} from '../../types/src/index';
 import { setChatTitle } from './repository';
 import api from './utils/api';
 import { defaultModel } from './utils/models';
@@ -17,15 +17,15 @@ export const handler = async (
 
     const req = JSON.parse(event.body) as PredictTitleRequest;
 
-    // Validation
+    // 検証
     if (!req.prompt || !req.chat?.id || !req.chat?.createdDate || !req.id) {
       throw new Error('Invalid request format');
     }
 
-    // Use the lightweight default model for title generation
+    // タイトル生成には軽量デフォルトモデルを使用
     const model = defaultModel;
 
-    // Add a question for title setting
+    // タイトル設定用の質問を追加
     const messages: UnrecordedMessage[] = [
       {
         role: 'user',
@@ -33,8 +33,8 @@ export const handler = async (
       },
     ];
 
-    // When adding a new model, the default Claude prompter is used, so the output may be enclosed in <output></output>
-    // The following processing removes the xml tags containing <output></output>
+    // 新しいモデルを追加する際、デフォルトのClaudeプロンプターが使用されるため、出力が<output></output>で囲まれる可能性がある
+    // 以下の処理で<output></output>を含むXMLタグを削除
     const title =
       (await api['bedrock'].invoke?.(model, messages, req.id))?.replace(
         /<([^>]+)>([\s\S]*?)<\/\1>/,
