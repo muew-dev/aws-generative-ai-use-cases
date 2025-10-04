@@ -108,7 +108,7 @@ export class Auth extends Construct {
         'CheckEmailDomain',
         {
           runtime: LAMBDA_RUNTIME_NODEJS,
-          entry: '../lambda/src/handlers/checkEmailDomain.ts',
+          entry: '../lambda/src/api-gateway/auth/checkEmailDomain.ts',
           timeout: Duration.minutes(15),
           environment: {
             ALLOWED_SIGN_UP_EMAIL_DOMAINS_STR: JSON.stringify(

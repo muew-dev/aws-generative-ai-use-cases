@@ -510,7 +510,7 @@ export class Rag extends Construct {
     // Lambda
     const queryFunction = new NodejsFunction(this, 'Query', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/queryKendra.ts',
+      entry: '../lambda/src/api-gateway/rag/queryKendra.ts',
       timeout: Duration.minutes(15),
       bundling: {
         // Use new Kendra features, so explicitly bundle AWS SDK
@@ -533,7 +533,7 @@ export class Rag extends Construct {
 
     const retrieveFunction = new NodejsFunction(this, 'Retrieve', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/retrieveKendra.ts',
+      entry: '../lambda/src/api-gateway/rag/retrieveKendra.ts',
       timeout: Duration.minutes(15),
       bundling: {
         // Use new Kendra features, so explicitly bundle AWS SDK

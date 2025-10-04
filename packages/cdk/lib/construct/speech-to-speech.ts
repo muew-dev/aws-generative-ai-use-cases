@@ -74,7 +74,7 @@ export class SpeechToSpeech extends Construct {
 
     const speechToSpeechTask = new NodejsFunction(this, 'Task', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/speechToSpeechTask.ts',
+      entry: '../lambda/src/api-gateway/speech/speechToSpeechTask.ts',
       timeout: Duration.minutes(15),
       environment: {
         EVENT_API_ENDPOINT: eventApiEndpoint,
@@ -121,7 +121,7 @@ export class SpeechToSpeech extends Construct {
       'StartSession',
       {
         runtime: LAMBDA_RUNTIME_NODEJS,
-        entry: '../lambda/src/handlers/startSpeechToSpeechSession.ts',
+        entry: '../lambda/src/api-gateway/speech/startSpeechToSpeechSession.ts',
         timeout: Duration.minutes(15),
         environment: {
           SPEECH_TO_SPEECH_TASK_FUNCTION_ARN: speechToSpeechTask.functionArn,

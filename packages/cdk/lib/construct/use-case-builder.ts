@@ -64,7 +64,7 @@ export class UseCaseBuilder extends Construct {
       securityGroups: props.securityGroups,
     };
 
-    const commonPath = '../lambda/src/useCaseBuilder';
+    const commonPath = '../lambda/src/api-gateway/usecase';
 
     // Add UseCaseBuilder related APIs
     const listUseCasesFunction = new NodejsFunction(this, 'ListUseCases', {

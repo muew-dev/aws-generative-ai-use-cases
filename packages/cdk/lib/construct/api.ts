@@ -176,7 +176,7 @@ export class Api extends Construct {
     // Lambda
     const predictFunction = new NodejsFunction(this, 'Predict', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/predict.ts',
+      entry: '../lambda/src/api-gateway/core/predict.ts',
       timeout: Duration.minutes(15),
       environment: {
         MODEL_REGION: modelRegion,
@@ -200,7 +200,7 @@ export class Api extends Construct {
 
     const predictStreamFunction = new NodejsFunction(this, 'PredictStream', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/predictStream.ts',
+      entry: '../lambda/src/streaming/predictStream.ts',
       timeout: Duration.minutes(15),
       memorySize: 256,
       environment: {
@@ -241,7 +241,7 @@ export class Api extends Construct {
     // Add Flow Lambda Function
     const invokeFlowFunction = new NodejsFunction(this, 'InvokeFlow', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/invokeFlow.ts',
+      entry: '../lambda/src/api-gateway/core/invokeFlow.ts',
       timeout: Duration.minutes(15),
       bundling: {
         nodeModules: [
@@ -259,7 +259,7 @@ export class Api extends Construct {
 
     const predictTitleFunction = new NodejsFunction(this, 'PredictTitle', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/predictTitle.ts',
+      entry: '../lambda/src/api-gateway/core/predictTitle.ts',
       timeout: Duration.minutes(15),
       bundling: {
         nodeModules: ['@aws-sdk/client-bedrock-runtime'],
@@ -285,7 +285,7 @@ export class Api extends Construct {
 
     const generateImageFunction = new NodejsFunction(this, 'GenerateImage', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/generateImage.ts',
+      entry: '../lambda/src/api-gateway/media/generateImage.ts',
       timeout: Duration.minutes(15),
       environment: {
         MODEL_REGION: modelRegion,
@@ -303,7 +303,7 @@ export class Api extends Construct {
 
     const generateVideoFunction = new NodejsFunction(this, 'GenerateVideo', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/generateVideo.ts',
+      entry: '../lambda/src/api-gateway/media/generateVideo.ts',
       timeout: Duration.minutes(15),
       environment: {
         MODEL_REGION: modelRegion,
@@ -339,7 +339,7 @@ export class Api extends Construct {
 
     const copyVideoJob = new NodejsFunction(this, 'CopyVideoJob', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/copyVideoJob.ts',
+      entry: '../lambda/src/api-gateway/media/copyVideoJob.ts',
       timeout: Duration.minutes(15),
       memorySize: 512,
       environment: {
@@ -376,7 +376,7 @@ export class Api extends Construct {
 
     const listVideoJobs = new NodejsFunction(this, 'ListVideoJobs', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/listVideoJobs.ts',
+      entry: '../lambda/src/api-gateway/media/listVideoJobs.ts',
       timeout: Duration.minutes(15),
       environment: {
         MODEL_REGION: modelRegion,
@@ -400,7 +400,7 @@ export class Api extends Construct {
 
     const deleteVideoJob = new NodejsFunction(this, 'DeleteVideoJob', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/deleteVideoJob.ts',
+      entry: '../lambda/src/api-gateway/media/deleteVideoJob.ts',
       timeout: Duration.minutes(15),
       environment: {
         MODEL_IDS: JSON.stringify(modelIds),
@@ -418,7 +418,7 @@ export class Api extends Construct {
       'OptimizePromptFunction',
       {
         runtime: LAMBDA_RUNTIME_NODEJS,
-        entry: '../lambda/src/handlers/optimizePrompt.ts',
+        entry: '../lambda/src/api-gateway/core/optimizePrompt.ts',
         timeout: Duration.minutes(15),
         bundling: {
           nodeModules: ['@aws-sdk/client-bedrock-agent-runtime'],
@@ -434,7 +434,7 @@ export class Api extends Construct {
 
     const getSignedUrlFunction = new NodejsFunction(this, 'GetSignedUrl', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/getFileUploadSignedUrl.ts',
+      entry: '../lambda/src/api-gateway/file/getFileUploadSignedUrl.ts',
       timeout: Duration.minutes(15),
       environment: {
         BUCKET_NAME: fileBucket.bucketName,
@@ -460,7 +460,7 @@ export class Api extends Construct {
       'GetFileDownloadSignedUrlFunction',
       {
         runtime: LAMBDA_RUNTIME_NODEJS,
-        entry: '../lambda/src/handlers/getFileDownloadSignedUrl.ts',
+        entry: '../lambda/src/api-gateway/file/getFileDownloadSignedUrl.ts',
         timeout: Duration.minutes(15),
         environment: {
           CROSS_ACCOUNT_BEDROCK_ROLE_ARN: crossAccountBedrockRoleArn ?? '',
@@ -572,7 +572,7 @@ export class Api extends Construct {
 
     const createChatFunction = new NodejsFunction(this, 'CreateChat', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/createChat.ts',
+      entry: '../lambda/src/api-gateway/chat/createChat.ts',
       timeout: Duration.minutes(15),
       environment: {
         TABLE_NAME: table.tableName,
@@ -584,7 +584,7 @@ export class Api extends Construct {
 
     const deleteChatFunction = new NodejsFunction(this, 'DeleteChat', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/deleteChat.ts',
+      entry: '../lambda/src/api-gateway/chat/deleteChat.ts',
       timeout: Duration.minutes(15),
       environment: {
         TABLE_NAME: table.tableName,
@@ -596,7 +596,7 @@ export class Api extends Construct {
 
     const createMessagesFunction = new NodejsFunction(this, 'CreateMessages', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/createMessages.ts',
+      entry: '../lambda/src/api-gateway/chat/createMessages.ts',
       timeout: Duration.minutes(15),
       environment: {
         TABLE_NAME: table.tableName,
@@ -614,7 +614,7 @@ export class Api extends Construct {
       'UpdateChatTitle',
       {
         runtime: LAMBDA_RUNTIME_NODEJS,
-        entry: '../lambda/src/handlers/updateTitle.ts',
+        entry: '../lambda/src/api-gateway/chat/updateTitle.ts',
         timeout: Duration.minutes(15),
         environment: {
           TABLE_NAME: table.tableName,
@@ -627,7 +627,7 @@ export class Api extends Construct {
 
     const listChatsFunction = new NodejsFunction(this, 'ListChats', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/listChats.ts',
+      entry: '../lambda/src/api-gateway/chat/listChats.ts',
       timeout: Duration.minutes(15),
       environment: {
         TABLE_NAME: table.tableName,
@@ -639,7 +639,7 @@ export class Api extends Construct {
 
     const findChatbyIdFunction = new NodejsFunction(this, 'FindChatbyId', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/findChatById.ts',
+      entry: '../lambda/src/api-gateway/chat/findChatById.ts',
       timeout: Duration.minutes(15),
       environment: {
         TABLE_NAME: table.tableName,
@@ -651,7 +651,7 @@ export class Api extends Construct {
 
     const listMessagesFunction = new NodejsFunction(this, 'ListMessages', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/listMessages.ts',
+      entry: '../lambda/src/api-gateway/chat/listMessages.ts',
       timeout: Duration.minutes(15),
       environment: {
         TABLE_NAME: table.tableName,
@@ -663,7 +663,7 @@ export class Api extends Construct {
 
     const updateFeedbackFunction = new NodejsFunction(this, 'UpdateFeedback', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/updateFeedback.ts',
+      entry: '../lambda/src/api-gateway/chat/updateFeedback.ts',
       timeout: Duration.minutes(15),
       environment: {
         TABLE_NAME: table.tableName,
@@ -675,7 +675,7 @@ export class Api extends Construct {
 
     const getWebTextFunction = new NodejsFunction(this, 'GetWebText', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/getWebText.ts',
+      entry: '../lambda/src/api-gateway/core/getWebText.ts',
       timeout: Duration.minutes(15),
       vpc,
       securityGroups,
@@ -683,7 +683,7 @@ export class Api extends Construct {
 
     const createShareId = new NodejsFunction(this, 'CreateShareId', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/createShareId.ts',
+      entry: '../lambda/src/api-gateway/share/createShareId.ts',
       timeout: Duration.minutes(15),
       environment: {
         TABLE_NAME: table.tableName,
@@ -695,7 +695,7 @@ export class Api extends Construct {
 
     const getSharedChat = new NodejsFunction(this, 'GetSharedChat', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/getSharedChat.ts',
+      entry: '../lambda/src/api-gateway/share/getSharedChat.ts',
       timeout: Duration.minutes(15),
       environment: {
         TABLE_NAME: table.tableName,
@@ -707,7 +707,7 @@ export class Api extends Construct {
 
     const findShareId = new NodejsFunction(this, 'FindShareId', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/findShareId.ts',
+      entry: '../lambda/src/api-gateway/share/findShareId.ts',
       timeout: Duration.minutes(15),
       environment: {
         TABLE_NAME: table.tableName,
@@ -719,7 +719,7 @@ export class Api extends Construct {
 
     const deleteShareId = new NodejsFunction(this, 'DeleteShareId', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/deleteShareId.ts',
+      entry: '../lambda/src/api-gateway/share/deleteShareId.ts',
       timeout: Duration.minutes(15),
       environment: {
         TABLE_NAME: table.tableName,
@@ -734,7 +734,7 @@ export class Api extends Construct {
       'ListSystemContexts',
       {
         runtime: LAMBDA_RUNTIME_NODEJS,
-        entry: '../lambda/src/handlers/listSystemContexts.ts',
+        entry: '../lambda/src/api-gateway/context/listSystemContexts.ts',
         timeout: Duration.minutes(15),
         environment: {
           TABLE_NAME: table.tableName,
@@ -750,7 +750,7 @@ export class Api extends Construct {
       'CreateSystemContexts',
       {
         runtime: LAMBDA_RUNTIME_NODEJS,
-        entry: '../lambda/src/handlers/createSystemContext.ts',
+        entry: '../lambda/src/api-gateway/context/createSystemContext.ts',
         timeout: Duration.minutes(15),
         environment: {
           TABLE_NAME: table.tableName,
@@ -766,7 +766,7 @@ export class Api extends Construct {
       'UpdateSystemContextTitle',
       {
         runtime: LAMBDA_RUNTIME_NODEJS,
-        entry: '../lambda/src/handlers/updateSystemContextTitle.ts',
+        entry: '../lambda/src/api-gateway/context/updateSystemContextTitle.ts',
         timeout: Duration.minutes(15),
         environment: {
           TABLE_NAME: table.tableName,
@@ -782,7 +782,7 @@ export class Api extends Construct {
       'DeleteSystemContexts',
       {
         runtime: LAMBDA_RUNTIME_NODEJS,
-        entry: '../lambda/src/handlers/deleteSystemContext.ts',
+        entry: '../lambda/src/api-gateway/context/deleteSystemContext.ts',
         timeout: Duration.minutes(15),
         environment: {
           TABLE_NAME: table.tableName,
@@ -795,7 +795,7 @@ export class Api extends Construct {
 
     const deleteFileFunction = new NodejsFunction(this, 'DeleteFileFunction', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/deleteFile.ts',
+      entry: '../lambda/src/api-gateway/file/deleteFile.ts',
       timeout: Duration.minutes(15),
       environment: {
         BUCKET_NAME: fileBucket.bucketName,
@@ -808,7 +808,7 @@ export class Api extends Construct {
     // Lambda function for getting token usage
     const getTokenUsageFunction = new NodejsFunction(this, 'GetTokenUsage', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: '../lambda/src/handlers/getTokenUsage.ts',
+      entry: '../lambda/src/api-gateway/core/getTokenUsage.ts',
       environment: {
         TABLE_NAME: table.tableName,
         STATS_TABLE_NAME: props.statsTable.tableName,
