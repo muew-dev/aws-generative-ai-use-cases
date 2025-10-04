@@ -4,7 +4,7 @@ import {
   BraveSearchResult,
   TavilySearchResult,
 } from 'generative-ai-use-cases';
-import { StackInput } from '../lib/stack-input';
+import { StackInput } from '../../../cdk/lib/stack-input';
 
 type SearchResult = {
   title: string;

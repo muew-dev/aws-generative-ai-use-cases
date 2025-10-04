@@ -1,6 +1,6 @@
 import { Handler, Context } from 'aws-lambda';
 import { OptimizePromptRequest } from 'generative-ai-use-cases';
-import bedrockOptimizePrompt from './utils/bedrockOptimizePrompt';
+import bedrockOptimizePrompt from '../utils/bedrockOptimizePrompt';
 
 declare global {
   namespace awslambda {

@@ -59,7 +59,7 @@ export class Transcribe extends Construct {
 
     const getSignedUrlFunction = new NodejsFunction(this, 'GetSignedUrl', {
       runtime: LAMBDA_RUNTIME_NODEJS,
-      entry: './lambda/getFileUploadSignedUrl.ts',
+      entry: '../lambda/src/handlers/getFileUploadSignedUrl.ts',
       timeout: Duration.minutes(15),
       environment: {
         BUCKET_NAME: audioBucket.bucketName,
@@ -84,7 +84,7 @@ export class Transcribe extends Construct {
       'StartTranscription',
       {
         runtime: LAMBDA_RUNTIME_NODEJS,
-        entry: './lambda/startTranscription.ts',
+        entry: '../lambda/src/handlers/startTranscription.ts',
         timeout: Duration.minutes(15),
         environment: {
           TRANSCRIPT_BUCKET_NAME: transcriptBucket.bucketName,
@@ -108,7 +108,7 @@ export class Transcribe extends Construct {
       'GetTranscription',
       {
         runtime: LAMBDA_RUNTIME_NODEJS,
-        entry: './lambda/getTranscription.ts',
+        entry: '../lambda/src/handlers/getTranscription.ts',
         timeout: Duration.minutes(15),
         initialPolicy: [
           new PolicyStatement({

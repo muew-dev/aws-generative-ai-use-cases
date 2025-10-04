@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { GenerateImageRequest } from 'generative-ai-use-cases';
-import api from './utils/api';
-import { defaultImageGenerationModel } from './utils/models';
+import api from '../utils/api';
+import { defaultImageGenerationModel } from '../utils/models';
 
 export const handler = async (
   event: APIGatewayProxyEvent

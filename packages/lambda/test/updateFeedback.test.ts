@@ -1,13 +1,13 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { handler } from '../../lambda/updateFeedback';
-import { listMessages, updateFeedback } from '../../lambda/repository';
+import { handler } from '../src/handlers/updateFeedback';
+import { listMessages, updateFeedback } from '../src/handlers/repository';
 import {
   RecordedMessage,
   UpdateFeedbackRequest,
 } from 'generative-ai-use-cases';
 
 // Mock the repository
-jest.mock('../../lambda/repository');
+jest.mock('../src/handlers/repository');
 const mockedListMessages = listMessages as jest.MockedFunction<
   typeof listMessages
 >;

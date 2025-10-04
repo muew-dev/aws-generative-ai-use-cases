@@ -4,8 +4,8 @@ import {
   UnrecordedMessage,
 } from 'generative-ai-use-cases';
 import { setChatTitle } from './repository';
-import api from './utils/api';
-import { defaultModel } from './utils/models';
+import api from '../utils/api';
+import { defaultModel } from '../utils/models';
 
 export const handler = async (
   event: APIGatewayProxyEvent

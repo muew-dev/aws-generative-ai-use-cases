@@ -1,6 +1,6 @@
 import { Handler, Context } from 'aws-lambda';
 import { FlowRequest } from 'generative-ai-use-cases';
-import bedrockFlowApi from './utils/bedrockFlowApi';
+import bedrockFlowApi from '../utils/bedrockFlowApi';
 
 declare global {
   namespace awslambda {

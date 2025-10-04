@@ -21,7 +21,7 @@ import {
   InvokeCommand,
   InvocationType,
 } from '@aws-sdk/client-lambda';
-import { initBedrockRuntimeClient } from './utils/bedrockClient';
+import { initBedrockRuntimeClient } from '../utils/bedrockClient';
 
 const BUCKET_NAME: string = process.env.BUCKET_NAME!;
 const TABLE_NAME: string = process.env.TABLE_NAME!;

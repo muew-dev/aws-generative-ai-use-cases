@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { PredictRequest } from 'generative-ai-use-cases';
-import api from './utils/api';
-import { defaultModel } from './utils/models';
+import api from '../utils/api';
+import { defaultModel } from '../utils/models';
 
 export const handler = async (
   event: APIGatewayProxyEvent

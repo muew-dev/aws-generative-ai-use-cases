@@ -14,7 +14,7 @@ import {
   SpeechToSpeechEvent,
   Model,
 } from 'generative-ai-use-cases';
-import { initBedrockRuntimeClient } from './utils/bedrockClient';
+import { initBedrockRuntimeClient } from '../utils/bedrockClient';
 
 Object.assign(global, { WebSocket: require('ws') });
 

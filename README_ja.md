@@ -183,7 +183,161 @@ npm run cdk:deploy:quick
 
 ## アーキテクチャ
 
+### システム全体アーキテクチャ
+
 ![arch.drawio.png](./docs/assets/images/arch.drawio.png)
+
+### 詳細インフラ構成（CDKコードベース）
+
+以下は、CDKコードから読み取った実際のAWSインフラ構成を詳細化したアーキテクチャ図です：
+
+```mermaid
+graph TB
+    %% ユーザー・フロントエンド
+    User[👤 ユーザー]
+    Browser[🌐 ブラウザ]
+
+    %% セキュリティ層
+    WAF[🛡️ AWS WAF]
+
+    %% フロントエンド配信
+    CloudFront[☁️ Amazon CloudFront]
+    S3Web[📁 S3 Bucket<br/>Web配信]
+
+    %% 認証
+    CognitoUP[🔐 Cognito User Pool]
+    CognitoIP[🔑 Cognito Identity Pool]
+
+    %% API層
+    APIGW[🚪 API Gateway<br/>REST API]
+    AppSync[⚡ AppSync Event API<br/>WebSocket]
+
+    %% Lambda関数群
+    subgraph "Lambda関数 (56個)"
+        subgraph "API Gateway経由 (53個)"
+            LambdaChat[💬 チャット関連<br/>8個のLambda]
+            LambdaMedia[🎨 メディア生成<br/>5個のLambda]
+            LambdaFile[📎 ファイル管理<br/>3個のLambda]
+            LambdaTranscribe[🎤 音声認識<br/>3個のLambda]
+            LambdaSpeech[🗣️ 音声対話<br/>2個のLambda]
+            LambdaRAG[🔍 RAG機能<br/>3個のLambda]
+            LambdaShare[🔗 共有機能<br/>4個のLambda]
+            LambdaContext[📋 システムコンテキスト<br/>4個のLambda]
+            LambdaUseCase[🏗️ ユースケースビルダー<br/>10個のLambda]
+            LambdaAuth[🔒 認証<br/>1個のLambda]
+            LambdaCore[⚙️ コア機能<br/>10個のLambda]
+        end
+
+        LambdaStream[🌊 Streaming Response<br/>1個のLambda]
+        LambdaAgent[🤖 検索エージェント<br/>1個のLambda]
+        LambdaMCP[🔧 MCP機能<br/>1個のLambda]
+    end
+
+    %% データストレージ
+    DynamoDB[🗄️ DynamoDB<br/>会話履歴・統計]
+    S3Files[📁 S3 Bucket<br/>ファイルストレージ]
+    S3Audio[🎵 S3 Bucket<br/>音声ファイル]
+    S3Transcript[📝 S3 Bucket<br/>転写結果]
+    S3Agent[📊 S3 Bucket<br/>Agent用データ]
+
+    %% AI/ML サービス
+    Bedrock[🧠 Amazon Bedrock<br/>LLM・画像・動画生成]
+    BedrockAgent[🤖 Bedrock Agent<br/>検索・コード実行]
+    BedrockKB[📚 Bedrock Knowledge Base]
+    Transcribe[🎤 Amazon Transcribe]
+    Kendra[🔍 Amazon Kendra]
+    OpenSearch[🔎 Amazon OpenSearch]
+    SageMaker[🤖 Amazon SageMaker]
+
+    %% 接続関係
+    User --> Browser
+    Browser --> WAF
+    WAF --> CloudFront
+    WAF --> APIGW
+    WAF --> CognitoUP
+    CloudFront --> S3Web
+
+    %% 認証フロー
+    Browser --> CognitoUP
+    CognitoUP --> CognitoIP
+    CognitoIP --> APIGW
+    CognitoIP --> AppSync
+
+    %% API Gateway経由のフロー
+    APIGW --> LambdaChat
+    APIGW --> LambdaMedia
+    APIGW --> LambdaFile
+    APIGW --> LambdaTranscribe
+    APIGW --> LambdaSpeech
+    APIGW --> LambdaRAG
+    APIGW --> LambdaShare
+    APIGW --> LambdaContext
+    APIGW --> LambdaUseCase
+    APIGW --> LambdaAuth
+    APIGW --> LambdaCore
+
+    %% ストリーミング・エージェント
+    Browser --> LambdaStream
+    BedrockAgent --> LambdaAgent
+    Browser --> LambdaMCP
+
+    %% WebSocket
+    AppSync --> LambdaSpeech
+
+    %% Lambda → データストレージ
+    LambdaChat --> DynamoDB
+    LambdaShare --> DynamoDB
+    LambdaContext --> DynamoDB
+    LambdaUseCase --> DynamoDB
+    LambdaCore --> DynamoDB
+
+    LambdaFile --> S3Files
+    LambdaTranscribe --> S3Audio
+    LambdaTranscribe --> S3Transcript
+    LambdaAgent --> S3Agent
+
+    %% Lambda → AI/MLサービス
+    LambdaCore --> Bedrock
+    LambdaStream --> Bedrock
+    LambdaMedia --> Bedrock
+    LambdaSpeech --> Bedrock
+    LambdaMCP --> Bedrock
+
+    LambdaTranscribe --> Transcribe
+    LambdaRAG --> Kendra
+    LambdaRAG --> BedrockKB
+    LambdaAgent --> BedrockAgent
+    LambdaCore --> SageMaker
+
+    %% RAG関連の接続
+    Kendra --> S3Files
+    BedrockKB --> OpenSearch
+    OpenSearch --> S3Files
+    BedrockAgent --> BedrockKB
+
+    %% スタイリング
+    classDef userClass fill:#e1f5fe
+    classDef securityClass fill:#fff3e0
+    classDef lambdaClass fill:#f3e5f5
+    classDef storageClass fill:#e8f5e8
+    classDef aiClass fill:#fff8e1
+
+    class User,Browser userClass
+    class WAF,CognitoUP,CognitoIP securityClass
+    class LambdaChat,LambdaMedia,LambdaFile,LambdaTranscribe,LambdaSpeech,LambdaRAG,LambdaShare,LambdaContext,LambdaUseCase,LambdaAuth,LambdaCore,LambdaStream,LambdaAgent,LambdaMCP lambdaClass
+    class DynamoDB,S3Files,S3Audio,S3Transcript,S3Agent,S3Web storageClass
+    class Bedrock,BedrockAgent,BedrockKB,Transcribe,Kendra,OpenSearch,SageMaker aiClass
+```
+
+#### Lambda関数分類
+
+上記の詳細図は、現在のCDKコード（56個のLambda関数）の実際の構成を反映しています：
+
+1. **API Gateway経由のLambda** (53個): HTTP APIエンドポイントとして公開
+   - チャット、メディア生成、ファイル管理、音声、RAG、共有、コンテキスト、ユースケースビルダー等
+2. **Streaming Response用Lambda** (1個): WebSocketでのリアルタイム応答
+3. **検索エージェント用Lambda** (1個): Bedrock Agentから呼び出される
+4. **MCP機能Lambda** (1個): Model Context Protocol対応（Function URL経由）
 
 ## その他
 
