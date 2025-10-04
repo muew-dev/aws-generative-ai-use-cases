@@ -30,8 +30,6 @@ interface ImportMetaEnv {
   readonly VITE_APP_SPEECH_TO_SPEECH_NAMESPACE: string;
   readonly VITE_APP_SPEECH_TO_SPEECH_EVENT_API_ENDPOINT: string;
   readonly VITE_APP_SPEECH_TO_SPEECH_MODEL_IDS: string;
-  readonly VITE_APP_MCP_ENABLED: string;
-  readonly VITE_APP_MCP_ENDPOINT: string;
   readonly VITE_APP_COGNITO_USER_POOL_PROXY_ENDPOINT: string;
   readonly VITE_APP_COGNITO_IDENTITY_POOL_PROXY_ENDPOINT: string;
   readonly VITE_APP_AGENT_CORE_ENABLED: string;

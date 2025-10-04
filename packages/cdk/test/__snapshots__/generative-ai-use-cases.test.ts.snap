@@ -4992,7 +4992,7 @@ exports[`GenerativeAiUseCases matches the snapshot (closed network mode) 4`] = `
         "AgentCoreRuntimeName": "GenericAgentCoreRuntime",
         "CustomConfig": {
           "containerImageUri": {
-            "Fn::Sub": "123456890123.dkr.ecr.us-east-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-123456890123-us-east-1:736d91ac33c9bb64c93f49d1258dbf8aff8d6ec20441291f20f42076efb65f00",
+            "Fn::Sub": "123456890123.dkr.ecr.us-east-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-123456890123-us-east-1:8c9adb625efb65d55c7f64f69b3171ac6e31a0f1376b69240044cc384a5644cb",
           },
           "environmentVariables": {
             "FILE_BUCKET": {
@@ -5340,12 +5340,6 @@ exports[`GenerativeAiUseCases matches the snapshot (closed network mode) 6`] = `
           "Arn",
         ],
       },
-    },
-    "McpEnabled": {
-      "Value": "false",
-    },
-    "McpEndpoint": {
-      "Value": "",
     },
     "ModelIds": {
       "Value": {
@@ -18398,8 +18392,6 @@ exports[`GenerativeAiUseCases matches the snapshot (closed network mode) 6`] = `
             ],
           },
           "VITE_APP_INLINE_AGENTS": "false",
-          "VITE_APP_MCP_ENABLED": "false",
-          "VITE_APP_MCP_ENDPOINT": "",
           "VITE_APP_MODEL_IDS": {
             "Fn::Join": [
               "",
@@ -26205,7 +26197,7 @@ exports[`GenerativeAiUseCases matches the snapshot 4`] = `
         "AgentCoreRuntimeName": "GenericAgentCoreRuntime",
         "CustomConfig": {
           "containerImageUri": {
-            "Fn::Sub": "123456890123.dkr.ecr.us-east-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-123456890123-us-east-1:736d91ac33c9bb64c93f49d1258dbf8aff8d6ec20441291f20f42076efb65f00",
+            "Fn::Sub": "123456890123.dkr.ecr.us-east-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-123456890123-us-east-1:8c9adb625efb65d55c7f64f69b3171ac6e31a0f1376b69240044cc384a5644cb",
           },
           "environmentVariables": {
             "FILE_BUCKET": {
@@ -26553,12 +26545,6 @@ exports[`GenerativeAiUseCases matches the snapshot 6`] = `
           "Arn",
         ],
       },
-    },
-    "McpEnabled": {
-      "Value": "false",
-    },
-    "McpEndpoint": {
-      "Value": "",
     },
     "ModelIds": {
       "Value": {
@@ -38607,8 +38593,6 @@ exports[`GenerativeAiUseCases matches the snapshot 6`] = `
             ],
           },
           "VITE_APP_INLINE_AGENTS": "false",
-          "VITE_APP_MCP_ENABLED": "false",
-          "VITE_APP_MCP_ENDPOINT": "",
           "VITE_APP_MODEL_IDS": {
             "Fn::Join": [
               "",

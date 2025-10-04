@@ -6,9 +6,7 @@ import os
 from typing import Any
 
 import boto3
-from mcp import StdioServerParameters, stdio_client
 from strands import tool
-from strands.tools.mcp import MCPClient
 
 from .config import WORKSPACE_DIR, get_aws_credentials, get_uv_environment
 
@@ -27,10 +25,9 @@ logger = logging.getLogger(__name__)
 
 
 class ToolManager:
-    """Manages tools including MCP tools and built-in tools."""
+    """Manages tools including built-in tools."""
 
     def __init__(self):
-        self.mcp_tools = None
         self.session_id = None
         self.trace_id = None
 
@@ -39,48 +36,6 @@ class ToolManager:
         self.session_id = session_id
         self.trace_id = trace_id
 
-    def load_mcp_tools(self) -> list[Any]:
-        """Load MCP tools from mcp.json"""
-        if self.mcp_tools is not None:
-            return self.mcp_tools
-
-        try:
-            with open("mcp.json") as f:
-                mcp_json = json.loads(f.read())
-
-                if "mcpServers" not in mcp_json:
-                    logger.warning("mcpServers not defined in mcp.json")
-                    self.mcp_tools = []
-                    return self.mcp_tools
-
-                mcp_servers = mcp_json["mcpServers"]
-                mcp_clients = []
-                uv_env = get_uv_environment()
-
-                for server_name, server in mcp_servers.items():
-                    try:
-                        client = MCPClient(
-                            lambda server=server: stdio_client(
-                                StdioServerParameters(
-                                    command=server["command"],
-                                    args=server.get("args", []),
-                                    env={**uv_env, **server.get("env", {})},
-                                )
-                            )
-                        )
-                        client.start()
-                        mcp_clients.append(client)
-                    except Exception as e:
-                        logger.error(f"Error creating MCP client for {server_name}: {e}")
-
-                # Flatten the tools
-                self.mcp_tools = sum([c.list_tools_sync() for c in mcp_clients], [])
-                logger.info(f"Loaded {len(self.mcp_tools)} MCP tools")
-                return self.mcp_tools
-        except Exception as e:
-            logger.error(f"Error loading MCP tools: {e}")
-            self.mcp_tools = []
-            return self.mcp_tools
 
     def get_upload_tool(self):
         """Get the S3 upload tool with session context"""
@@ -137,12 +92,11 @@ class ToolManager:
         return code_interpreter_tools
 
     def get_all_tools(self) -> list[Any]:
-        """Get all available tools (MCP + built-in + code interpreter)"""
-        mcp_tools = self.load_mcp_tools()
+        """Get all available tools (built-in + code interpreter)"""
         upload_tool = self.get_upload_tool()
         code_interpreter_tools = self.get_code_interpreter_tool()
 
-        all_tools = mcp_tools + [upload_tool] + code_interpreter_tools
-        logger.info(f"Total tools loaded: {len(all_tools)} (MCP: {len(mcp_tools)}, Built-in: 1, Code Interpreter: {len(code_interpreter_tools)})")
+        all_tools = [upload_tool] + code_interpreter_tools
+        logger.info(f"Total tools loaded: {len(all_tools)} (Built-in: 1, Code Interpreter: {len(code_interpreter_tools)})")
 
         return all_tools

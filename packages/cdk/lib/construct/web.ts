@@ -57,8 +57,6 @@ export interface WebProps {
   readonly speechToSpeechNamespace: string;
   readonly speechToSpeechEventApiEndpoint: string;
   readonly speechToSpeechModelIds: ModelConfiguration[];
-  readonly mcpEnabled: boolean;
-  readonly mcpEndpoint: string | null;
   readonly webBucket?: s3.Bucket;
   readonly cognitoUserPoolProxyEndpoint?: string;
   readonly cognitoIdentityPoolProxyEndpoint?: string;
@@ -284,8 +282,6 @@ export class Web extends Construct {
         VITE_APP_SPEECH_TO_SPEECH_MODEL_IDS: JSON.stringify(
           props.speechToSpeechModelIds
         ),
-        VITE_APP_MCP_ENABLED: props.mcpEnabled.toString(),
-        VITE_APP_MCP_ENDPOINT: props.mcpEndpoint ?? '',
         VITE_APP_COGNITO_USER_POOL_PROXY_ENDPOINT:
           props.cognitoUserPoolProxyEndpoint ?? '',
         VITE_APP_COGNITO_IDENTITY_POOL_PROXY_ENDPOINT:

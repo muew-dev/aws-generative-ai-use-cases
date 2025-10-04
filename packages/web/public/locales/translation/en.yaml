@@ -497,10 +497,6 @@ landing:
 
         Cute, stylish, easy to use, POP culture, friendly, youth-oriented,
         music, photography, trendy smartphone, city background
-    mcp:
-      content: >-
-        Please research about Amazon Bedrock security. Is user input used for
-        model training?
     rag:
       content: >-
         Please provide an overview of Amazon Nova Canvas and explain its key
@@ -578,13 +574,6 @@ landing:
         efficiency in design work. In this feature, you can get LLM assistance
         in creating prompts.
       title: Image Generation
-    mcp_chat:
-      description: >-
-        MCP Chat is a chat function that seamlessly integrates Bedrock's LLM
-        models with external data and external tools through the Model Context
-        Protocol (MCP). You can freely add tools by editing the mcp.json file.
-        Leveraging Strands Agents as an MCP agent.
-      title: MCP Chat
     meeting-minutes:
       description: >-
         Automatically generate meeting minutes from audio recordings or
@@ -674,9 +663,6 @@ language:
   th: Thai
   vi: Vietnamese
   zh: Chinese
-mcp_chat:
-  loading_message: Connecting to MCP server. This may take some time. Please wait...
-  title: MCP Chat
 meetingMinutes:
   auto_generate: Auto Generate
   clear_minutes: Clear Minutes

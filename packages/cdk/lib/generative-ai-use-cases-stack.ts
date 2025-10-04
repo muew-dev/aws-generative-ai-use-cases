@@ -10,7 +10,6 @@ import {
   Transcribe,
   CommonWebAcl,
   SpeechToSpeech,
-  McpApi,
   AgentCore,
 } from './construct';
 import { CfnWebACLAssociation } from 'aws-cdk-lib/aws-wafv2';
@@ -160,19 +159,6 @@ export class GenerativeAiUseCasesStack extends Stack {
       securityGroups,
     });
 
-    // MCP
-    let mcpEndpoint: string | null = null;
-    if (params.mcpEnabled) {
-      const mcpApi = new McpApi(this, 'McpApi', {
-        idPool: auth.idPool,
-        isSageMakerStudio: props.isSageMakerStudio,
-        fileBucket: api.fileBucket,
-        vpc: props.vpc,
-        securityGroups,
-      });
-      mcpEndpoint = mcpApi.endpoint;
-    }
-
     // AgentCore Runtime (External runtimes and permissions only)
     let genericRuntimeArn: string | undefined;
     let genericRuntimeName: string | undefined;
@@ -225,8 +211,6 @@ export class GenerativeAiUseCasesStack extends Stack {
       speechToSpeechNamespace: speechToSpeech.namespace,
       speechToSpeechEventApiEndpoint: speechToSpeech.eventApiEndpoint,
       speechToSpeechModelIds: params.speechToSpeechModelIds,
-      mcpEnabled: params.mcpEnabled,
-      mcpEndpoint,
       agentCoreEnabled:
         params.createGenericAgentCoreRuntime ||
         params.agentCoreExternalRuntimes.length > 0,
@@ -450,14 +434,6 @@ export class GenerativeAiUseCasesStack extends Stack {
 
     new CfnOutput(this, 'SpeechToSpeechModelIds', {
       value: JSON.stringify(params.speechToSpeechModelIds),
-    });
-
-    new CfnOutput(this, 'McpEnabled', {
-      value: params.mcpEnabled.toString(),
-    });
-
-    new CfnOutput(this, 'McpEndpoint', {
-      value: mcpEndpoint ?? '',
     });
 
     new CfnOutput(this, 'AgentCoreEnabled', {

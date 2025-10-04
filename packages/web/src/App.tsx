@@ -22,7 +22,6 @@ import {
   PiMicrophoneBold,
   PiTreeStructure,
   PiNotebook,
-  PiGraph,
 } from 'react-icons/pi';
 import { Outlet } from 'react-router-dom';
 import Drawer, { ItemProps } from './components/Drawer';
@@ -43,7 +42,6 @@ const ragKnowledgeBaseEnabled: boolean =
   import.meta.env.VITE_APP_RAG_KNOWLEDGE_BASE_ENABLED === 'true';
 const agentEnabled: boolean = import.meta.env.VITE_APP_AGENT_ENABLED === 'true';
 const inlineAgents: boolean = import.meta.env.VITE_APP_INLINE_AGENTS === 'true';
-const mcpEnabled: boolean = import.meta.env.VITE_APP_MCP_ENABLED === 'true';
 const agentCoreEnabled: boolean =
   import.meta.env.VITE_APP_AGENT_CORE_ENABLED === 'true';
 const {
@@ -130,15 +128,6 @@ const App: React.FC = () => {
           };
         })
       : []),
-    mcpEnabled
-      ? {
-          label: t('mcp_chat.title'),
-          to: '/mcp',
-          icon: <PiGraph />,
-          display: 'usecase' as const,
-          sub: 'Deprecated',
-        }
-      : null,
     agentCoreEnabled
       ? {
           label: t('agent_core.title'),

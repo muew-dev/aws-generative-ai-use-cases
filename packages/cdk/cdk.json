@@ -61,7 +61,6 @@
     "searchApiKey": "",
     "agents": [],
     "inlineAgents": false,
-    "mcpEnabled": false,
     "flows": [],
     "createGenericAgentCoreRuntime": false,
     "agentCoreExternalRuntimes": [],
