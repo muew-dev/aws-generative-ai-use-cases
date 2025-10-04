@@ -7,7 +7,7 @@ import {
 } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
 import { VideoJob } from 'generative-ai-use-cases';
-import { updateJobStatus } from './repositoryVideoJob';
+import { updateJobStatus } from '../core/repositoryVideoJob';
 
 export interface CopyVideoJobParams {
   job: VideoJob;

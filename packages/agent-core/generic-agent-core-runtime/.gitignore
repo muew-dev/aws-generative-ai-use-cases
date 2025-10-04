@@ -53,9 +53,6 @@ temp/
 .tmp/
 .ruff_cache/
 
-# Docker
-.dockerignore
-
 # AWS
 .aws/
 

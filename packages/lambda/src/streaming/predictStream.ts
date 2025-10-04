@@ -1,7 +1,7 @@
 import { Handler, Context } from 'aws-lambda';
 import { PredictRequest } from 'generative-ai-use-cases';
-import api from '../utils/api';
-import { defaultModel } from '../utils/models';
+import api from '../shared/api';
+import { defaultModel } from '../shared/models';
 
 declare global {
   namespace awslambda {

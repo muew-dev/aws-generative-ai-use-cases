@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { listVideoJobs } from './repositoryVideoJob';
+import { listVideoJobs } from '../core/repositoryVideoJob';
 
 export const handler = async (
   event: APIGatewayProxyEvent

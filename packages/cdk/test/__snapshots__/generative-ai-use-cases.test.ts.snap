@@ -4763,7 +4763,7 @@ exports[`GenerativeAiUseCases matches the snapshot (closed network mode) 4`] = `
         "ImageScanningConfiguration": {
           "ScanOnPush": true,
         },
-        "RepositoryName": "lambda-python-generic-agent-core-runtime-agentcorestack",
+        "RepositoryName": "agent-core-generic-agent-core-runtime-agentcorestack",
       },
       "Type": "AWS::ECR::Repository",
       "UpdateReplacePolicy": "Delete",
@@ -25976,7 +25976,7 @@ exports[`GenerativeAiUseCases matches the snapshot 4`] = `
         "ImageScanningConfiguration": {
           "ScanOnPush": true,
         },
-        "RepositoryName": "lambda-python-generic-agent-core-runtime-agentcorestack",
+        "RepositoryName": "agent-core-generic-agent-core-runtime-agentcorestack",
       },
       "Type": "AWS::ECR::Repository",
       "UpdateReplacePolicy": "Delete",
