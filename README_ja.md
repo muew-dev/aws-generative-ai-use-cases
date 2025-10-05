@@ -213,7 +213,7 @@ graph TB
     AppSync[⚡ AppSync Event API<br/>WebSocket]
 
     %% Lambda関数群
-    subgraph "Lambda関数 (56個)"
+    subgraph "Lambda関数 (59個)"
         subgraph "API Gateway経由 (53個)"
             LambdaChat[💬 チャット関連<br/>8個のLambda]
             LambdaMedia[🎨 メディア生成<br/>5個のLambda]
@@ -231,6 +231,12 @@ graph TB
         LambdaStream[🌊 Streaming Response<br/>1個のLambda]
         LambdaAgent[🤖 検索エージェント<br/>1個のLambda]
         LambdaMCP[🔧 MCP機能<br/>1個のLambda]
+
+        subgraph "CloudFormation Custom Resource (3個)"
+            LambdaCustomOSS[🔧 OpenSearch Index<br/>ベクトルインデックス作成]
+            LambdaCustomTag[🏷️ Apply Tags<br/>OSS コレクション タグ管理]
+            LambdaCustomAgent[🤖 Agent Runtime<br/>Bedrock Agent Core 管理]
+        end
     end
 
     %% データストレージ
@@ -315,6 +321,11 @@ graph TB
     OpenSearch --> S3Files
     BedrockAgent --> BedrockKB
 
+    %% Custom Resource の接続
+    LambdaCustomOSS --> OpenSearch
+    LambdaCustomTag --> OpenSearch
+    LambdaCustomAgent --> BedrockAgent
+
     %% スタイリング
     classDef userClass fill:#e1f5fe
     classDef securityClass fill:#fff3e0
@@ -324,20 +335,24 @@ graph TB
 
     class User,Browser userClass
     class WAF,CognitoUP,CognitoIP securityClass
-    class LambdaChat,LambdaMedia,LambdaFile,LambdaTranscribe,LambdaSpeech,LambdaRAG,LambdaShare,LambdaContext,LambdaUseCase,LambdaAuth,LambdaCore,LambdaStream,LambdaAgent,LambdaMCP lambdaClass
+    class LambdaChat,LambdaMedia,LambdaFile,LambdaTranscribe,LambdaSpeech,LambdaRAG,LambdaShare,LambdaContext,LambdaUseCase,LambdaAuth,LambdaCore,LambdaStream,LambdaAgent,LambdaMCP,LambdaCustomOSS,LambdaCustomTag,LambdaCustomAgent lambdaClass
     class DynamoDB,S3Files,S3Audio,S3Transcript,S3Agent,S3Web storageClass
     class Bedrock,BedrockAgent,BedrockKB,Transcribe,Kendra,OpenSearch,SageMaker aiClass
 ```
 
 #### Lambda関数分類
 
-上記の詳細図は、現在のCDKコード（56個のLambda関数）の実際の構成を反映しています：
+上記の詳細図は、現在のCDKコード（59個のLambda関数）の実際の構成を反映しています：
 
 1. **API Gateway経由のLambda** (53個): HTTP APIエンドポイントとして公開
    - チャット、メディア生成、ファイル管理、音声、RAG、共有、コンテキスト、ユースケースビルダー等
 2. **Streaming Response用Lambda** (1個): WebSocketでのリアルタイム応答
 3. **検索エージェント用Lambda** (1個): Bedrock Agentから呼び出される
 4. **MCP機能Lambda** (1個): Model Context Protocol対応（Function URL経由）
+5. **CloudFormation Custom Resource用Lambda** (3個): インフラ構築時に実行
+   - **OpenSearch Index**: ベクトル検索用インデックス作成（日本語Kuromoji対応）
+   - **Apply Tags**: OpenSearch ServerlessコレクションへのAWSタグ管理
+   - **Agent Runtime**: Bedrock Agent Core の実行環境管理
 
 ## その他
 
