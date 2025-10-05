@@ -76,7 +76,7 @@ export class ClosedWeb extends Construct {
       memoryLimitMiB: 512,
       desiredCount: 1,
       taskImageOptions: {
-        image: ContainerImage.fromAsset('./fargate-s3-server', {
+        image: ContainerImage.fromAsset('../fargate-s3-server', {
           platform: Platform.LINUX_AMD64,
           networkMode: props.isSageMakerStudio
             ? NetworkMode.custom('sagemaker')

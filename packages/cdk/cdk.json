@@ -55,7 +55,7 @@
     "videoGenerationModelIds": ["amazon.nova-reel-v1:0"],
     "speechToSpeechModelIds": ["amazon.nova-sonic-v1:0"],
     "endpointNames": [],
-    "agentEnabled": false,
+    "agentEnabled": true,
     "searchAgentEnabled": false,
     "searchEngine": "Brave",
     "searchApiKey": "",
