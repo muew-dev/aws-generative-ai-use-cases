@@ -62,11 +62,13 @@ npm run cdk:destroy
 ## Architecture Overview
 
 ### Monorepo Structure
+
 - Uses npm workspaces
 - Main packages: `cdk`, `web`, `types`, `common`
 - Browser extension as separate module
 
 ### Frontend (`/packages/web`)
+
 - **Stack**: React 18 + TypeScript + Vite
 - **Styling**: Tailwind CSS with custom components
 - **State**: Zustand for state management, SWR for data fetching
@@ -75,6 +77,7 @@ npm run cdk:destroy
 - **Key Libraries**: Novel editor, Tiptap, React Router, Radix UI
 
 ### Backend (`/packages/cdk`)
+
 - **Infrastructure**: AWS CDK v2
 - **Runtime**: Node.js Lambda functions (TypeScript)
 - **Database**: DynamoDB

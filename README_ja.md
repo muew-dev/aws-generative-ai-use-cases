@@ -354,6 +354,119 @@ graph TB
    - **Apply Tags**: OpenSearch ServerlessコレクションへのAWSタグ管理
    - **Agent Runtime**: Bedrock Agent Core の実行環境管理
 
+## GitHub Actions による CI/CD
+
+このプロジェクトでは以下のGitHub Actionsワークフローを提供しています：
+
+### CDK Diff（差分確認）
+
+- **ファイル**: `.github/workflows/cdk-diff.yml`
+- **目的**: Pull Requestで変更されるAWSリソースの差分を事前確認
+- **トリガー**: mainブランチへのPull Request作成・更新時
+- **機能**:
+  - CDKの差分（`cdk diff`）を自動実行
+  - 変更内容をPRにコメントとして自動投稿
+  - 本番環境への影響が大きい場合は専用のdiffも実行
+- **必要なSecrets**: `AWS_OIDC_ROLE_ARN`（デフォルト環境用）、`AWS_OIDC_ROLE_ARN_PROD`（本番環境用）
+
+### CDK Deploy（デプロイ）
+
+- **ファイル**: `.github/workflows/cdk-deploy.yml`
+- **目的**: 各環境への自動デプロイ
+- **トリガー**:
+  - mainブランチへのpush（デフォルト環境）
+  - 手動実行（全環境対応）
+
+- **環境サポート**:
+  - **default**: 開発・検証用環境
+  - **dev**: 開発環境
+  - **staging**: ステージング環境
+  - **prod**: 本番環境
+- **必要なSecrets**:
+  - `AWS_OIDC_ROLE_ARN`: デフォルト環境用のOIDCロールARN
+  - `AWS_OIDC_ROLE_ARN_DEV`: 開発環境用のOIDCロールARN
+  - `AWS_OIDC_ROLE_ARN_STG`: ステージング環境用のOIDCロールARN
+  - `AWS_OIDC_ROLE_ARN_PROD`: 本番環境用のOIDCロールARN
+
+### 品質チェック・テスト系ワークフロー
+
+#### Node.js CI（メインプロジェクト）
+
+- **ファイル**: `.github/workflows/node.js.yml`
+- **目的**: WebアプリケーションとCDKの品質チェック
+- **トリガー**: mainブランチへのpush・PR（browser-extension除く）
+- **実行内容**: テスト実行、リント、ビルド、CDK合成確認
+
+#### Python CI
+
+- **ファイル**: `.github/workflows/python.yml`
+- **目的**: Pythonコードのコードスタイルチェック
+- **対象**: `packages/cdk/lambda-python/`配下のコード
+- **ツール**: ruff（フォーマット・リント）
+
+#### Browser Extension CI
+
+- **ファイル**: `.github/workflows/browser-extension.yml`
+- **目的**: ブラウザ拡張機能の品質チェック
+- **対象**: `browser-extension/`配下のコード
+- **実行内容**: リント、ビルド確認
+
+#### cdk.context.json チェック
+
+- **ファイル**: `.github/workflows/deny-cdk-context-json.yml`
+- **目的**: CDKコンテキストファイルの誤コミットを防止
+- **説明**: `cdk.context.json`はCDKが自動生成するファイルでコミットすべきではないため、PRでこのファイルが含まれている場合はエラーとする
+
+### ドキュメント・リリース系ワークフロー
+
+#### GitHub Pages
+
+- **ファイル**: `.github/workflows/gh-pages.yml`
+- **目的**: プロジェクトドキュメントの自動公開
+- **トリガー**: mainブランチのMarkdownファイルやdocs/の変更時
+- **技術**: MkDocsを使用したドキュメントサイト生成・公開
+
+#### Release Drafter
+
+- **ファイル**: `.github/workflows/release-drafter.yml`
+- **目的**: リリースノートのドラフト自動作成
+- **トリガー**: PRがmainブランチにマージされた時
+- **機能**: PR情報からリリースノートを自動生成、ドラフト状態で保存
+
+#### Update Package Version
+
+- **ファイル**: `.github/workflows/update-version.yml`
+- **目的**: パッケージバージョンの自動更新
+- **トリガー**: Release Drafterワークフロー完了後
+- **流れ**: ドラフトリリースからバージョン取得 → package.json更新 → PR自動作成
+
+#### Publish Release
+
+- **ファイル**: `.github/workflows/publish-release.yml`
+- **目的**: ドラフトリリースの正式公開
+- **トリガー**: `new-release`ブランチのPRがマージされた時
+- **機能**: ドラフト状態のリリースを正式リリースとして公開
+
+### プロジェクト管理系ワークフロー
+
+#### Close Stale Issues
+
+- **ファイル**: `.github/workflows/close-stale-issues.yml`
+- **目的**: 古いIssue・PRの自動クローズ
+- **スケジュール**: 毎日午前1:30（UTC）
+- **ルール**: 30日間無活動でstaleラベル付与、さらに14日間でクローズ
+- **除外**: bug・dnc・new releaseラベル付きは対象外
+
+### AWS OIDC認証について
+
+GitHub ActionsでAWSリソースにアクセスするため、OpenID Connect (OIDC) による認証を使用しています。これにより：
+
+- AWS Access KeyやSecret Keyをリポジトリに保存する必要がない
+- 一時的な認証情報が自動発行される
+- より安全なCI/CDパイプラインを実現
+
+各環境用のOIDCロールARNをGitHub Secretsに設定することで、環境ごとに適切な権限でデプロイが実行されます。
+
 ## その他
 
 - [デプロイオプション](docs/ja/DEPLOY_OPTION.md)
