@@ -41,5 +41,8 @@
     "**/*": [
       "sh -c 'npm run lint'"
     ]
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.52.4"
   }
 }
