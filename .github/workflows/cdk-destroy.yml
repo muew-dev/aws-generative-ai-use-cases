@@ -1,0 +1,62 @@
+name: CDK Destroy All Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_destroy:
+        description: 'Type "destroy" to confirm you want to destroy all infrastructure'
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm_destroy }}" != "destroy" ]; then
+            echo "::error::You must type 'destroy' to confirm the destruction of infrastructure"
+            exit 1
+          fi
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+          aws-region: ap-northeast-1
+
+      - name: Setup environment
+        run: |
+          chmod +x setup-env.sh
+          ./setup-env.sh
+
+      - name: CDK Destroy All Stacks
+        run: |
+          echo "Destroying all stacks"
+          npm run cdk:destroy -- --all --force
+
+      - name: Cleanup notification
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "::notice::All infrastructure destruction completed successfully"
+          else
+            echo "::error::Infrastructure destruction failed. Please check the logs and cleanup manually if needed"
+          fi
