@@ -41,7 +41,7 @@ const envs: Record<string, Partial<StackInput>> = {
       'us.anthropic.claude-3-sonnet-20240229-v1:0',
       'anthropic.claude-3-haiku-20240307-v1:0',
     ],
-    imageGenerationModelIds: ['us.amazon.titan-image-generator-v1'],
+    imageGenerationModelIds: ['amazon.titan-image-generator-v1'],
     videoGenerationModelIds: [],
     speechToSpeechModelIds: [],
     endpointNames: [],
