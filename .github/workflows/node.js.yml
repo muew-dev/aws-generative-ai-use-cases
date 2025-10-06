@@ -6,10 +6,8 @@ name: Node.js(Web + CDK) CI
 on:
   push:
     branches: ['main']
-    paths-ignore: ['browser-extension/**']
   pull_request:
     branches: ['main']
-    paths-ignore: ['browser-extension/**']
 
 jobs:
   check-lint-build:

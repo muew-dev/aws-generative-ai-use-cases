@@ -9,10 +9,10 @@ permissions:
 on:
   push:
     branches: ['main']
-    paths: ['packages/cdk/lambda-python/**']
+    paths: ['packages/agent-core/**']
   pull_request:
     branches: ['main']
-    paths: ['packages/cdk/lambda-python/**']
+    paths: ['packages/agent-core/**']
 
 jobs:
   lint:
@@ -36,15 +36,15 @@ jobs:
           version: 'latest'
 
       - name: Install dependencies
-        working-directory: packages/cdk/lambda-python/generic-agent-core-runtime
+        working-directory: packages/agent-core/generic-agent-core-runtime
         run: uv sync --group=lint
 
       - name: Run ruff check
-        working-directory: packages/cdk/lambda-python/generic-agent-core-runtime
+        working-directory: packages/agent-core/generic-agent-core-runtime
         run: uv run ruff check --fix .
 
       - name: Run ruff format
-        working-directory: packages/cdk/lambda-python/generic-agent-core-runtime
+        working-directory: packages/agent-core/generic-agent-core-runtime
         run: uv run ruff format .
 
       - name: Check for changes

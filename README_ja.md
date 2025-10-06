@@ -467,6 +467,135 @@ GitHub ActionsでAWSリソースにアクセスするため、OpenID Connect (OI
 
 各環境用のOIDCロールARNをGitHub Secretsに設定することで、環境ごとに適切な権限でデプロイが実行されます。
 
+#### AWS_OIDC_ROLE_ARNの設定手順
+
+GitHub ActionsからAWSにアクセスするためのOIDCロールを作成・設定する手順：
+
+##### 前提条件
+
+以下のいずれかの方法でAWSに認証済みであること：
+
+```bash
+# 方法1: AWS CLIでプロファイル設定
+aws configure
+# Access Key ID、Secret Access Key、リージョン、出力形式を入力
+
+# 方法2: AWS SSOを使用（AWS Access Portal経由）
+# 初回設定
+aws configure sso
+
+# 設定項目例：
+# SSO session name: my-session
+# SSO start URL: https://my-company.awsapps.com/start
+# SSO region: ap-northeast-1
+# SSO registration scopes: sso:account:access
+# CLI default client Region: ap-northeast-1
+# CLI default output format: json
+# CLI profile name: my-profile
+
+# ログイン
+aws sso login --profile my-profile
+
+# 注意: AWS Access Portalの管理者から以下の情報を取得してください：
+# - SSO start URL (https://xxx.awsapps.com/start の形式)
+# - 利用可能なAWSアカウントとロール情報
+
+# 方法3: 環境変数で設定
+export AWS_ACCESS_KEY_ID=your-access-key
+export AWS_SECRET_ACCESS_KEY=your-secret-key
+export AWS_DEFAULT_REGION=ap-northeast-1
+
+# 認証確認
+aws sts get-caller-identity
+```
+
+##### 1. GitHub OIDC Identity Providerの作成
+
+AWS IAMコンソールで以下を実行：
+
+```bash
+# AWS CLIでの作成例
+aws iam create-open-id-connect-provider \
+  --url https://token.actions.githubusercontent.com \
+  --client-id-list sts.amazonaws.com
+
+# 注意: サムプリントは自動で取得されます（AWS CLIバージョン1.19.122以降）
+```
+
+##### 2. IAMロールの作成
+
+以下の信頼ポリシーでロールを作成：
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::033566443293:oidc-provider/token.actions.githubusercontent.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringLike": {
+          "token.actions.githubusercontent.com:sub": "repo:muew-dev/aws-generative-ai-use-cases:*"
+        },
+        "StringEquals": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+        }
+      }
+    }
+  ]
+}
+```
+
+**環境別に制限する場合**（本番環境など、より厳格な制御が必要な場合）:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::YOUR_AWS_ACCOUNT_ID:oidc-provider/token.actions.githubusercontent.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+          "token.actions.githubusercontent.com:sub": "repo:muew-dev/aws-generative-ai-use-cases:environment:prod"
+        }
+      }
+    }
+  ]
+}
+```
+
+##### 3. 必要な権限の付与
+
+CDKデプロイに必要な権限をロールに付与：
+
+- **AdministratorAccess**（推奨：開発環境用）
+- または必要最小限の権限（本番環境推奨）：
+  - CloudFormation関連権限
+  - Lambda、S3、DynamoDB、Cognito等の作成・更新権限
+  - Bedrock、OpenSearch、Kendra等AI/MLサービス権限
+
+##### 4. GitHub Secretsへの設定
+
+GitHubリポジトリの Settings > Secrets and variables > Actions で以下を設定：
+
+- `AWS_OIDC_ROLE_ARN`: `arn:aws:iam::YOUR_AWS_ACCOUNT_ID:role/YOUR_ROLE_NAME`
+- `AWS_OIDC_ROLE_ARN_DEV`: 開発環境用ロールARN（環境別デプロイ時）
+- `AWS_OIDC_ROLE_ARN_STG`: ステージング環境用ロールARN
+- `AWS_OIDC_ROLE_ARN_PROD`: 本番環境用ロールARN
+
+##### 5. 参考リンク
+
+- [AWS公式: GitHub ActionsでのOIDC設定](https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html)
+- [GitHub公式: OIDCでのAWS認証](https://docs.github.com/ja/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)
+
 ## その他
 
 - [デプロイオプション](docs/ja/DEPLOY_OPTION.md)

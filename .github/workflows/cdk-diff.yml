@@ -14,7 +14,7 @@ on:
       - 'packages/lambda/**'
       - 'packages/types/**'
       - 'packages/common/**'
-      - 'packages/fargate-s3-server/**'
+      - 'fargate-s3-server/**'
 
 permissions:
   id-token: write
