@@ -15,19 +15,74 @@ const getContext = (app: cdk.App): StackInput => {
 // If you want to define parameters directly
 const envs: Record<string, Partial<StackInput>> = {
   // If you want to define an anonymous environment, uncomment the following and the content of cdk.json will be ignored.
-  // If you want to define an anonymous environment in parameter.ts, uncomment the following and the content of cdk.json will be ignored.
-  // '': {
-  //   // Parameters for anonymous environment
-  //   // If you want to override the default settings, add the following
-  // },
+  '': {
+    // Default environment parameters (overrides cdk.json)
+    ragEnabled: false,
+    kendraIndexLanguage: 'ja',
+    kendraIndexScheduleEnabled: false,
+    ragKnowledgeBaseEnabled: true,
+    ragKnowledgeBaseStandbyReplicas: false,
+    ragKnowledgeBaseAdvancedParsing: false,
+    ragKnowledgeBaseAdvancedParsingModelId:
+      'anthropic.claude-3-sonnet-20240229-v1:0',
+    ragKnowledgeBaseBinaryVector: false,
+    embeddingModelId: 'amazon.titan-embed-text-v2:0',
+    queryDecompositionEnabled: false,
+    selfSignUpEnabled: true,
+    samlAuthEnabled: false,
+    samlCognitoDomainName: '',
+    samlCognitoFederatedIdentityProviderName: '',
+    hiddenUseCases: {},
+    modelRegion: 'ap-northeast-1',
+    modelIds: [
+      'anthropic.claude-3-5-sonnet-20241022-v2:0',
+      'anthropic.claude-3-5-haiku-20241022-v1:0',
+      'anthropic.claude-3-opus-20240229-v1:0',
+      'anthropic.claude-3-sonnet-20240229-v1:0',
+      'anthropic.claude-3-haiku-20240307-v1:0',
+    ],
+    imageGenerationModelIds: ['amazon.titan-image-generator-v1'],
+    videoGenerationModelIds: [],
+    speechToSpeechModelIds: [],
+    endpointNames: [],
+    agentEnabled: true,
+    searchAgentEnabled: false,
+    searchEngine: 'Brave',
+    searchApiKey: '',
+    agents: [],
+    inlineAgents: false,
+    flows: [],
+    createGenericAgentCoreRuntime: false,
+    agentCoreExternalRuntimes: [],
+    dashboard: false,
+    anonymousUsageTracking: true,
+    guardrailEnabled: false,
+    crossAccountBedrockRoleArn: '',
+    useCaseBuilderEnabled: true,
+    closedNetworkMode: false,
+    closedNetworkVpcIpv4Cidr: '10.0.0.0/16',
+    closedNetworkCreateTestEnvironment: true,
+    closedNetworkCreateResolverEndpoint: true,
+  },
   dev: {
-    // Parameters for development environment
+    // Development environment - inherits from default above
+    agentEnabled: true,
+    guardrailEnabled: false,
+    dashboard: false,
   },
   staging: {
-    // Parameters for staging environment
+    // Staging environment
+    agentEnabled: true,
+    guardrailEnabled: false,
+    dashboard: true,
+    anonymousUsageTracking: false,
   },
   prod: {
-    // Parameters for production environment
+    // Production environment
+    agentEnabled: true,
+    guardrailEnabled: true,
+    dashboard: true,
+    anonymousUsageTracking: false,
   },
   // If you need other environments, customize them as needed
 };

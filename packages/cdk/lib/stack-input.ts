@@ -157,8 +157,6 @@ const baseStackInputSchema = z.object({
       })
     )
     .default([]),
-  // MCP
-  mcpEnabled: z.boolean().default(false),
   // Guardrail
   guardrailEnabled: z.boolean().default(false),
   // Usecase builder

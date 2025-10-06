@@ -183,7 +183,418 @@ npm run cdk:deploy:quick
 
 ## アーキテクチャ
 
+### システム全体アーキテクチャ
+
 ![arch.drawio.png](./docs/assets/images/arch.drawio.png)
+
+### 詳細インフラ構成（CDKコードベース）
+
+以下は、CDKコードから読み取った実際のAWSインフラ構成を詳細化したアーキテクチャ図です：
+
+```mermaid
+graph TB
+    %% ユーザー・フロントエンド
+    User[👤 ユーザー]
+    Browser[🌐 ブラウザ]
+
+    %% セキュリティ層
+    WAF[🛡️ AWS WAF]
+
+    %% フロントエンド配信
+    CloudFront[☁️ Amazon CloudFront]
+    S3Web[📁 S3 Bucket<br/>Web配信]
+
+    %% 認証
+    CognitoUP[🔐 Cognito User Pool]
+    CognitoIP[🔑 Cognito Identity Pool]
+
+    %% API層
+    APIGW[🚪 API Gateway<br/>REST API]
+    AppSync[⚡ AppSync Event API<br/>WebSocket]
+
+    %% Lambda関数群
+    subgraph "Lambda関数 (59個)"
+        subgraph "API Gateway経由 (53個)"
+            LambdaChat[💬 チャット関連<br/>8個のLambda]
+            LambdaMedia[🎨 メディア生成<br/>5個のLambda]
+            LambdaFile[📎 ファイル管理<br/>3個のLambda]
+            LambdaTranscribe[🎤 音声認識<br/>3個のLambda]
+            LambdaSpeech[🗣️ 音声対話<br/>2個のLambda]
+            LambdaRAG[🔍 RAG機能<br/>3個のLambda]
+            LambdaShare[🔗 共有機能<br/>4個のLambda]
+            LambdaContext[📋 システムコンテキスト<br/>4個のLambda]
+            LambdaUseCase[🏗️ ユースケースビルダー<br/>10個のLambda]
+            LambdaAuth[🔒 認証<br/>1個のLambda]
+            LambdaCore[⚙️ コア機能<br/>10個のLambda]
+        end
+
+        LambdaStream[🌊 Streaming Response<br/>1個のLambda]
+        LambdaAgent[🤖 検索エージェント<br/>1個のLambda]
+        LambdaMCP[🔧 MCP機能<br/>1個のLambda]
+
+        subgraph "CloudFormation Custom Resource (3個)"
+            LambdaCustomOSS[🔧 OpenSearch Index<br/>ベクトルインデックス作成]
+            LambdaCustomTag[🏷️ Apply Tags<br/>OSS コレクション タグ管理]
+            LambdaCustomAgent[🤖 Agent Runtime<br/>Bedrock Agent Core 管理]
+        end
+    end
+
+    %% データストレージ
+    DynamoDB[🗄️ DynamoDB<br/>会話履歴・統計]
+    S3Files[📁 S3 Bucket<br/>ファイルストレージ]
+    S3Audio[🎵 S3 Bucket<br/>音声ファイル]
+    S3Transcript[📝 S3 Bucket<br/>転写結果]
+    S3Agent[📊 S3 Bucket<br/>Agent用データ]
+
+    %% AI/ML サービス
+    Bedrock[🧠 Amazon Bedrock<br/>LLM・画像・動画生成]
+    BedrockAgent[🤖 Bedrock Agent<br/>検索・コード実行]
+    BedrockKB[📚 Bedrock Knowledge Base]
+    Transcribe[🎤 Amazon Transcribe]
+    Kendra[🔍 Amazon Kendra]
+    OpenSearch[🔎 Amazon OpenSearch]
+    SageMaker[🤖 Amazon SageMaker]
+
+    %% 接続関係
+    User --> Browser
+    Browser --> WAF
+    WAF --> CloudFront
+    WAF --> APIGW
+    WAF --> CognitoUP
+    CloudFront --> S3Web
+
+    %% 認証フロー
+    Browser --> CognitoUP
+    CognitoUP --> CognitoIP
+    CognitoIP --> APIGW
+    CognitoIP --> AppSync
+
+    %% API Gateway経由のフロー
+    APIGW --> LambdaChat
+    APIGW --> LambdaMedia
+    APIGW --> LambdaFile
+    APIGW --> LambdaTranscribe
+    APIGW --> LambdaSpeech
+    APIGW --> LambdaRAG
+    APIGW --> LambdaShare
+    APIGW --> LambdaContext
+    APIGW --> LambdaUseCase
+    APIGW --> LambdaAuth
+    APIGW --> LambdaCore
+
+    %% ストリーミング・エージェント
+    Browser --> LambdaStream
+    BedrockAgent --> LambdaAgent
+    Browser --> LambdaMCP
+
+    %% WebSocket
+    AppSync --> LambdaSpeech
+
+    %% Lambda → データストレージ
+    LambdaChat --> DynamoDB
+    LambdaShare --> DynamoDB
+    LambdaContext --> DynamoDB
+    LambdaUseCase --> DynamoDB
+    LambdaCore --> DynamoDB
+
+    LambdaFile --> S3Files
+    LambdaTranscribe --> S3Audio
+    LambdaTranscribe --> S3Transcript
+    LambdaAgent --> S3Agent
+
+    %% Lambda → AI/MLサービス
+    LambdaCore --> Bedrock
+    LambdaStream --> Bedrock
+    LambdaMedia --> Bedrock
+    LambdaSpeech --> Bedrock
+    LambdaMCP --> Bedrock
+
+    LambdaTranscribe --> Transcribe
+    LambdaRAG --> Kendra
+    LambdaRAG --> BedrockKB
+    LambdaAgent --> BedrockAgent
+    LambdaCore --> SageMaker
+
+    %% RAG関連の接続
+    Kendra --> S3Files
+    BedrockKB --> OpenSearch
+    OpenSearch --> S3Files
+    BedrockAgent --> BedrockKB
+
+    %% Custom Resource の接続
+    LambdaCustomOSS --> OpenSearch
+    LambdaCustomTag --> OpenSearch
+    LambdaCustomAgent --> BedrockAgent
+
+    %% スタイリング
+    classDef userClass fill:#e1f5fe
+    classDef securityClass fill:#fff3e0
+    classDef lambdaClass fill:#f3e5f5
+    classDef storageClass fill:#e8f5e8
+    classDef aiClass fill:#fff8e1
+
+    class User,Browser userClass
+    class WAF,CognitoUP,CognitoIP securityClass
+    class LambdaChat,LambdaMedia,LambdaFile,LambdaTranscribe,LambdaSpeech,LambdaRAG,LambdaShare,LambdaContext,LambdaUseCase,LambdaAuth,LambdaCore,LambdaStream,LambdaAgent,LambdaMCP,LambdaCustomOSS,LambdaCustomTag,LambdaCustomAgent lambdaClass
+    class DynamoDB,S3Files,S3Audio,S3Transcript,S3Agent,S3Web storageClass
+    class Bedrock,BedrockAgent,BedrockKB,Transcribe,Kendra,OpenSearch,SageMaker aiClass
+```
+
+#### Lambda関数分類
+
+上記の詳細図は、現在のCDKコード（59個のLambda関数）の実際の構成を反映しています：
+
+1. **API Gateway経由のLambda** (53個): HTTP APIエンドポイントとして公開
+   - チャット、メディア生成、ファイル管理、音声、RAG、共有、コンテキスト、ユースケースビルダー等
+2. **Streaming Response用Lambda** (1個): WebSocketでのリアルタイム応答
+3. **検索エージェント用Lambda** (1個): Bedrock Agentから呼び出される
+4. **MCP機能Lambda** (1個): Model Context Protocol対応（Function URL経由）
+5. **CloudFormation Custom Resource用Lambda** (3個): インフラ構築時に実行
+   - **OpenSearch Index**: ベクトル検索用インデックス作成（日本語Kuromoji対応）
+   - **Apply Tags**: OpenSearch ServerlessコレクションへのAWSタグ管理
+   - **Agent Runtime**: Bedrock Agent Core の実行環境管理
+
+## GitHub Actions による CI/CD
+
+このプロジェクトでは以下のGitHub Actionsワークフローを提供しています：
+
+### CDK Diff（差分確認）
+
+- **ファイル**: `.github/workflows/cdk-diff.yml`
+- **目的**: Pull Requestで変更されるAWSリソースの差分を事前確認
+- **トリガー**: mainブランチへのPull Request作成・更新時
+- **機能**:
+  - CDKの差分（`cdk diff`）を自動実行
+  - 変更内容をPRにコメントとして自動投稿
+  - 本番環境への影響が大きい場合は専用のdiffも実行
+- **必要なSecrets**: `AWS_OIDC_ROLE_ARN`（デフォルト環境用）、`AWS_OIDC_ROLE_ARN_PROD`（本番環境用）
+
+### CDK Deploy（デプロイ）
+
+- **ファイル**: `.github/workflows/cdk-deploy.yml`
+- **目的**: 各環境への自動デプロイ
+- **トリガー**:
+  - mainブランチへのpush（デフォルト環境）
+  - 手動実行（全環境対応）
+
+- **環境サポート**:
+  - **default**: 開発・検証用環境
+  - **dev**: 開発環境
+  - **staging**: ステージング環境
+  - **prod**: 本番環境
+- **必要なSecrets**:
+  - `AWS_OIDC_ROLE_ARN`: デフォルト環境用のOIDCロールARN
+  - `AWS_OIDC_ROLE_ARN_DEV`: 開発環境用のOIDCロールARN
+  - `AWS_OIDC_ROLE_ARN_STG`: ステージング環境用のOIDCロールARN
+  - `AWS_OIDC_ROLE_ARN_PROD`: 本番環境用のOIDCロールARN
+
+### 品質チェック・テスト系ワークフロー
+
+#### Node.js CI（メインプロジェクト）
+
+- **ファイル**: `.github/workflows/node.js.yml`
+- **目的**: WebアプリケーションとCDKの品質チェック
+- **トリガー**: mainブランチへのpush・PR（browser-extension除く）
+- **実行内容**: テスト実行、リント、ビルド、CDK合成確認
+
+#### Python CI
+
+- **ファイル**: `.github/workflows/python.yml`
+- **目的**: Pythonコードのコードスタイルチェック
+- **対象**: `packages/cdk/lambda-python/`配下のコード
+- **ツール**: ruff（フォーマット・リント）
+
+#### Browser Extension CI
+
+- **ファイル**: `.github/workflows/browser-extension.yml`
+- **目的**: ブラウザ拡張機能の品質チェック
+- **対象**: `browser-extension/`配下のコード
+- **実行内容**: リント、ビルド確認
+
+#### cdk.context.json チェック
+
+- **ファイル**: `.github/workflows/deny-cdk-context-json.yml`
+- **目的**: CDKコンテキストファイルの誤コミットを防止
+- **説明**: `cdk.context.json`はCDKが自動生成するファイルでコミットすべきではないため、PRでこのファイルが含まれている場合はエラーとする
+
+### ドキュメント・リリース系ワークフロー
+
+#### GitHub Pages
+
+- **ファイル**: `.github/workflows/gh-pages.yml`
+- **目的**: プロジェクトドキュメントの自動公開
+- **トリガー**: mainブランチのMarkdownファイルやdocs/の変更時
+- **技術**: MkDocsを使用したドキュメントサイト生成・公開
+
+#### Release Drafter
+
+- **ファイル**: `.github/workflows/release-drafter.yml`
+- **目的**: リリースノートのドラフト自動作成
+- **トリガー**: PRがmainブランチにマージされた時
+- **機能**: PR情報からリリースノートを自動生成、ドラフト状態で保存
+
+#### Update Package Version
+
+- **ファイル**: `.github/workflows/update-version.yml`
+- **目的**: パッケージバージョンの自動更新
+- **トリガー**: Release Drafterワークフロー完了後
+- **流れ**: ドラフトリリースからバージョン取得 → package.json更新 → PR自動作成
+
+#### Publish Release
+
+- **ファイル**: `.github/workflows/publish-release.yml`
+- **目的**: ドラフトリリースの正式公開
+- **トリガー**: `new-release`ブランチのPRがマージされた時
+- **機能**: ドラフト状態のリリースを正式リリースとして公開
+
+### プロジェクト管理系ワークフロー
+
+#### Close Stale Issues
+
+- **ファイル**: `.github/workflows/close-stale-issues.yml`
+- **目的**: 古いIssue・PRの自動クローズ
+- **スケジュール**: 毎日午前1:30（UTC）
+- **ルール**: 30日間無活動でstaleラベル付与、さらに14日間でクローズ
+- **除外**: bug・dnc・new releaseラベル付きは対象外
+
+### AWS OIDC認証について
+
+GitHub ActionsでAWSリソースにアクセスするため、OpenID Connect (OIDC) による認証を使用しています。これにより：
+
+- AWS Access KeyやSecret Keyをリポジトリに保存する必要がない
+- 一時的な認証情報が自動発行される
+- より安全なCI/CDパイプラインを実現
+
+各環境用のOIDCロールARNをGitHub Secretsに設定することで、環境ごとに適切な権限でデプロイが実行されます。
+
+#### AWS_OIDC_ROLE_ARNの設定手順
+
+GitHub ActionsからAWSにアクセスするためのOIDCロールを作成・設定する手順：
+
+##### 前提条件
+
+以下のいずれかの方法でAWSに認証済みであること：
+
+```bash
+# 方法1: AWS CLIでプロファイル設定
+aws configure
+# Access Key ID、Secret Access Key、リージョン、出力形式を入力
+
+# 方法2: AWS SSOを使用（AWS Access Portal経由）
+# 初回設定
+aws configure sso
+
+# 設定項目例：
+# SSO session name: my-session
+# SSO start URL: https://my-company.awsapps.com/start
+# SSO region: ap-northeast-1
+# SSO registration scopes: sso:account:access
+# CLI default client Region: ap-northeast-1
+# CLI default output format: json
+# CLI profile name: my-profile
+
+# ログイン
+aws sso login --profile my-profile
+
+# 注意: AWS Access Portalの管理者から以下の情報を取得してください：
+# - SSO start URL (https://xxx.awsapps.com/start の形式)
+# - 利用可能なAWSアカウントとロール情報
+
+# 方法3: 環境変数で設定
+export AWS_ACCESS_KEY_ID=your-access-key
+export AWS_SECRET_ACCESS_KEY=your-secret-key
+export AWS_DEFAULT_REGION=ap-northeast-1
+
+# 認証確認
+aws sts get-caller-identity
+```
+
+##### 1. GitHub OIDC Identity Providerの作成
+
+AWS IAMコンソールで以下を実行：
+
+```bash
+# AWS CLIでの作成例
+aws iam create-open-id-connect-provider \
+  --url https://token.actions.githubusercontent.com \
+  --client-id-list sts.amazonaws.com
+
+# 注意: サムプリントは自動で取得されます（AWS CLIバージョン1.19.122以降）
+```
+
+##### 2. IAMロールの作成
+
+以下の信頼ポリシーでロールを作成：
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::033566443293:oidc-provider/token.actions.githubusercontent.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringLike": {
+          "token.actions.githubusercontent.com:sub": "repo:muew-dev/aws-generative-ai-use-cases:*"
+        },
+        "StringEquals": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+        }
+      }
+    }
+  ]
+}
+```
+
+**環境別に制限する場合**（本番環境など、より厳格な制御が必要な場合）:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::YOUR_AWS_ACCOUNT_ID:oidc-provider/token.actions.githubusercontent.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+          "token.actions.githubusercontent.com:sub": "repo:muew-dev/aws-generative-ai-use-cases:environment:prod"
+        }
+      }
+    }
+  ]
+}
+```
+
+##### 3. 必要な権限の付与
+
+CDKデプロイに必要な権限をロールに付与：
+
+- **AdministratorAccess**（推奨：開発環境用）
+- または必要最小限の権限（本番環境推奨）：
+  - CloudFormation関連権限
+  - Lambda、S3、DynamoDB、Cognito等の作成・更新権限
+  - Bedrock、OpenSearch、Kendra等AI/MLサービス権限
+
+##### 4. GitHub Secretsへの設定
+
+GitHubリポジトリの Settings > Secrets and variables > Actions で以下を設定：
+
+- `AWS_OIDC_ROLE_ARN`: `arn:aws:iam::YOUR_AWS_ACCOUNT_ID:role/YOUR_ROLE_NAME`
+- `AWS_OIDC_ROLE_ARN_DEV`: 開発環境用ロールARN（環境別デプロイ時）
+- `AWS_OIDC_ROLE_ARN_STG`: ステージング環境用ロールARN
+- `AWS_OIDC_ROLE_ARN_PROD`: 本番環境用ロールARN
+
+##### 5. 参考リンク
+
+- [AWS公式: GitHub ActionsでのOIDC設定](https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html)
+- [GitHub公式: OIDCでのAWS認証](https://docs.github.com/ja/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)
 
 ## その他
 

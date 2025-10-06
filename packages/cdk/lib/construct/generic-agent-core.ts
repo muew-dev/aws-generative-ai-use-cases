@@ -64,7 +64,7 @@ export class GenericAgentCore extends Construct {
       name: `GenericAgentCoreRuntime${env}`,
       instructions: 'You are a helpful assistant powered by AWS Bedrock.',
       memorySize: 2048,
-      dockerPath: 'lambda-python/generic-agent-core-runtime',
+      dockerPath: '../../../agent-core/generic-agent-core-runtime',
       networkMode: 'PUBLIC',
       serverProtocol: 'HTTP',
       environmentVariables: {
@@ -112,8 +112,12 @@ export class GenericAgentCore extends Construct {
   } {
     const dockerPath =
       this.genericRuntimeConfig.dockerPath ||
-      'lambda-python/generic-agent-core-runtime';
-    const pathName = dockerPath.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+      '../../../agent-core/generic-agent-core-runtime';
+    const pathName = dockerPath
+      .replace(/[^a-zA-Z0-9]/g, '-')
+      .toLowerCase()
+      .replace(/^-+/, '')
+      .replace(/-+/g, '-');
 
     const repository = new Repository(this, 'AgentCoreRuntimeRepository', {
       repositoryName: `${pathName}-${Stack.of(this).stackName.toLowerCase()}`,
@@ -125,7 +129,7 @@ export class GenericAgentCore extends Construct {
       this,
       'AgentCoreRuntimeDockerAsset',
       {
-        directory: path.join(__dirname, `../../${dockerPath}`),
+        directory: path.join(__dirname, dockerPath),
         platform: Platform.LINUX_ARM64, // AgentCore for ARM platform
       }
     );
