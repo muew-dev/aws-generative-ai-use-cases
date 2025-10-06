@@ -75,7 +75,16 @@ jobs:
               comment.body.includes('CDK Diff Results')
             );
 
-            const commentBody = `${diffOutput}
+            // GitHub comment has 65536 character limit
+            const maxLength = 60000; // Leave some room for additional text
+            let truncatedDiff = diffOutput;
+
+            if (diffOutput.length > maxLength) {
+              truncatedDiff = diffOutput.substring(0, maxLength) + 
+                '\n\n... (出力が長すぎるため省略されました。完全な差分はActionsログで確認してください)';
+            }
+
+            const commentBody = `${truncatedDiff}
 
             <details>
             <summary>CDK Diff について</summary>
