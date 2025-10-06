@@ -39,7 +39,7 @@ const envs: Record<string, Partial<StackInput>> = {
     videoGenerationModelIds: [],
     speechToSpeechModelIds: [],
     endpointNames: [],
-    agentEnabled: true,
+    agentEnabled: false,
     searchAgentEnabled: false,
     searchEngine: 'Brave',
     searchApiKey: '',
