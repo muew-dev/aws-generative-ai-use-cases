@@ -16,7 +16,7 @@ module.exports = {
       parser: 'yaml-eslint-parser',
     },
   ],
-  plugins: ['react-refresh', 'i18nhelper', '@shopify', 'yml'],
+  plugins: ['react-refresh', '@shopify', 'yml'],
   rules: {
     'react-refresh/only-export-components': [
       'warn',
@@ -28,9 +28,6 @@ module.exports = {
     // So this rule is temporarily disabled.
     // https://github.com/francoismassart/eslint-plugin-tailwindcss/issues/307
     'tailwindcss/enforces-shorthand': ['off'],
-    // Detect Japanese strings
-    'i18nhelper/no-jp-string': 'warn',
-    'i18nhelper/no-jp-comment': 'warn',
     // Apply JSX rules
     '@shopify/jsx-no-hardcoded-content': 'warn',
     // Yaml

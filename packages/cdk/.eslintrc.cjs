@@ -10,12 +10,9 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint', 'i18nhelper', '@shopify'],
+  plugins: ['@typescript-eslint', '@shopify'],
   rules: {
     '@typescript-eslint/no-namespace': 'off',
-    // Detect Japanese strings
-    'i18nhelper/no-jp-string': 'warn',
-    'i18nhelper/no-jp-comment': 'warn',
     // Apply JSX rules
     '@shopify/jsx-no-hardcoded-content': 'warn',
   },

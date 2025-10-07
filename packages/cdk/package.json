@@ -8,8 +8,7 @@
     "test:lambda:watch": "jest lambda --watchAll",
     "cdk": "cdk",
     "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",
-    "lambda-build-dryrun": "tsc --noEmit --skipLibCheck",
-    "postinstall": "npm ci --prefix custom-resources/agent-core-runtime && npm ci --prefix custom-resources/opensearch-index && npm ci --prefix custom-resources/apply-tags"
+    "lambda-build-dryrun": "tsc --noEmit --skipLibCheck"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.137",

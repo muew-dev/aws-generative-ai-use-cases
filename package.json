@@ -3,7 +3,7 @@
   "private": true,
   "version": "5.1.2",
   "scripts": {
-    "lint": "run-s custom-lint:build root:lint web:lint:fix cdk:lint cdk:lambda-build-dryrun",
+    "lint": "run-s root:lint web:lint:fix cdk:lint cdk:lambda-build-dryrun",
     "test": "run-s web:test",
     "root:lint": "npx prettier --write .",
     "web:devw": "source ./setup-env.sh ${npm_config_env} && VITE_APP_VERSION=${npm_package_version} npm -w packages/web run dev",
@@ -22,7 +22,6 @@
     "cdk:lambda-build-dryrun": "npm -w packages/cdk run lambda-build-dryrun",
     "cdk:test": "npm -w packages/cdk run test",
     "cdk:test:update-snapshot": "npm -w packages/cdk run test -- --update-snapshot",
-    "custom-lint:build": "npm -w packages/eslint-plugin-i18nhelper run build",
     "docs:dev": "mkdocs serve",
     "docs:build": "mkdocs build",
     "docs:gh-deploy": "mkdocs gh-deploy --",
