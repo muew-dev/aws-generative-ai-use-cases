@@ -1,11 +1,10 @@
 import js from '@eslint/js';
-import globals from 'globals';
 import typescript from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
-import tailwindcss from 'eslint-plugin-tailwindcss';
 import yml from 'eslint-plugin-yml';
+import globals from 'globals';
 import yamlParser from 'yaml-eslint-parser';
 
 export default [
@@ -47,7 +46,6 @@ export default [
     plugins: {
       'react-refresh': reactRefresh,
       'react-hooks': reactHooks,
-      tailwindcss: tailwindcss,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -55,13 +53,6 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
-      'tailwindcss/classnames-order': 'off',
-      'tailwindcss/enforces-shorthand': 'off',
-    },
-    settings: {
-      tailwindcss: {
-        whitelist: ['w-', 'h-'],
-      },
     },
   },
   // YAML configuration for web package

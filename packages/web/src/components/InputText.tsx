@@ -27,7 +27,9 @@ const InputText: React.FC<Props> = (props) => {
         value={props.value}
         placeholder={props.placeholder || t('common.enter_text')}
         onChange={(e) => {
-          props.onChange ? props.onChange(e.target.value) : null;
+          if (props.onChange) {
+            props.onChange(e.target.value);
+          }
         }}
       />
     </div>

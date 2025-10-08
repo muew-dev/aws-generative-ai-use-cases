@@ -67,7 +67,7 @@ const VideoAnalyzerPage: React.FC = () => {
   const [deviceId, setDeviceId] = useState('');
   const [sending, setSending] = useState(false);
   const videoElement = useRef<HTMLVideoElement | null>(null);
-  const callbackRef = useRef<() => void>();
+  const callbackRef = useRef<(() => void) | undefined>(undefined);
   const { getSignedUrl, uploadFile } = useFileApi();
   const { pathname, search } = useLocation();
   const {

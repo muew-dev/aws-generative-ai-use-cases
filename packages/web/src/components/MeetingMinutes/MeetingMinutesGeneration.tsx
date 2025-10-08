@@ -1,26 +1,26 @@
+import queryString from 'query-string';
 import React, {
-  useState,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
-  useEffect,
+  useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
+import { PiCaretLeft, PiCaretRight, PiPencilLine } from 'react-icons/pi';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import queryString from 'query-string';
-import Button from '../Button';
-import ButtonCopy from '../ButtonCopy';
-import ButtonIcon from '../ButtonIcon';
-import Select from '../Select';
-import Switch from '../Switch';
-import Textarea from '../Textarea';
-import Markdown from '../Markdown';
-import { PiPencilLine, PiCaretRight, PiCaretLeft } from 'react-icons/pi';
 import useMeetingMinutes, {
   MeetingMinutesStyle,
 } from '../../hooks/useMeetingMinutes';
 import { MODELS } from '../../hooks/useModel';
+import Button from '../Button';
+import ButtonCopy from '../ButtonCopy';
+import ButtonIcon from '../ButtonIcon';
+import Markdown from '../Markdown';
+import Select from '../Select';
+import Switch from '../Switch';
+import Textarea from '../Textarea';
 
 interface MeetingMinutesGenerationProps {
   /** Current transcript text to generate minutes from */
@@ -38,7 +38,7 @@ const MeetingMinutesGeneration: React.FC<MeetingMinutesGenerationProps> = ({
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const countdownIntervalRef = useRef<number | null>(null);
   const shouldGenerateRef = useRef<boolean>(false);
 
   // Internal state management
@@ -127,7 +127,7 @@ const MeetingMinutesGeneration: React.FC<MeetingMinutesGenerationProps> = ({
         }
         return newValue;
       });
-    }, 1000);
+    }, 1000) as unknown as number;
 
     return () => {
       if (countdownIntervalRef.current) {

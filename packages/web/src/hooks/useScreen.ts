@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { create } from 'zustand';
 
 const useScreenStore = create<{
@@ -105,7 +105,7 @@ const useScreen = () => {
       notifyScreen(current);
     };
 
-    screen.current.addEventListener('scroll', handleScrollInner);
+    current.addEventListener('scroll', handleScrollInner);
     notifyScreen(current);
 
     return () => {

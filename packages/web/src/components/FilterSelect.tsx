@@ -10,8 +10,8 @@ import React, {
 
 import useOnClickOutside from '../hooks/useOnClickOutside';
 
-import { PiMagnifyingGlass, PiPlusCircle, PiX } from 'react-icons/pi';
 import { useTranslation } from 'react-i18next';
+import { PiMagnifyingGlass, PiPlusCircle, PiX } from 'react-icons/pi';
 
 export type Option = {
   value: string;
@@ -55,7 +55,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [list, setList] = useState<Options>(options);
   const [inputValue, setInputValue] = useState<string>('');
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   const searchBoxRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

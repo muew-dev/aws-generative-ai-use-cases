@@ -1,6 +1,4 @@
-import './writer.css';
 import 'katex/dist/katex.min.css';
-import { getDefaultEditorContent, emptyContent } from './lib/content';
 import {
   EditorCommand,
   EditorCommandEmpty,
@@ -13,33 +11,35 @@ import {
   type JSONContent,
   handleCommandNavigation,
 } from 'novel';
-import { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { defaultExtensions } from './extensions';
+import { emptyContent, getDefaultEditorContent } from './lib/content';
 import { ColorSelector } from './selectors/ColorSelector';
 import { LinkSelector } from './selectors/LinkSelector';
 import { NodeSelector } from './selectors/NodeSelector';
 import { Separator } from './ui/Separator';
+import './writer.css';
 
 import GenerativeMenuSwitch from './generative/GenerativeMenuSwitch';
 import { TextButtons } from './selectors/TextButton';
 import { slashCommand, suggestionItems } from './SlashCommand';
 
-import hljs from 'highlight.js/lib/core';
-import Card from '../Card';
-import Button from '../Button';
-import ButtonIcon from '../ButtonIcon';
-import { PiTrash, PiChatText, PiSpinner } from 'react-icons/pi';
-import useWriter from '../../hooks/useWriter';
 import { Editor } from '@tiptap/react';
-import Select from '../Select';
-import { MODELS } from '../../hooks/useModel';
-import { AICommentManager, useComments } from './extensions/AIComments';
-import ButtonCopy from '../ButtonCopy';
 import DiffMatchPatch from 'diff-match-patch';
 import { DocumentComment } from 'generative-ai-use-cases';
-import { toast } from 'sonner';
+import hljs from 'highlight.js/lib/core';
 import { useTranslation } from 'react-i18next';
+import { PiChatText, PiSpinner, PiTrash } from 'react-icons/pi';
+import { toast } from 'sonner';
+import { MODELS } from '../../hooks/useModel';
+import useWriter from '../../hooks/useWriter';
+import Button from '../Button';
+import ButtonCopy from '../ButtonCopy';
+import ButtonIcon from '../ButtonIcon';
+import Card from '../Card';
+import Select from '../Select';
+import { AICommentManager, useComments } from './extensions/AIComments';
 
 const extensions = [...defaultExtensions, slashCommand];
 
@@ -434,7 +434,9 @@ const TailwindAdvancedEditor: React.FC<Props> = ({ initialSentence }) => {
                       <div style={{ height: spacerHeight }} />
                     )}
                     <div
-                      ref={(el) => (commentRefs.current[idx] = el)}
+                      ref={(el) => {
+                        commentRefs.current[idx] = el;
+                      }}
                       className="pb-2">
                       <CommentItem
                         comment={comment}
