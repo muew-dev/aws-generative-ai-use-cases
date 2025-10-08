@@ -2,25 +2,25 @@ import { Duration } from 'aws-cdk-lib';
 import {
   AuthorizationType,
   CognitoUserPoolsAuthorizer,
+  EndpointType,
   LambdaIntegration,
   RestApi,
-  EndpointType,
 } from 'aws-cdk-lib/aws-apigateway';
 import { UserPool, UserPoolClient } from 'aws-cdk-lib/aws-cognito';
 
-import { Construct } from 'constructs';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { IdentityPool } from 'aws-cdk-lib/aws-cognito-identitypool';
-import {} from 'aws-cdk-lib/aws-iam';
-import { HttpMethods } from 'aws-cdk-lib/aws-s3';
-import { ModelConfiguration } from 'generative-ai-use-cases';
-import { LAMBDA_RUNTIME_NODEJS } from '../../../consts';
+import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import {
   InterfaceVpcEndpoint,
-  IVpc,
   ISecurityGroup,
+  IVpc,
 } from 'aws-cdk-lib/aws-ec2';
+import {} from 'aws-cdk-lib/aws-iam';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { HttpMethods } from 'aws-cdk-lib/aws-s3';
+import { Construct } from 'constructs';
+import { ModelConfiguration } from 'generative-ai-use-cases';
+import { LAMBDA_RUNTIME_NODEJS } from '../../../consts';
 
 export interface BackendApiProps {
   // Context Params
