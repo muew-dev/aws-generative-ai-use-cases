@@ -105,7 +105,7 @@ const AgentChatPage: React.FC = () => {
 
   useEffect(() => {
     updateSystemContextByModel();
-    // eslint-disable-next-line  react-hooks/exhaustive-deps
+     
   }, [prompter]);
 
   const title = useMemo(() => {
@@ -133,7 +133,7 @@ const AgentChatPage: React.FC = () => {
         setModelId(_modelId);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [setContent, modelId, availableModels, search, agentName]);
 
   const onSend = useCallback(() => {
@@ -152,7 +152,7 @@ const AgentChatPage: React.FC = () => {
     );
     setContent('');
     clearFiles();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [content, setFollowing, uploadedFiles]);
 
   const onRetry = useCallback(() => {
@@ -173,7 +173,7 @@ const AgentChatPage: React.FC = () => {
     clear();
     setContent('');
     setSessionId(uuidv4());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [clear]);
 
   const onStop = useCallback(() => {

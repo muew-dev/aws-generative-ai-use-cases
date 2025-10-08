@@ -586,7 +586,7 @@ const GenerateImagePage: React.FC = () => {
     } else if (previousGenerationMode === 'BACKGROUND_REMOVAL') {
       setImageSample(previousImageSample);
     }
-    // eslint-disable-next-line  react-hooks/exhaustive-deps
+     
   }, [generationMode]);
 
   const modeOptions = useMemo(
@@ -604,7 +604,7 @@ const GenerateImagePage: React.FC = () => {
 
   useEffect(() => {
     updateSystemContextByModel();
-    // eslint-disable-next-line  react-hooks/exhaustive-deps
+     
   }, [prompter]);
 
   // Setting the demo data for LandingPage
@@ -629,7 +629,7 @@ const GenerateImagePage: React.FC = () => {
       setModelId(_modelId);
       setImageGenModelId(_imageGenModelId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [
     imageGenModelId,
     imageGenModelIds,

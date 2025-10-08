@@ -1054,7 +1054,7 @@ const useChat = (id: string, chatId?: string) => {
     if (!isLoadingMessage && messagesData && !isLoadingChat && chatData) {
       restore(id, messagesData.messages, chatData.chat);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [isLoadingMessage, isLoadingChat]);
 
   const filteredMessages = useMemo(() => {

@@ -184,7 +184,7 @@ const UseCaseBuilderView: React.FC<Props> = (props) => {
 
   useEffect(() => {
     clear(textFormUniqueLabels);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [textFormUniqueLabels]);
 
   useEffect(() => {
@@ -205,7 +205,7 @@ const UseCaseBuilderView: React.FC<Props> = (props) => {
         ? props.modelId!
         : availableModels[0]
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [availableModels, props.modelId, pathname]);
 
   useEffect(() => {
@@ -219,7 +219,7 @@ const UseCaseBuilderView: React.FC<Props> = (props) => {
     if (_lastMessage.role !== 'assistant') return;
     const _response = messages[messages.length - 1].content;
     setText(_response.trim());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [messages]);
 
   useEffect(() => {

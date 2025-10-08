@@ -271,7 +271,7 @@ const GenerateVideoPage: React.FC = () => {
     } else {
       setVideoGenModelId(_modelId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [videoGenModelId, videoGenModelIds, search, setPrompt]);
 
   useEffect(() => {

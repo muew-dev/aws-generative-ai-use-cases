@@ -108,14 +108,14 @@ const AgentCorePage: React.FC = () => {
     if (allAvailableRuntimes.length > 0 && !selectedArn) {
       setSelectedArn(allAvailableRuntimes[0].arn);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [allAvailableRuntimes]);
 
   // Initialize system context and model ID only once on mount
   useEffect(() => {
     const _modelId = !modelId ? availableModels[0] : modelId;
     setModelId(_modelId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [availableModels]);
 
   // Accept file types based on model
@@ -165,7 +165,7 @@ const AgentCorePage: React.FC = () => {
       console.error('Error sending message:', error);
       setWriting(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [
     content,
     selectedArn,
@@ -226,7 +226,7 @@ const AgentCorePage: React.FC = () => {
     return availableModels.map((m) => {
       return { value: m, label: modelDisplayName(m) };
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [availableModels]);
 
   const showingMessages = useMemo(() => {

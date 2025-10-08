@@ -56,7 +56,7 @@ const RagPage: React.FC = () => {
     } else {
       setModelId(_modelId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [availableModels, modelId, search, setContent]);
 
   const onSend = useCallback(() => {

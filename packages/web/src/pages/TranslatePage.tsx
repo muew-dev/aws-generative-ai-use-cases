@@ -129,7 +129,7 @@ const TranslatePage: React.FC = () => {
 
   useEffect(() => {
     updateSystemContextByModel();
-    // eslint-disable-next-line  react-hooks/exhaustive-deps
+     
   }, [prompter]);
 
   // Memo variable
@@ -152,7 +152,7 @@ const TranslatePage: React.FC = () => {
     } else {
       setModelId(_modelId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [
     setSentence,
     setAdditionalContext,
@@ -172,12 +172,12 @@ const TranslatePage: React.FC = () => {
       // Translate after debounce
       onSentenceChange(sentence, additionalContext, language, loading);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [sentence, language]);
 
   // Translate after debounce
   // Wait for 1 second after stopping input and send a translation request
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   const onSentenceChange = useCallback(
     debounce(
       (
@@ -205,7 +205,7 @@ const TranslatePage: React.FC = () => {
     if (_lastMessage.role !== 'assistant') return;
     const _response = messages[messages.length - 1].content;
     setTranslatedSentence(_response.trim());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [messages]);
 
   // When the recording function fails, turn the toggle switch off
@@ -245,7 +245,7 @@ const TranslatePage: React.FC = () => {
   const onClickExec = useCallback(() => {
     if (loading) return;
     getTranslation(sentence, language, additionalContext);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [sentence, additionalContext, loading, prompter, language]);
 
   // Reset
@@ -253,7 +253,7 @@ const TranslatePage: React.FC = () => {
     clear();
     clearChat();
     clearTranscripts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);

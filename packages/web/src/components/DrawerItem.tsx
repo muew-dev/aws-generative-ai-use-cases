@@ -30,7 +30,7 @@ const DrawerItem: React.FC<DrawerItemProps> = (props) => {
     ) {
       switchOpen();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   return (

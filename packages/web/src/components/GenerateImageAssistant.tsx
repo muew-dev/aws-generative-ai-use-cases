@@ -119,7 +119,7 @@ const GenerateImageAssistant: React.FC<Props> = (props) => {
           scrollToBottom();
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [loading, scrollToBottom]);
 
   const onSend = useCallback(() => {

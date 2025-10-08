@@ -51,7 +51,7 @@ const StatPage: React.FC = () => {
     };
 
     fetchStats();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   if (isLoading) {

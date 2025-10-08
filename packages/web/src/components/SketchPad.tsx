@@ -72,7 +72,7 @@ const SketchPad: React.FC<Props> = (props) => {
 
   const [isOpenUpload, setIsOpenUpload] = useState(false);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   const undoStack: SignaturePad.Point[][] = [];
 
   useEffect(() => {

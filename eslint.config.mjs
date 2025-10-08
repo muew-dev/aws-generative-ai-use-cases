@@ -1,6 +1,5 @@
 import js from '@eslint/js';
 import globals from 'globals';
-import shopify from '@shopify/eslint-plugin';
 import typescript from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -30,12 +29,10 @@ export default [
     },
     plugins: {
       '@typescript-eslint': typescript,
-      '@shopify': shopify,
     },
     rules: {
       ...typescript.configs.recommended.rules,
       '@typescript-eslint/no-namespace': 'off',
-      '@shopify/jsx-no-hardcoded-content': 'warn',
     },
   },
   // Web package specific configuration
@@ -100,6 +97,12 @@ export default [
       '**/cdk.out/**',
       '**/custom-resources/**',
       'eslint.config.js',
+      'packages/web/dev-dist/**',
+      'packages/web/public/**/*.js',
+      'packages/web/tailwind.config.ts',
+      'packages/web/vite.config.ts',
+      'packages/web/postcss.config.js',
+      'packages/web/tests/**',
     ],
   },
 ];

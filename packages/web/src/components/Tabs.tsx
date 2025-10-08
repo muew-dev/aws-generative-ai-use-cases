@@ -20,7 +20,7 @@ const Tabs: React.FC<Props> = (props) => {
     if (props.tabs.length > 0 && currentId === '') {
       setCurrentId(props.tabs[0].id);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [props.tabs]);
 
   return (

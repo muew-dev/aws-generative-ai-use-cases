@@ -116,7 +116,7 @@ const PromptList: React.FC<Props> = (props) => {
         inputRef.current?.focus();
 
         return () => {
-          // eslint-disable-next-line react-hooks/exhaustive-deps
+           
           inputRef.current?.removeEventListener('keypress', listener);
         };
       }
