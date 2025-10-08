@@ -47,6 +47,20 @@ jobs:
           chmod +x setup-env.sh
           ./setup-env.sh
 
+      - name: Clean up S3 buckets before destroy
+        run: |
+          echo "Cleaning up S3 buckets that might prevent stack deletion"
+          # Get the CloudFront logging bucket name from CDK outputs or assume pattern
+          LOGGING_BUCKET=$(aws s3 ls | grep "generativeaiuse.*cloudfront.*log" | awk '{print $3}' | head -1)
+          if [ ! -z "$LOGGING_BUCKET" ]; then
+            echo "Found logging bucket: $LOGGING_BUCKET"
+            echo "Emptying bucket contents..."
+            aws s3 rm s3://$LOGGING_BUCKET --recursive --quiet || echo "Bucket already empty or not found"
+          else
+            echo "No CloudFront logging bucket found to clean"
+          fi
+        continue-on-error: true
+
       - name: CDK Destroy All Stacks
         run: |
           echo "Destroying all stacks"
