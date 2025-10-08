@@ -2,7 +2,7 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { getParams } from '../parameter';
-import { createStacks } from '../lib/create-stacks';
+import { GenerativeAiUseCasesStack } from '../lib/stacks/generative-ai-use-cases-stack';
 import { TAG_KEY } from '../consts';
 
 const app = new cdk.App();
@@ -13,4 +13,7 @@ if (params.tagValue) {
     excludeResourceTypes: ['AWS::OpenSearchServerless::Collection'],
   });
 }
-createStacks(app, params);
+
+new GenerativeAiUseCasesStack(app, 'GenerativeAiUseCasesStack', {
+  params: params,
+});

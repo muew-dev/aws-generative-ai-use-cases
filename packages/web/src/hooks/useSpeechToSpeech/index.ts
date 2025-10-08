@@ -1,15 +1,15 @@
-import { useRef, useState } from 'react';
 import { events, EventsChannel } from 'aws-amplify/data';
-import { AudioPlayer } from './AudioPlayer';
-import { AudioRecorder } from './AudioRecorder';
+import {
+  Model,
+  SpeechToSpeechEvent,
+  SpeechToSpeechEventType,
+} from 'generative-ai-use-cases';
+import { useRef, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import useHttp from '../../hooks/useHttp';
+import { AudioPlayer } from './AudioPlayer';
+import { AudioRecorder } from './AudioRecorder';
 import useChatHistory from './useChatHistory';
-import {
-  SpeechToSpeechEventType,
-  SpeechToSpeechEvent,
-  Model,
-} from 'generative-ai-use-cases';
 
 const NAMESPACE = import.meta.env.VITE_APP_SPEECH_TO_SPEECH_NAMESPACE!;
 const MIN_AUDIO_CHUNKS_PER_BATCH = 10;
@@ -96,7 +96,7 @@ export const useSpeechToSpeech = () => {
     audioRecorder.addEventListener(
       'onAudioRecorded',
       (audioData: Int16Array) => {
-        const base64Data = arrayBufferToBase64(audioData.buffer);
+        const base64Data = arrayBufferToBase64(audioData.buffer as ArrayBuffer);
         audioInputQueue.current.push(base64Data);
       }
     );

@@ -55,13 +55,11 @@ const Textarea: React.FC<Props> = (props) => {
           <span className="text-sm">{props.label}</span>
           {props.help && <Help className="ml-1" message={props.help} />}
           {props.optional && (
-            /* eslint-disable-next-line @shopify/jsx-no-hardcoded-content */
             <span className="ml-2 text-xs italic text-gray-500">
               - {t('common.optional')}
             </span>
           )}
           {props.required && (
-            /* eslint-disable-next-line @shopify/jsx-no-hardcoded-content */
             <span className="ml-2 text-xs font-bold text-gray-800">
               * {t('common.required')}
             </span>
@@ -73,8 +71,8 @@ const Textarea: React.FC<Props> = (props) => {
         className={`${
           props.className ?? ''
         } w-full resize-none rounded p-1.5 outline-none ${
-          props.noBorder ? 'border-0 focus:ring-0 ' : 'border border-black/30'
-        } ${props.disabled ? 'bg-gray-200 ' : ''}`}
+          props.noBorder ? 'border-0 focus:ring-0' : 'border border-black/30'
+        } ${props.disabled ? 'bg-gray-200' : ''}`}
         rows={props.rows ?? 1}
         placeholder={props.placeholder || t('common.enter_text')}
         value={props.value}

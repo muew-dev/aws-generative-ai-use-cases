@@ -10,7 +10,7 @@ function isValidUrl(url: string) {
   try {
     new URL(url);
     return true;
-  } catch (_e) {
+  } catch {
     return false;
   }
 }
@@ -20,7 +20,7 @@ function getUrlFromString(str: string) {
     if (str.includes('.') && !str.includes(' ')) {
       return new URL(`https://${str}`).toString();
     }
-  } catch (_e) {
+  } catch {
     return null;
   }
 }
@@ -47,7 +47,6 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
           size="sm"
           variant="ghost"
           className="gap-2 rounded-none border-none">
-          {/* eslint-disable-next-line @shopify/jsx-no-hardcoded-content */}
           <p className="text-base">↗</p>
           <p
             className={cn('underline decoration-stone-400 underline-offset-4', {

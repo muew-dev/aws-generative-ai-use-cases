@@ -18,8 +18,8 @@ const Base64Image: React.FC<Props> = (props) => {
   const { t } = useTranslation();
 
   const onClick = useCallback(() => {
-    if (props.clickable) {
-      props.onClick ? props.onClick() : null;
+    if (props.clickable && props.onClick) {
+      props.onClick();
     }
   }, [props]);
 

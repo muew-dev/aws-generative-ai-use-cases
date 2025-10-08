@@ -22,7 +22,7 @@ const useRemoteVersion = () => {
       if (!version) {
         return false;
       }
-      // eslint-disable-next-line react-hooks/rules-of-hooks
+       
       const { data: packageJson } = useSWR<AxiosResponse<PackageJson>>(
         PACKAGE_JSON_URL,
         versionFetcher

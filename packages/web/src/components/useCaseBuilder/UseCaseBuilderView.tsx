@@ -184,7 +184,7 @@ const UseCaseBuilderView: React.FC<Props> = (props) => {
 
   useEffect(() => {
     clear(textFormUniqueLabels);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [textFormUniqueLabels]);
 
   useEffect(() => {
@@ -205,7 +205,7 @@ const UseCaseBuilderView: React.FC<Props> = (props) => {
         ? props.modelId!
         : availableModels[0]
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [availableModels, props.modelId, pathname]);
 
   useEffect(() => {
@@ -219,7 +219,7 @@ const UseCaseBuilderView: React.FC<Props> = (props) => {
     if (_lastMessage.role !== 'assistant') return;
     const _response = messages[messages.length - 1].content;
     setText(_response.trim());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [messages]);
 
   useEffect(() => {
@@ -583,7 +583,7 @@ const UseCaseBuilderView: React.FC<Props> = (props) => {
       )}
       {!props.isLoading && (
         <>
-          <div className="flex flex-col ">
+          <div className="flex flex-col">
             {textFormItems.map((item, idx) => (
               <div key={idx}>
                 {(item.inputType === 'text' || item.inputType === 'form') && (
@@ -625,7 +625,7 @@ const UseCaseBuilderView: React.FC<Props> = (props) => {
                   ref={fileInput}
                 />
                 <div
-                  className={`${uploading ? 'bg-gray-300' : 'bg-aws-smile cursor-pointer '} flex w-fit items-center justify-center rounded-lg border px-2 py-1 text-white`}>
+                  className={`${uploading ? 'bg-gray-300' : 'bg-aws-smile cursor-pointer'} flex w-fit items-center justify-center rounded-lg border px-2 py-1 text-white`}>
                   {uploading ? (
                     <PiSpinnerGap className="animate-spin" />
                   ) : (
@@ -714,7 +714,7 @@ const UseCaseBuilderView: React.FC<Props> = (props) => {
             </>
           )}
         </div>
-        <div className="flex shrink-0 gap-3 ">
+        <div className="flex shrink-0 gap-3">
           {stopReason === 'max_tokens' && (
             <Button onClick={continueGeneration}>
               {t('translate.continue_output')}

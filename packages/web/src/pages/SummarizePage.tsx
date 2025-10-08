@@ -85,7 +85,7 @@ const SummarizePage: React.FC = () => {
 
   useEffect(() => {
     updateSystemContextByModel();
-    // eslint-disable-next-line  react-hooks/exhaustive-deps
+     
   }, [prompter]);
 
   const disabledExec = useMemo(() => {
@@ -106,7 +106,7 @@ const SummarizePage: React.FC = () => {
     } else {
       setModelId(_modelId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [setSentence, setAdditionalContext, modelId, availableModels, search]);
 
   useEffect(() => {
@@ -130,21 +130,21 @@ const SummarizePage: React.FC = () => {
     if (_lastMessage.role !== 'assistant') return;
     const _response = messages[messages.length - 1].content;
     setSummarizedSentence(_response.trim());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [messages]);
 
   // Execute summary
   const onClickExec = useCallback(() => {
     if (loading) return;
     getSummary(sentence, additionalContext);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [sentence, additionalContext, loading]);
 
   // Reset
   const onClickClear = useCallback(() => {
     clear();
     clearChat();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   return (

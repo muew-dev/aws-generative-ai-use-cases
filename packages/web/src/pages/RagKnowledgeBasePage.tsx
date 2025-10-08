@@ -122,7 +122,7 @@ const RagKnowledgeBasePage: React.FC = () => {
 
   useEffect(() => {
     updateSystemContextByModel();
-    // eslint-disable-next-line  react-hooks/exhaustive-deps
+     
   }, [prompter]);
 
   useEffect(() => {
@@ -138,7 +138,7 @@ const RagKnowledgeBasePage: React.FC = () => {
     } else {
       setModelId(_modelId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [availableModels, modelId, search, setContent]);
 
   const getExtraDataFromFilters = useCallback(() => {
@@ -341,7 +341,6 @@ const RagKnowledgeBasePage: React.FC = () => {
         {userDefinedExplicitFilters.length === 0 && (
           <p>
             {t('rag.no_settings_found')}
-            {/* eslint-disable-next-line @shopify/jsx-no-hardcoded-content */}
             <a
               className="text-aws-smile underline"
               href="https://github.com/aws-samples/generative-ai-use-cases/blob/main/packages/common/src/custom/rag-knowledge-base.ts"

@@ -1,14 +1,14 @@
+import React, { useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { BaseProps } from '../@types/common';
-import useDrawer from '../hooks/useDrawer';
-import { useCallback } from 'react';
 import Switch from '../components/Switch';
+import useDrawer from '../hooks/useDrawer';
 import useLocalStorageBoolean from '../hooks/useLocalStorageBoolean';
 
 export type DrawerItemProps = BaseProps & {
   label: string;
   to: string;
-  icon: JSX.Element;
+  icon: React.ReactElement;
   sub?: string;
   settingVisibility?: boolean;
 };
@@ -30,7 +30,6 @@ const DrawerItem: React.FC<DrawerItemProps> = (props) => {
     ) {
       switchOpen();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -115,7 +115,7 @@ const WebContent: React.FC = () => {
 
   useEffect(() => {
     updateSystemContextByModel();
-    // eslint-disable-next-line  react-hooks/exhaustive-deps
+     
   }, [prompter]);
 
   const disabledExec = useMemo(() => {
@@ -136,7 +136,7 @@ const WebContent: React.FC = () => {
     } else {
       setModelId(_modelId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [setUrl, setContext, modelId, availableModels, search]);
 
   useEffect(() => {
@@ -166,7 +166,7 @@ const WebContent: React.FC = () => {
 
     try {
       res = await getWebText({ url });
-    } catch (e) {
+    } catch {
       setFetching(false);
       setShowError(true);
       return;

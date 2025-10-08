@@ -104,7 +104,6 @@ export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
     <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
         <Button size="sm" className="gap-2 rounded-none" variant="ghost">
-          {/* eslint-disable-next-line @shopify/jsx-no-hardcoded-content */}
           <span
             className="rounded-sm px-1"
             style={{
@@ -119,7 +118,7 @@ export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
 
       <PopoverContent
         sideOffset={5}
-        className="my-1 flex max-h-80 w-48 flex-col overflow-hidden overflow-y-auto rounded border p-1 shadow-xl "
+        className="my-1 flex max-h-80 w-48 flex-col overflow-hidden overflow-y-auto rounded border p-1 shadow-xl"
         align="start">
         <div className="flex flex-col">
           <div className="text-muted-foreground my-1 px-2 text-sm font-semibold">
@@ -130,17 +129,17 @@ export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
               key={name}
               onSelect={() => {
                 editor.commands.unsetColor();
-                name !== t('writer.colors.default') &&
+                if (name !== t('writer.colors.default')) {
                   editor
                     .chain()
                     .focus()
                     .setColor(color || '')
                     .run();
+                }
                 onOpenChange(false);
               }}
               className="hover:bg-accent flex cursor-pointer items-center justify-between px-2 py-1 text-sm">
               <div className="flex items-center gap-2">
-                {/* eslint-disable-next-line @shopify/jsx-no-hardcoded-content */}
                 <div
                   className="rounded-sm border px-2 py-px font-medium"
                   style={{ color }}>
@@ -160,13 +159,13 @@ export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
               key={name}
               onSelect={() => {
                 editor.commands.unsetHighlight();
-                name !== t('writer.colors.default') &&
+                if (name !== t('writer.colors.default')) {
                   editor.chain().focus().setHighlight({ color }).run();
+                }
                 onOpenChange(false);
               }}
               className="hover:bg-accent flex cursor-pointer items-center justify-between px-2 py-1 text-sm">
               <div className="flex items-center gap-2">
-                {/* eslint-disable-next-line @shopify/jsx-no-hardcoded-content */}
                 <div
                   className="rounded-sm border px-2 py-px font-medium"
                   style={{ backgroundColor: color }}>

@@ -1,15 +1,26 @@
 {
-  "i18n-ally.localesPaths": ["packages/web/public/locales"],
-  "i18n-ally.sourceLanguage": "ja",
-  "i18n-ally.keystyle": "nested",
-  "i18n-ally.enabledFrameworks": ["react-i18next"],
-  "i18n-ally.displayLanguage": "ja",
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
-  ],
-  "i18n-ally.namespace": true,
-  "i18n-ally.pathMatcher": "{namespace}/{locale}.{ext}",
-  "i18n-ally.defaultNamespace": "translation"
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll.eslint": "explicit"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

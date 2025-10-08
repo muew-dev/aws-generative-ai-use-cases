@@ -2,10 +2,12 @@ import React, {
   ReactNode,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
 import { ColorChangeHandler, CompactPicker } from 'react-color';
+import { useTranslation } from 'react-i18next';
 import {
   PiArrowClockwise,
   PiArrowCounterClockwise,
@@ -17,11 +19,10 @@ import {
   PiUploadSimple,
 } from 'react-icons/pi';
 import SignatureCanvas from 'react-signature-canvas';
-import Button from './Button';
 import { BaseProps } from '../@types/common';
+import Button from './Button';
 import ModalDialog from './ModalDialog';
 import RangeSlider from './RangeSlider';
-import { useTranslation } from 'react-i18next';
 
 type SketchButtonProps = BaseProps & {
   isActive?: boolean;
@@ -72,8 +73,7 @@ const SketchPad: React.FC<Props> = (props) => {
 
   const [isOpenUpload, setIsOpenUpload] = useState(false);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const undoStack: SignaturePad.Point[][] = [];
+  const undoStack = useMemo<unknown[][]>(() => [], []);
 
   useEffect(() => {
     if (props.image?.imageBase64) {
@@ -111,7 +111,8 @@ const SketchPad: React.FC<Props> = (props) => {
     if (data) {
       const redoItem = undoStack.pop();
       if (redoItem) {
-        data.push(redoItem);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data.push(redoItem as any);
         canvasRef.current?.fromData(data);
       }
     }

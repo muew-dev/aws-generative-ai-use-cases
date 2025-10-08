@@ -1,49 +1,49 @@
-import './i18n/config';
+import { Authenticator } from '@aws-amplify/ui-react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import AuthWithUserpool from './components/AuthWithUserpool';
-import AuthWithSAML from './components/AuthWithSAML';
-import './index.css';
 import {
-  RouterProvider,
   createBrowserRouter,
   RouteObject,
+  RouterProvider,
 } from 'react-router-dom';
-import LandingPage from './pages/LandingPage';
-import Setting from './pages/Setting';
-import StatPage from './pages/StatPage.tsx';
-import ChatPage from './pages/ChatPage';
-import SharedChatPage from './pages/SharedChatPage';
-import SummarizePage from './pages/SummarizePage';
-import GenerateTextPage from './pages/GenerateTextPage';
-import TranslatePage from './pages/TranslatePage';
-import VideoAnalyzerPage from './pages/VideoAnalyzerPage';
-import NotFound from './pages/NotFound';
-import RagPage from './pages/RagPage';
-import RagKnowledgeBasePage from './pages/RagKnowledgeBasePage';
-import WebContent from './pages/WebContent';
-import GenerateImagePage from './pages/GenerateImagePage';
-import GenerateVideoPage from './pages/GenerateVideoPage';
-import OptimizePromptPage from './pages/OptimizePromptPage';
-import TranscribePage from './pages/TranscribePage';
-import MeetingMinutesPage from './pages/MeetingMinutesPage';
-import AgentChatPage from './pages/AgentChatPage.tsx';
-import FlowChatPage from './pages/FlowChatPage';
-import VoiceChatPage from './pages/VoiceChatPage';
-import AgentCorePage from './pages/AgentCorePage.tsx';
-import { MODELS } from './hooks/useModel';
-import { Authenticator } from '@aws-amplify/ui-react';
-import UseCaseBuilderEditPage from './pages/useCaseBuilder/UseCaseBuilderEditPage.tsx';
+import { Toaster } from 'sonner';
 import App from './App.tsx';
 import UseCaseBuilderRoot from './UseCaseBuilderRoot.tsx';
-import UseCaseBuilderExecutePage from './pages/useCaseBuilder/UseCaseBuilderExecutePage.tsx';
-import UseCaseBuilderSamplesPage from './pages/useCaseBuilder/UseCaseBuilderSamplesPage.tsx';
-import UseCaseBuilderMyUseCasePage from './pages/useCaseBuilder/UseCaseBuilderMyUseCasePage.tsx';
+import AuthWithSAML from './components/AuthWithSAML';
+import AuthWithUserpool from './components/AuthWithUserpool';
+import { MODELS } from './hooks/useModel';
 import { optimizePromptEnabled } from './hooks/useOptimizePrompt';
-import GenerateDiagramPage from './pages/GenerateDiagramPage.tsx';
-import WriterPage from './pages/WriterPage.tsx';
 import useUseCases from './hooks/useUseCases';
-import { Toaster } from 'sonner';
+import './i18n/config';
+import './index.css';
+import AgentChatPage from './pages/AgentChatPage.tsx';
+import AgentCorePage from './pages/AgentCorePage.tsx';
+import ChatPage from './pages/ChatPage';
+import FlowChatPage from './pages/FlowChatPage';
+import GenerateDiagramPage from './pages/GenerateDiagramPage.tsx';
+import GenerateImagePage from './pages/GenerateImagePage';
+import GenerateTextPage from './pages/GenerateTextPage';
+import GenerateVideoPage from './pages/GenerateVideoPage';
+import LandingPage from './pages/LandingPage';
+import MeetingMinutesPage from './pages/MeetingMinutesPage';
+import NotFound from './pages/NotFound';
+import OptimizePromptPage from './pages/OptimizePromptPage';
+import RagKnowledgeBasePage from './pages/RagKnowledgeBasePage';
+import RagPage from './pages/RagPage';
+import Setting from './pages/Setting';
+import SharedChatPage from './pages/SharedChatPage';
+import StatPage from './pages/StatPage.tsx';
+import SummarizePage from './pages/SummarizePage';
+import TranscribePage from './pages/TranscribePage';
+import TranslatePage from './pages/TranslatePage';
+import VideoAnalyzerPage from './pages/VideoAnalyzerPage';
+import VoiceChatPage from './pages/VoiceChatPage';
+import WebContent from './pages/WebContent';
+import WriterPage from './pages/WriterPage.tsx';
+import UseCaseBuilderEditPage from './pages/useCaseBuilder/UseCaseBuilderEditPage.tsx';
+import UseCaseBuilderExecutePage from './pages/useCaseBuilder/UseCaseBuilderExecutePage.tsx';
+import UseCaseBuilderMyUseCasePage from './pages/useCaseBuilder/UseCaseBuilderMyUseCasePage.tsx';
+import UseCaseBuilderSamplesPage from './pages/useCaseBuilder/UseCaseBuilderSamplesPage.tsx';
 
 const ragEnabled: boolean = import.meta.env.VITE_APP_RAG_ENABLED === 'true';
 const ragKnowledgeBaseEnabled: boolean =
@@ -62,7 +62,7 @@ const {
 } = MODELS;
 const useCaseBuilderEnabled: boolean =
   import.meta.env.VITE_APP_USE_CASE_BUILDER_ENABLED === 'true';
-// eslint-disable-next-line  react-hooks/rules-of-hooks
+ 
 const { enabled } = useUseCases();
 
 const routes: RouteObject[] = [
@@ -272,7 +272,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    {/* eslint-disable-next-line @shopify/jsx-no-hardcoded-content */}
     <React.Suspense fallback={<div>Loading...</div>}>
       <Authenticator.Provider>
         <RouterProvider router={router} />

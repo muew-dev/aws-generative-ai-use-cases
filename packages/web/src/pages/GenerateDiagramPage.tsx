@@ -160,7 +160,7 @@ const GenerateDiagramPage: React.FC = () => {
       }
     })();
     // To avoid infinite loops, only keep the following dependencies
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [availableModels, search]);
 
   useEffect(() => {
@@ -461,8 +461,7 @@ const GenerateDiagramPage: React.FC = () => {
   }> = ({ option, isSelected, onClick }) => (
     <button
       onClick={() => onClick(option.id)}
-      className={`min-h-[155px] w-[calc(25%)] min-w-[110px] max-w-[130px] flex-col rounded-lg border px-1 hover:bg-blue-50
-        ${isSelected ? 'border-blue-600 bg-blue-100' : 'border-gray-500 bg-white'}`}>
+      className={`min-h-[155px] w-[calc(25%)] min-w-[110px] max-w-[130px] flex-col rounded-lg border px-1 hover:bg-blue-50 ${isSelected ? 'border-blue-600 bg-blue-100' : 'border-gray-500 bg-white'}`}>
       <div className="text-2xl">
         {React.createElement(option.icon, {
           size: '1.5rem',
@@ -510,7 +509,6 @@ const GenerateDiagramPage: React.FC = () => {
                 <label className="mb-2 block text-sm font-bold text-gray-700">
                   <>
                     {t('diagram.diagram_type')}{' '}
-                    {/* eslint-disable-next-line @shopify/jsx-no-hardcoded-content */}
                     <span className="font-normal">
                       - {DiagramData[selectedType].title}
                     </span>

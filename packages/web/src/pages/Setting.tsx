@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react';
 import useVersion from '../hooks/useVersion';
 import useUserSetting from '../hooks/useUserSetting';
 import { Link } from 'react-router-dom';
@@ -9,7 +10,6 @@ import { MODELS } from '../hooks/useModel';
 import useGitHub, { PullRequest } from '../hooks/useGitHub';
 import { PiGithubLogoFill, PiArrowSquareOut } from 'react-icons/pi';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { useCallback } from 'react';
 import { useSWRConfig } from 'swr';
 import { useTranslation, Trans } from 'react-i18next';
 import { supportedLngs } from '../i18n/config';

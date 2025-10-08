@@ -94,7 +94,7 @@ const agentNames: string[] = JSON.parse(import.meta.env.VITE_APP_AGENT_NAMES)
 const getFlows = () => {
   try {
     return JSON.parse(import.meta.env.VITE_APP_FLOWS);
-  } catch (e) {
+  } catch {
     return [];
   }
 };
