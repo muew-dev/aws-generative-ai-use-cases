@@ -84,6 +84,13 @@ jobs:
               continue;
             }
 
+            // Skip table borders and decorative elements
+            if (line.match(/^[├─┼┤└┴┬┐┌│┘╋╔╚╗╝╟╢╤╧╞╡╥╨╓╖╙╜╪╫╬═║\s]+$/) ||
+                line.match(/^[│├─┤┼└┴┬┐┌┘╋]+/) ||
+                line.includes('────────')) {
+              continue;
+            }
+
             // Detect stack sections
             if (line.startsWith('Stack ')) {
               stackName = line;
@@ -101,11 +108,11 @@ jobs:
               else if (line.includes('[!]')) changesSummary.replace++;
             }
 
-            // Include relevant diff lines
+            // Include relevant diff lines (but exclude pure table borders)
             if (inDiffSection && (
               line.match(/^\[.\] AWS::/) ||
-              line.trim().startsWith('├─') ||
-              line.trim().startsWith('└─') ||
+              (line.trim().startsWith('├─') && line.includes('AWS::')) ||
+              (line.trim().startsWith('└─') && line.includes('AWS::')) ||
               line.match(/^\s*\[.\]\s/)
             )) {
               processedLines.push(line);
@@ -259,6 +266,13 @@ jobs:
               continue;
             }
 
+            // Skip table borders and decorative elements
+            if (line.match(/^[├─┼┤└┴┬┐┌│┘╋╔╚╗╝╟╢╤╧╞╡╥╨╓╖╙╜╪╫╬═║\s]+$/) ||
+                line.match(/^[│├─┤┼└┴┬┐┌┘╋]+/) ||
+                line.includes('────────')) {
+              continue;
+            }
+
             // Detect stack sections
             if (line.startsWith('Stack ')) {
               stackName = line;
@@ -276,11 +290,11 @@ jobs:
               else if (line.includes('[!]')) changesSummary.replace++;
             }
 
-            // Include relevant diff lines
+            // Include relevant diff lines (but exclude pure table borders)
             if (inDiffSection && (
               line.match(/^\[.\] AWS::/) ||
-              line.trim().startsWith('├─') ||
-              line.trim().startsWith('└─') ||
+              (line.trim().startsWith('├─') && line.includes('AWS::')) ||
+              (line.trim().startsWith('└─') && line.includes('AWS::')) ||
               line.match(/^\s*\[.\]\s/)
             )) {
               processedLines.push(line);
