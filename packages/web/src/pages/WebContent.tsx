@@ -115,7 +115,6 @@ const WebContent: React.FC = () => {
 
   useEffect(() => {
     updateSystemContextByModel();
-     
   }, [prompter]);
 
   const disabledExec = useMemo(() => {
@@ -136,7 +135,6 @@ const WebContent: React.FC = () => {
     } else {
       setModelId(_modelId);
     }
-     
   }, [setUrl, setContext, modelId, availableModels, search]);
 
   useEffect(() => {

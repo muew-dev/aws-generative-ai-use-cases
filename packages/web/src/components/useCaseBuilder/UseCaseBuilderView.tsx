@@ -184,7 +184,6 @@ const UseCaseBuilderView: React.FC<Props> = (props) => {
 
   useEffect(() => {
     clear(textFormUniqueLabels);
-     
   }, [textFormUniqueLabels]);
 
   useEffect(() => {
@@ -205,7 +204,6 @@ const UseCaseBuilderView: React.FC<Props> = (props) => {
         ? props.modelId!
         : availableModels[0]
     );
-     
   }, [availableModels, props.modelId, pathname]);
 
   useEffect(() => {
@@ -219,7 +217,6 @@ const UseCaseBuilderView: React.FC<Props> = (props) => {
     if (_lastMessage.role !== 'assistant') return;
     const _response = messages[messages.length - 1].content;
     setText(_response.trim());
-     
   }, [messages]);
 
   useEffect(() => {

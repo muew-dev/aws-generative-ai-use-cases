@@ -76,7 +76,6 @@ const VoiceChatPage: React.FC = () => {
         closeSession();
       }
     };
-     
   }, []);
 
   return (

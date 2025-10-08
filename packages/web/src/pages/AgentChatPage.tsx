@@ -105,7 +105,6 @@ const AgentChatPage: React.FC = () => {
 
   useEffect(() => {
     updateSystemContextByModel();
-     
   }, [prompter]);
 
   const title = useMemo(() => {
@@ -133,7 +132,6 @@ const AgentChatPage: React.FC = () => {
         setModelId(_modelId);
       }
     }
-     
   }, [setContent, modelId, availableModels, search, agentName]);
 
   const onSend = useCallback(() => {
@@ -152,7 +150,6 @@ const AgentChatPage: React.FC = () => {
     );
     setContent('');
     clearFiles();
-     
   }, [content, setFollowing, uploadedFiles]);
 
   const onRetry = useCallback(() => {
@@ -173,7 +170,6 @@ const AgentChatPage: React.FC = () => {
     clear();
     setContent('');
     setSessionId(uuidv4());
-     
   }, [clear]);
 
   const onStop = useCallback(() => {

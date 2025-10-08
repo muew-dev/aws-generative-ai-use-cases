@@ -119,7 +119,6 @@ const GenerateImageAssistant: React.FC<Props> = (props) => {
           scrollToBottom();
         });
     }
-     
   }, [loading, scrollToBottom]);
 
   const onSend = useCallback(() => {

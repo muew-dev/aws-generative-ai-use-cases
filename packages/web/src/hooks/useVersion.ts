@@ -22,7 +22,7 @@ const useRemoteVersion = () => {
       if (!version) {
         return false;
       }
-       
+
       const { data: packageJson } = useSWR<AxiosResponse<PackageJson>>(
         PACKAGE_JSON_URL,
         versionFetcher

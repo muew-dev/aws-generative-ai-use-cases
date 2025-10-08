@@ -20,6 +20,7 @@ export default [
           './packages/web/tsconfig.json',
           './packages/cdk/tsconfig.json',
           './packages/common/tsconfig.json',
+          './packages/lambda/tsconfig.json',
         ],
       },
       globals: {
@@ -87,7 +88,7 @@ export default [
       '**/dist/**',
       '**/cdk.out/**',
       '**/custom-resources/**',
-      'eslint.config.js',
+      'eslint.config.mjs',
       'packages/web/dev-dist/**',
       'packages/web/public/**/*.js',
       'packages/web/tailwind.config.ts',

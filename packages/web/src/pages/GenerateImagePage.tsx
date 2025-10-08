@@ -586,7 +586,6 @@ const GenerateImagePage: React.FC = () => {
     } else if (previousGenerationMode === 'BACKGROUND_REMOVAL') {
       setImageSample(previousImageSample);
     }
-     
   }, [generationMode]);
 
   const modeOptions = useMemo(
@@ -604,7 +603,6 @@ const GenerateImagePage: React.FC = () => {
 
   useEffect(() => {
     updateSystemContextByModel();
-     
   }, [prompter]);
 
   // Setting the demo data for LandingPage
@@ -629,7 +627,6 @@ const GenerateImagePage: React.FC = () => {
       setModelId(_modelId);
       setImageGenModelId(_imageGenModelId);
     }
-     
   }, [
     imageGenModelId,
     imageGenModelIds,

@@ -62,7 +62,7 @@ const {
 } = MODELS;
 const useCaseBuilderEnabled: boolean =
   import.meta.env.VITE_APP_USE_CASE_BUILDER_ENABLED === 'true';
- 
+
 const { enabled } = useUseCases();
 
 const routes: RouteObject[] = [

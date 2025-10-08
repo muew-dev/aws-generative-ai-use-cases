@@ -160,7 +160,6 @@ const GenerateDiagramPage: React.FC = () => {
       }
     })();
     // To avoid infinite loops, only keep the following dependencies
-     
   }, [availableModels, search]);
 
   useEffect(() => {

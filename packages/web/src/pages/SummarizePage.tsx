@@ -85,7 +85,6 @@ const SummarizePage: React.FC = () => {
 
   useEffect(() => {
     updateSystemContextByModel();
-     
   }, [prompter]);
 
   const disabledExec = useMemo(() => {
@@ -106,7 +105,6 @@ const SummarizePage: React.FC = () => {
     } else {
       setModelId(_modelId);
     }
-     
   }, [setSentence, setAdditionalContext, modelId, availableModels, search]);
 
   useEffect(() => {
@@ -130,21 +128,18 @@ const SummarizePage: React.FC = () => {
     if (_lastMessage.role !== 'assistant') return;
     const _response = messages[messages.length - 1].content;
     setSummarizedSentence(_response.trim());
-     
   }, [messages]);
 
   // Execute summary
   const onClickExec = useCallback(() => {
     if (loading) return;
     getSummary(sentence, additionalContext);
-     
   }, [sentence, additionalContext, loading]);
 
   // Reset
   const onClickClear = useCallback(() => {
     clear();
     clearChat();
-     
   }, []);
 
   return (

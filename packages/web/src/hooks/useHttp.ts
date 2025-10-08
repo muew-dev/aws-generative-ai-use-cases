@@ -42,7 +42,6 @@ const useHttp = () => {
       url: string | null,
       config?: SWRConfiguration
     ) => {
-       
       return useSWR<Data, Error>(url, fetcher, config);
     },
 
@@ -52,7 +51,6 @@ const useHttp = () => {
       getKey: (pageIndex: number, previousPageData: any) => string | null,
       config?: SWRConfiguration
     ) => {
-       
       return useSWRInfinite<Data, Error>(getKey, fetcher, config);
     },
 

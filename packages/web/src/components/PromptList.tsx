@@ -115,7 +115,6 @@ const PromptList: React.FC<Props> = (props) => {
         inputRef.current?.focus();
 
         return () => {
-           
           inputRef.current?.removeEventListener('keypress', listener);
         };
       }

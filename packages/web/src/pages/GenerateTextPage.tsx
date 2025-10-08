@@ -87,7 +87,6 @@ const GenerateTextPage: React.FC = () => {
 
   useEffect(() => {
     updateSystemContextByModel();
-     
   }, [prompter]);
 
   const disabledExec = useMemo(() => {
@@ -109,7 +108,6 @@ const GenerateTextPage: React.FC = () => {
     } else {
       setModelId(_modelId);
     }
-     
   }, [setInformation, setContext, modelId, availableModels, search]);
 
   useEffect(() => {
@@ -133,21 +131,18 @@ const GenerateTextPage: React.FC = () => {
     if (_lastMessage.role !== 'assistant') return;
     const _response = messages[messages.length - 1].content;
     setText(_response.trim());
-     
   }, [messages]);
 
   // Execute summary
   const onClickExec = useCallback(() => {
     if (loading) return;
     getGeneratedText(information, context);
-     
   }, [information, context, loading]);
 
   // Reset
   const onClickClear = useCallback(() => {
     clear();
     clearChat();
-     
   }, []);
 
   return (

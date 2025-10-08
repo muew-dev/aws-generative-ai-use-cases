@@ -271,7 +271,6 @@ const GenerateVideoPage: React.FC = () => {
     } else {
       setVideoGenModelId(_modelId);
     }
-     
   }, [videoGenModelId, videoGenModelIds, search, setPrompt]);
 
   useEffect(() => {

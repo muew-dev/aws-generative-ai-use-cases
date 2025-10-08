@@ -20,7 +20,6 @@ const Tabs: React.FC<Props> = (props) => {
     if (props.tabs.length > 0 && currentId === '') {
       setCurrentId(props.tabs[0].id);
     }
-     
   }, [props.tabs]);
 
   return (

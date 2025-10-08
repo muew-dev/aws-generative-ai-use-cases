@@ -122,7 +122,6 @@ const RagKnowledgeBasePage: React.FC = () => {
 
   useEffect(() => {
     updateSystemContextByModel();
-     
   }, [prompter]);
 
   useEffect(() => {
@@ -138,7 +137,6 @@ const RagKnowledgeBasePage: React.FC = () => {
     } else {
       setModelId(_modelId);
     }
-     
   }, [availableModels, modelId, search, setContent]);
 
   const getExtraDataFromFilters = useCallback(() => {

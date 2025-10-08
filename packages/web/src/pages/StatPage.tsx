@@ -51,7 +51,6 @@ const StatPage: React.FC = () => {
     };
 
     fetchStats();
-     
   }, []);
 
   if (isLoading) {

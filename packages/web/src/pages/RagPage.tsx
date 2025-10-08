@@ -56,7 +56,6 @@ const RagPage: React.FC = () => {
     } else {
       setModelId(_modelId);
     }
-     
   }, [availableModels, modelId, search, setContent]);
 
   const onSend = useCallback(() => {

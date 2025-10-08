@@ -108,14 +108,12 @@ const AgentCorePage: React.FC = () => {
     if (allAvailableRuntimes.length > 0 && !selectedArn) {
       setSelectedArn(allAvailableRuntimes[0].arn);
     }
-     
   }, [allAvailableRuntimes]);
 
   // Initialize system context and model ID only once on mount
   useEffect(() => {
     const _modelId = !modelId ? availableModels[0] : modelId;
     setModelId(_modelId);
-     
   }, [availableModels]);
 
   // Accept file types based on model
@@ -165,7 +163,6 @@ const AgentCorePage: React.FC = () => {
       console.error('Error sending message:', error);
       setWriting(false);
     }
-     
   }, [
     content,
     selectedArn,
@@ -226,7 +223,6 @@ const AgentCorePage: React.FC = () => {
     return availableModels.map((m) => {
       return { value: m, label: modelDisplayName(m) };
     });
-     
   }, [availableModels]);
 
   const showingMessages = useMemo(() => {

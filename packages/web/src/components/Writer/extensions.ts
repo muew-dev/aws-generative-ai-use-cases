@@ -21,7 +21,6 @@ import { Markdown } from 'tiptap-markdown';
 //TODO I am using cx here to get tailwind autocomplete working, idk if someone else can write a regex to just capture the class key in objects
 const aiHighlight = AIHighlight;
 
-
 const tiptapLink = TiptapLink.configure({
   HTMLAttributes: {
     class:

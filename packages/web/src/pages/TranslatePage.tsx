@@ -129,7 +129,6 @@ const TranslatePage: React.FC = () => {
 
   useEffect(() => {
     updateSystemContextByModel();
-     
   }, [prompter]);
 
   // Memo variable
@@ -152,7 +151,6 @@ const TranslatePage: React.FC = () => {
     } else {
       setModelId(_modelId);
     }
-     
   }, [
     setSentence,
     setAdditionalContext,
@@ -172,12 +170,11 @@ const TranslatePage: React.FC = () => {
       // Translate after debounce
       onSentenceChange(sentence, additionalContext, language, loading);
     }
-     
   }, [sentence, language]);
 
   // Translate after debounce
   // Wait for 1 second after stopping input and send a translation request
-   
+
   const onSentenceChange = useCallback(
     debounce(
       (
@@ -205,7 +202,6 @@ const TranslatePage: React.FC = () => {
     if (_lastMessage.role !== 'assistant') return;
     const _response = messages[messages.length - 1].content;
     setTranslatedSentence(_response.trim());
-     
   }, [messages]);
 
   // When the recording function fails, turn the toggle switch off
@@ -245,7 +241,6 @@ const TranslatePage: React.FC = () => {
   const onClickExec = useCallback(() => {
     if (loading) return;
     getTranslation(sentence, language, additionalContext);
-     
   }, [sentence, additionalContext, loading, prompter, language]);
 
   // Reset
@@ -253,7 +248,6 @@ const TranslatePage: React.FC = () => {
     clear();
     clearChat();
     clearTranscripts();
-     
   }, []);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);

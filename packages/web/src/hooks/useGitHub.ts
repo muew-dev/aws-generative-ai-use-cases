@@ -33,7 +33,6 @@ export interface PullRequest {
 const useGitHub = () => {
   return {
     getClosedPullRequests: () => {
-       
       const { data } = useSWR(
         '/repos/aws-samples/generative-ai-use-cases/pulls?state=close',
         fetcher
