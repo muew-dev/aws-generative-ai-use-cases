@@ -20,7 +20,7 @@ const Tabs: React.FC<Props> = (props) => {
     if (props.tabs.length > 0 && currentId === '') {
       setCurrentId(props.tabs[0].id);
     }
-  }, [props.tabs]);
+  }, [props.tabs, currentId, setCurrentId]);
 
   return (
     <div className={props.className}>

@@ -74,26 +74,23 @@ const useScreen = () => {
   // A function to notify when the screen size or position changes
   // It is called when the screen is initially loaded and when scrolling
   // When the chat elements are loaded, the screen is automatically scrolled to the bottom, so it is also called there
-  const notifyScreen = useCallback(
-    (div: HTMLDivElement) => {
-      // When the bottom is reached, set isAtBottom to true
-      // Because the decimal point may be omitted, 1.0 is provided as a margin
-      if (div.clientHeight + div.scrollTop + 1.0 >= div.scrollHeight) {
-        setIsAtBottom(true);
-      } else {
-        setIsAtBottom(false);
-      }
+  const notifyScreen = useCallback((div: HTMLDivElement) => {
+    // When the bottom is reached, set isAtBottom to true
+    // Because the decimal point may be omitted, 1.0 is provided as a margin
+    if (div.clientHeight + div.scrollTop + 1.0 >= div.scrollHeight) {
+      setIsAtBottom(true);
+    } else {
+      setIsAtBottom(false);
+    }
 
-      // When the top is reached, set isAtTop to true
-      // Because the decimal point may be omitted, 1.0 is provided as a margin
-      if (div.scrollTop <= 1.0) {
-        setIsAtTop(true);
-      } else {
-        setIsAtTop(false);
-      }
-    },
-    [setIsAtBottom, setIsAtTop]
-  );
+    // When the top is reached, set isAtTop to true
+    // Because the decimal point may be omitted, 1.0 is provided as a margin
+    if (div.scrollTop <= 1.0) {
+      setIsAtTop(true);
+    } else {
+      setIsAtTop(false);
+    }
+  }, []);
 
   // When the screen (defined in App.tsx) is set, set the scroll event listener
   useEffect(() => {

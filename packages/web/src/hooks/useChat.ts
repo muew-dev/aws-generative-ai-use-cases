@@ -1,29 +1,29 @@
-import { produce } from 'immer';
-import { create } from 'zustand';
 import {
-  StreamingChunk,
-  ShownMessage,
-  RecordedMessage,
-  UnrecordedMessage,
-  ToBeRecordedMessage,
-  Chat,
-  Role,
-  UploadedFileType,
-  ExtraData,
-  Model,
-  UpdateFeedbackRequest,
-  ListChatsResponse,
   AdditionalModelRequestFields,
+  Chat,
+  ExtraData,
+  ListChatsResponse,
   Metadata,
+  Model,
+  RecordedMessage,
+  Role,
+  ShownMessage,
+  StreamingChunk,
+  ToBeRecordedMessage,
+  UnrecordedMessage,
+  UpdateFeedbackRequest,
+  UploadedFileType,
 } from 'generative-ai-use-cases';
+import { produce } from 'immer';
 import { useEffect, useMemo } from 'react';
+import { SWRInfiniteKeyedMutator } from 'swr/infinite';
 import { v4 as uuid } from 'uuid';
+import { create } from 'zustand';
+import { getPrompter } from '../prompts';
 import useChatApi from './useChatApi';
 import useChatList from './useChatList';
-import { SWRInfiniteKeyedMutator } from 'swr/infinite';
-import { getPrompter } from '../prompts';
-import { findModelByModelId } from './useModel';
 import useFileApi from './useFileApi';
+import { findModelByModelId } from './useModel';
 
 type GenerationMode = 'normal' | 'continue' | 'retry' | 'edit';
 
@@ -1054,7 +1054,7 @@ const useChat = (id: string, chatId?: string) => {
     if (!isLoadingMessage && messagesData && !isLoadingChat && chatData) {
       restore(id, messagesData.messages, chatData.chat);
     }
-  }, [isLoadingMessage, isLoadingChat]);
+  }, [id, isLoadingMessage, messagesData, isLoadingChat, chatData, restore]);
 
   const filteredMessages = useMemo(() => {
     return chats[id]?.messages.filter((chat) => chat.role !== 'system') ?? [];

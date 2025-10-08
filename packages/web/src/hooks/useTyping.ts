@@ -55,15 +55,7 @@ const useTyping = (typing?: boolean) => {
 
       return () => clearTimeout(timeout);
     }
-  }, [
-    typingTextInput,
-    currentIndex,
-    animating,
-    typing,
-    setCurrentIndex,
-    setAnimating,
-    inputUnit,
-  ]);
+  }, [typingTextInput, currentIndex, animating, typing, inputUnit]);
 
   const typingTextOutput = useMemo(() => {
     if (!settingTypingAnimation) {

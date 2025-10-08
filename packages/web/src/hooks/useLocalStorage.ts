@@ -37,7 +37,7 @@ const useLocalStorage = (key: string, defaultValue: string) => {
 
   const valueForKey = useMemo(() => {
     return onMemoryState[key] ?? localStorage.getItem(key) ?? defaultValue;
-  }, [onMemoryState, key, defaultValue]);
+  }, [onMemoryState[key], key, defaultValue]);
 
   return [valueForKey, setValueForKey] as const;
 };

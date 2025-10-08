@@ -103,7 +103,8 @@ const ChatPage: React.FC = () => {
     uploadFiles,
     base64Cache,
   } = useFiles(pathname);
-  const { chatId } = useParams();
+  const params = useParams();
+  const { chatId } = params;
 
   const { listSystemContexts, deleteSystemContext, updateSystemContextTitle } =
     useSystemContextApi();
@@ -161,7 +162,7 @@ const ChatPage: React.FC = () => {
     if (!chatId) {
       updateSystemContextByModel();
     }
-  }, [prompter]);
+  }, [chatId, prompter, updateSystemContextByModel]);
 
   const title = useMemo(() => {
     if (chatId) {
@@ -214,7 +215,14 @@ const ChatPage: React.FC = () => {
     } else {
       setModelId(_modelId);
     }
-  }, [search, setContent, availableModels, pathname]);
+  }, [
+    search,
+    setContent,
+    availableModels,
+    pathname,
+    setModelId,
+    params.modelId,
+  ]);
 
   const onSend = useCallback(() => {
     setFollowing(true);
