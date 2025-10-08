@@ -50,11 +50,93 @@ jobs:
       - name: CDK Diff (Default Environment)
         id: cdk-diff
         run: |
-          echo "## CDK Diff Results (Default Environment)" > diff-output.md
-          echo "" >> diff-output.md
-          echo '```' >> diff-output.md
-          npm -w cdk run cdk diff -- --all 2>&1 | tee -a diff-output.md
-          echo '```' >> diff-output.md
+          # Run CDK diff and capture output
+          npm -w cdk run cdk diff -- --all > raw-diff-output.txt 2>&1 || true
+
+          # Process the diff output to make it more readable
+          node -e "
+          const fs = require('fs');
+          const rawOutput = fs.readFileSync('raw-diff-output.txt', 'utf8');
+
+
+          // Extract meaningful diff sections only
+          const lines = rawOutput.split('\n');
+          let processedLines = [];
+          let inDiffSection = false;
+          let stackName = '';
+          let hasChanges = false;
+          let changesSummary = {
+            create: 0,
+            update: 0,
+            delete: 0,
+            replace: 0
+          };
+
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+
+            // Skip npm warnings and verbose logs
+            if (line.includes('npm WARN') ||
+                line.includes('> cdk@') ||
+                line.includes('npm notice') ||
+                line.includes('audited') ||
+                line.startsWith('Stack') && line.includes('There were no differences')) {
+              continue;
+            }
+
+            // Detect stack sections
+            if (line.startsWith('Stack ')) {
+              stackName = line;
+              inDiffSection = true;
+              processedLines.push('### ' + line);
+              continue;
+            }
+
+            // Count changes for summary
+            if (line.match(/^\[.\] AWS::/)) {
+              hasChanges = true;
+              if (line.includes('[+]')) changesSummary.create++;
+              else if (line.includes('[~]')) changesSummary.update++;
+              else if (line.includes('[-]')) changesSummary.delete++;
+              else if (line.includes('[!]')) changesSummary.replace++;
+            }
+
+            // Include relevant diff lines
+            if (inDiffSection && (
+              line.match(/^\[.\] AWS::/) ||
+              line.trim().startsWith('├─') ||
+              line.trim().startsWith('└─') ||
+              line.match(/^\s*\[.\]\s/)
+            )) {
+              processedLines.push(line);
+            }
+          }
+
+          // Create the formatted output
+          let output = '## CDK Diff Results (Default Environment)\n\n';
+
+          if (hasChanges) {
+            output += '### 📊 変更サマリー\n\n';
+            if (changesSummary.create > 0) output += \`🟢 **作成**: \${changesSummary.create} リソース\n\`;
+            if (changesSummary.update > 0) output += \`🟡 **更新**: \${changesSummary.update} リソース\n\`;
+            if (changesSummary.delete > 0) output += \`🔴 **削除**: \${changesSummary.delete} リソース\n\`;
+            if (changesSummary.replace > 0) output += \`🔄 **置換**: \${changesSummary.replace} リソース ⚠️\n\`;
+            output += '\n';
+
+            if (changesSummary.replace > 0) {
+              output += '⚠️ **重要**: 置換(REPLACE)が発生するリソースがあります。データ消失の可能性があるため注意してください。\n\n';
+            }
+
+            output += '### 📋 詳細な変更内容\n\n';
+            output += '\`\`\`diff\n';
+            output += processedLines.join('\n');
+            output += '\n\`\`\`\n';
+          } else {
+            output += '✅ **変更なし**: このPRではAWSリソースに変更はありません。\n';
+          }
+
+          fs.writeFileSync('diff-output.md', output);
+          "
         continue-on-error: true
 
       - name: Comment PR with diff results
@@ -80,23 +162,22 @@ jobs:
             let truncatedDiff = diffOutput;
 
             if (diffOutput.length > maxLength) {
-              truncatedDiff = diffOutput.substring(0, maxLength) + 
-                '\n\n... (出力が長すぎるため省略されました。完全な差分はActionsログで確認してください)';
+              truncatedDiff = diffOutput.substring(0, maxLength) +
+                '\n\n⚠️ **出力が長すぎるため省略されました**\n\n完全な差分は[GitHub Actionsのログ](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})で確認してください。';
             }
 
             const commentBody = `${truncatedDiff}
 
             <details>
-            <summary>CDK Diff について</summary>
+            <summary>ℹ️ CDK Diffの見方</summary>
 
-            このdiffは、PR内の変更がAWSリソースにどのような影響を与えるかを示しています:
+            このレポートは、PR内の変更がAWSリソースにどのような影響を与えるかを示しています:
 
-            - **🟢 CREATE**: 新しいリソースが作成されます
-            - **🟡 UPDATE**: 既存のリソースが更新されます
-            - **🔴 DELETE**: 既存のリソースが削除されます
-            - **🔄 REPLACE**: リソースが削除→再作成されます（データ消失の可能性）
+            - **🟢 作成**: 新しいリソースが追加されます
+            - **🟡 更新**: 既存のリソースが変更されます
+            - **🔴 削除**: 既存のリソースが削除されます
+            - **🔄 置換**: リソースが削除→再作成されます（⚠️データ消失の可能性）
 
-            ⚠️ **REPLACE**の場合はデータ消失の可能性があるため、事前にバックアップを検討してください。
             </details>`;
 
             if (existingComment) {
@@ -145,11 +226,99 @@ jobs:
       - name: CDK Diff (Production Environment)
         id: cdk-diff-prod
         run: |
-          echo "## CDK Diff Results (Production Environment)" > diff-output-prod.md
-          echo "" >> diff-output-prod.md
-          echo '```' >> diff-output-prod.md
-          npm -w cdk run cdk diff -- --all --context env=prod 2>&1 | tee -a diff-output-prod.md
-          echo '```' >> diff-output-prod.md
+          # Run CDK diff for production and capture output
+          npm -w cdk run cdk diff -- --all --context env=prod > raw-diff-output-prod.txt 2>&1 || true
+
+          # Process the diff output to make it more readable (same logic as default env)
+          node -e "
+          const fs = require('fs');
+          const rawOutput = fs.readFileSync('raw-diff-output-prod.txt', 'utf8');
+
+          // Extract meaningful diff sections only
+          const lines = rawOutput.split('\n');
+          let processedLines = [];
+          let inDiffSection = false;
+          let stackName = '';
+          let hasChanges = false;
+          let changesSummary = {
+            create: 0,
+            update: 0,
+            delete: 0,
+            replace: 0
+          };
+
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+
+            // Skip npm warnings and verbose logs
+            if (line.includes('npm WARN') ||
+                line.includes('> cdk@') ||
+                line.includes('npm notice') ||
+                line.includes('audited') ||
+                line.startsWith('Stack') && line.includes('There were no differences')) {
+              continue;
+            }
+
+            // Detect stack sections
+            if (line.startsWith('Stack ')) {
+              stackName = line;
+              inDiffSection = true;
+              processedLines.push('### ' + line);
+              continue;
+            }
+
+            // Count changes for summary
+            if (line.match(/^\[.\] AWS::/)) {
+              hasChanges = true;
+              if (line.includes('[+]')) changesSummary.create++;
+              else if (line.includes('[~]')) changesSummary.update++;
+              else if (line.includes('[-]')) changesSummary.delete++;
+              else if (line.includes('[!]')) changesSummary.replace++;
+            }
+
+            // Include relevant diff lines
+            if (inDiffSection && (
+              line.match(/^\[.\] AWS::/) ||
+              line.trim().startsWith('├─') ||
+              line.trim().startsWith('└─') ||
+              line.match(/^\s*\[.\]\s/)
+            )) {
+              processedLines.push(line);
+            }
+          }
+
+          // Create the formatted output for production
+          let output = '## 🔴 CDK Diff Results (Production Environment)\n\n';
+
+          if (hasChanges) {
+            output += '### 📊 変更サマリー\n\n';
+            if (changesSummary.create > 0) output += \`🟢 **作成**: \${changesSummary.create} リソース\n\`;
+            if (changesSummary.update > 0) output += \`🟡 **更新**: \${changesSummary.update} リソース\n\`;
+            if (changesSummary.delete > 0) output += \`🔴 **削除**: \${changesSummary.delete} リソース\n\`;
+            if (changesSummary.replace > 0) output += \`🔄 **置換**: \${changesSummary.replace} リソース ⚠️\n\`;
+            output += '\n';
+
+            output += '⚠️ **重要な注意事項（本番環境）**:\n';
+            output += '- 本番環境への変更です。十分な検証を行ってからデプロイしてください\n';
+            output += '- メンテナンス時間帯での実行を推奨します\n';
+            if (changesSummary.replace > 0) {
+              output += '- 🚨 **置換リソース**: データ消失の可能性があります。事前にバックアップを取得してください\n';
+            }
+            if (changesSummary.delete > 0) {
+              output += '- 🚨 **削除リソース**: 復旧手順を確認してください\n';
+            }
+            output += '- ロールバック手順を準備してください\n\n';
+
+            output += '### 📋 詳細な変更内容\n\n';
+            output += '\`\`\`diff\n';
+            output += processedLines.join('\n');
+            output += '\n\`\`\`\n';
+          } else {
+            output += '✅ **変更なし**: このPRでは本番環境のAWSリソースに変更はありません。\n';
+          }
+
+          fs.writeFileSync('diff-output-prod.md', output);
+          "
         continue-on-error: true
 
       - name: Comment PR with production diff results
@@ -159,18 +328,28 @@ jobs:
             const fs = require('fs');
             const diffOutput = fs.readFileSync('diff-output-prod.md', 'utf8');
 
-            const commentBody = `${diffOutput}
+            // GitHub comment has 65536 character limit
+            const maxLength = 60000;
+            let truncatedDiff = diffOutput;
+
+            if (diffOutput.length > maxLength) {
+              truncatedDiff = diffOutput.substring(0, maxLength) + 
+                '\n\n⚠️ **出力が長すぎるため省略されました**\n\n完全な差分は[GitHub Actionsのログ](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})で確認してください。';
+            }
+
+            const commentBody = `${truncatedDiff}
 
             <details>
-            <summary>🔴 Production環境のCDK Diff</summary>
+            <summary>🚨 本番環境への注意事項</summary>
 
-            このdiffは本番環境への影響を示しています。
+            本番環境への変更は以下の点にご注意ください：
 
-            **⚠️ 本番環境への変更は慎重に検討してください：**
-            - データ消失のリスクがある変更(REPLACE)がないか確認
-            - メンテナンス時間外での実行を検討
-            - バックアップの事前取得を検討
-            - ロールバック手順の準備
+            - **事前検証**: ステージング環境での十分なテスト
+            - **バックアップ**: データベースやストレージの事前バックアップ
+            - **メンテナンス時間**: サービスへの影響を最小化するタイミング
+            - **ロールバック準備**: 問題発生時の復旧手順の確認
+            - **監視体制**: デプロイ後のシステム監視強化
+
             </details>`;
 
             await github.rest.issues.createComment({
