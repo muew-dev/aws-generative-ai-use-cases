@@ -103,7 +103,7 @@ const useRag = (id: string) => {
       try {
         const retrievedItems = await retrieve(query);
         items = arrangeItems(retrievedItems.data.ResultItems ?? []);
-      } catch (error) {
+      } catch {
         popMessage();
         pushMessage('assistant', t('rag.errorRetrieval'));
         setLoading(false);

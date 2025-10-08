@@ -87,7 +87,7 @@ export const useMeetingMinutes = (
                     fullResponse += payload.text;
                     setGeneratedMinutes(fullResponse);
                   }
-                } catch (error) {
+                } catch {
                   // Skip invalid JSON chunks
                   console.debug('Skipping invalid JSON chunk:', c);
                 }

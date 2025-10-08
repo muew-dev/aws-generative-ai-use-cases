@@ -36,7 +36,7 @@ function parse(content: string) {
   let document;
   try {
     document = JSON.parse(content);
-  } catch (e) {
+  } catch {
     document = content;
   }
   return document;

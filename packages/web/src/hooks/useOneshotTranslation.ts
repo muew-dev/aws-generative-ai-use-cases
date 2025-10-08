@@ -26,7 +26,7 @@ const useOneshotTranslation = () => {
 
         setTranslating(false);
         return translated;
-      } catch (error) {
+      } catch {
         setTranslating(false);
         return '';
       }

@@ -166,7 +166,7 @@ const WebContent: React.FC = () => {
 
     try {
       res = await getWebText({ url });
-    } catch (e) {
+    } catch {
       setFetching(false);
       setShowError(true);
       return;
