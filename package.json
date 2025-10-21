@@ -3,48 +3,37 @@
   "private": true,
   "version": "5.1.2",
   "scripts": {
-    "lint": "run-s root:prettier root:eslint cdk:lambda-build-dryrun",
-    "test": "run-s web:test",
     "root:prettier": "npx prettier --write .",
-    "root:eslint": "npx eslint . --fix",
-    "web:devw": "source ./setup-env.sh ${npm_config_env} && VITE_APP_VERSION=${npm_package_version} npm -w packages/web run dev",
-    "web:devww": "powershell ./web_devw_win.ps1",
-    "web:dev": "VITE_APP_VERSION=${npm_package_version} npm -w packages/web run dev",
-    "web:build": "VITE_APP_VERSION=${npm_package_version} npm -w packages/web run build --",
-    "web:build:analyze": "VITE_APP_VERSION=${npm_package_version} npm -w packages/web run build -- --mode analyze",
-    "web:test": "npm -w packages/web run test",
-    "web:lint": "npm -w packages/web run lint",
-    "cdk:deploy": "npm -w packages/cdk run cdk deploy -- --all",
-    "cdk:deploy:quick": "npm -w packages/cdk run cdk deploy -- --all --asset-parallelism --asset-prebuild=false --concurrency 3 --method=direct --require-approval never --force",
-    "cdk:deploy:quick:hotswap": "npm -w packages/cdk run cdk deploy -- --all --asset-parallelism --asset-prebuild=false --concurrency 3 --method=direct --require-approval never --force --hotswap",
-    "cdk:destroy": "npm -w packages/cdk run cdk destroy -- --all",
-    "cdk:lambda-build-dryrun": "npm -w packages/cdk run lambda-build-dryrun",
-    "cdk:lint": "npm -w packages/cdk run lint",
-    "cdk:test": "npm -w packages/cdk run test",
-    "cdk:test:update-snapshot": "npm -w packages/cdk run test -- --update-snapshot"
+    "frontend:dev": "npm -w packages/frontend run dev",
+    "frontend:build": "npm -w packages/frontend run build",
+    "frontend:test": "npm -w packages/frontend run test",
+    "frontend:lint": "npm -w packages/frontend run lint",
+    "frontend:type-check": "npm -w packages/frontend run type-check",
+    "cdk:deploy": "npm -w cdk run cdk deploy -- --all",
+    "cdk:deploy:dev": "npm -w cdk run cdk deploy -- --all -c env=dev",
+    "cdk:deploy:staging": "npm -w cdk run cdk deploy -- --all -c env=staging",
+    "cdk:deploy:prod": "npm -w cdk run cdk deploy -- --all -c env=prod",
+    "cdk:deploy:quick": "npm -w cdk run cdk deploy -- --all --asset-parallelism --asset-prebuild=false --concurrency 3 --method=direct --require-approval never --force",
+    "cdk:deploy:quick:hotswap": "npm -w cdk run cdk deploy -- --all --asset-parallelism --asset-prebuild=false --concurrency 3 --method=direct --require-approval never --force --hotswap",
+    "cdk:destroy": "npm -w cdk run cdk destroy -- --all",
+    "cdk:lint": "npm -w cdk run lint",
+    "cdk:synth": "npm -w cdk run synth",
+    "cdk:test": "npm -w cdk run test",
+    "cdk:test:update-snapshot": "npm -w cdk run test -- --update-snapshot"
   },
   "devDependencies": {
-    "@eslint/js": "^9.37.0",
-    "@tailwindcss/postcss": "^4.1.14",
-    "@typescript-eslint/eslint-plugin": "^8.46.0",
-    "@typescript-eslint/parser": "^8.46.0",
-    "eslint": "^9.37.0",
-    "eslint-plugin-react-hooks": "^6.1.1",
-    "eslint-plugin-react-refresh": "^0.4.23",
-    "eslint-plugin-tailwindcss": "^3.18.2",
-    "eslint-plugin-yml": "^1.19.0",
     "lint-staged": "^16.2.3",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.6.14",
-    "yaml-eslint-parser": "^1.3.0"
+    "prettier-plugin-tailwindcss": "^0.6.14"
   },
   "engines": {
     "node": ">=22.20.0",
     "npm": ">=10.9.3"
   },
   "workspaces": [
-    "packages/*"
+    "packages/frontend",
+    "cdk"
   ],
   "lint-staged": {
     "**/*": [

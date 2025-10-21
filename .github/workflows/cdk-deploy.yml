@@ -49,13 +49,10 @@ jobs:
         run: npm ci
 
       - name: Run linting
-        run: npm run lint
+        run: npm run cdk:lint
 
       - name: Run CDK tests
-        run: npm -w cdk run test -- --testNamePattern="matches the snapshot$"
-
-      - name: Run web tests
-        run: npm run web:test
+        run: npm run cdk:test
 
   deploy-default:
     if: (github.ref == 'refs/heads/main' && github.event_name == 'push') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'default')
@@ -81,11 +78,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build web application
-        run: npm run web:build
-
       - name: Deploy CDK (Default Environment)
-        run: npm run cdk:deploy:quick
+        run: npm run cdk:deploy
 
   deploy-dev:
     if: github.event_name == 'workflow_dispatch' && inputs.environment == 'dev'

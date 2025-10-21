@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  bedrock-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - AWS_PROFILE=${AWS_PROFILE}
+      - AWS_REGION=ap-northeast-1
+    volumes:
+      - ~/.aws:/root/.aws:ro # AWS SSOトークンのマウント
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'

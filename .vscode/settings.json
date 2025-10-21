@@ -22,5 +22,27 @@
   },
   "[yml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    },
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4
+  },
+  "ruff.enable": true,
+  "ruff.importStrategy": "fromEnvironment",
+  "ruff.interpreter": ["${workspaceFolder}/.venv/bin/python"],
+  "ruff.format.preview": false,
+  "ruff.lint.enable": true,
+  "ruff.organizeImports": true,
+  "ruff.fixAll": true,
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.terminal.activateEnvironment": true,
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/packages/backend/src"
+  ]
 }

@@ -1,0 +1,609 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`AuroraDatabase Pattern Environment: dev (development) snapshot test for AuroraDatabase pattern - development: aurora-database-dev 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "TestAuroraDatabaseAuroraClusterD678395E": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "BackupRetentionPeriod": 7,
+        "CopyTagsToSnapshot": true,
+        "DBClusterIdentifier": "test-cluster-dev",
+        "DBClusterParameterGroupName": "default.aurora-postgresql17",
+        "DBSubnetGroupName": {
+          "Ref": "TestAuroraDatabaseDatabaseSubnetGroupF860730E",
+        },
+        "DatabaseName": "testdb",
+        "DeletionProtection": false,
+        "EnableHttpEndpoint": true,
+        "Engine": "aurora-postgresql",
+        "EngineVersion": "17.5",
+        "MasterUserPassword": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "TestAuroraDatabaseDatabaseSecretDB0F5C36",
+              },
+              ":SecretString:password::}}",
+            ],
+          ],
+        },
+        "MasterUsername": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "TestAuroraDatabaseDatabaseSecretDB0F5C36",
+              },
+              ":SecretString:username::}}",
+            ],
+          ],
+        },
+        "Port": 5432,
+        "StorageEncrypted": true,
+        "VpcSecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "TestAuroraDatabaseDatabaseSecurityGroup21740734",
+              "GroupId",
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBCluster",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TestAuroraDatabaseAuroraClusterwriterFEC8BA91": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "TestVpcDatabaseSubnet1RouteTableAssociationE6669ECB",
+        "TestVpcDatabaseSubnet2RouteTableAssociation3ADF1676",
+      ],
+      "Properties": {
+        "DBClusterIdentifier": {
+          "Ref": "TestAuroraDatabaseAuroraClusterD678395E",
+        },
+        "DBInstanceClass": "db.t3.medium",
+        "DBInstanceIdentifier": "writer-instance",
+        "Engine": "aurora-postgresql",
+        "PromotionTier": 0,
+        "PubliclyAccessible": false,
+      },
+      "Type": "AWS::RDS::DBInstance",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TestAuroraDatabaseDatabaseSecretAttachmentDCF2216E": {
+      "Properties": {
+        "SecretId": {
+          "Ref": "TestAuroraDatabaseDatabaseSecretDB0F5C36",
+        },
+        "TargetId": {
+          "Ref": "TestAuroraDatabaseAuroraClusterD678395E",
+        },
+        "TargetType": "AWS::RDS::DBCluster",
+      },
+      "Type": "AWS::SecretsManager::SecretTargetAttachment",
+    },
+    "TestAuroraDatabaseDatabaseSecretDB0F5C36": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "Description": "Aurora PostgreSQL master credentials",
+        "GenerateSecretString": {
+          "ExcludeCharacters": " %+~\`#$&*()|[]{}:;<>?!'/@"\\",
+          "GenerateStringKey": "password",
+          "IncludeSpace": false,
+          "PasswordLength": 32,
+          "SecretStringTemplate": "{"username":"testuser"}",
+        },
+        "Name": "test-secret-dev",
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TestAuroraDatabaseDatabaseSecurityGroup21740734": {
+      "Properties": {
+        "GroupDescription": "Security group for Aurora PostgreSQL cluster",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "VpcId": {
+          "Ref": "TestVpcE77CE678",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "TestAuroraDatabaseDatabaseSubnetGroupF860730E": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "DBSubnetGroupDescription": "Subnet group for Aurora PostgreSQL cluster",
+        "SubnetIds": [
+          {
+            "Ref": "TestVpcDatabaseSubnet1SubnetA8288FEA",
+          },
+          {
+            "Ref": "TestVpcDatabaseSubnet2Subnet2D24BF52",
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBSubnetGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TestVpcDatabaseSubnet1RouteTableAssociationE6669ECB": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "TestVpcDatabaseSubnet1RouteTableF963C438",
+        },
+        "SubnetId": {
+          "Ref": "TestVpcDatabaseSubnet1SubnetA8288FEA",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "TestVpcDatabaseSubnet1RouteTableF963C438": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStackdevelopment/TestVpc/DatabaseSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "TestVpcE77CE678",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "TestVpcDatabaseSubnet1SubnetA8288FEA": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Database",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStackdevelopment/TestVpc/DatabaseSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "TestVpcE77CE678",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "TestVpcDatabaseSubnet2RouteTable27CD07FE": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStackdevelopment/TestVpc/DatabaseSubnet2",
+          },
+        ],
+        "VpcId": {
+          "Ref": "TestVpcE77CE678",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "TestVpcDatabaseSubnet2RouteTableAssociation3ADF1676": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "TestVpcDatabaseSubnet2RouteTable27CD07FE",
+        },
+        "SubnetId": {
+          "Ref": "TestVpcDatabaseSubnet2Subnet2D24BF52",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "TestVpcDatabaseSubnet2Subnet2D24BF52": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.1.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Database",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStackdevelopment/TestVpc/DatabaseSubnet2",
+          },
+        ],
+        "VpcId": {
+          "Ref": "TestVpcE77CE678",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "TestVpcE77CE678": {
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStackdevelopment/TestVpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`AuroraDatabase Pattern Environment: prod (production) snapshot test for AuroraDatabase pattern - production: aurora-database-prod 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "TestAuroraDatabaseAuroraClusterD678395E": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "BackupRetentionPeriod": 30,
+        "CopyTagsToSnapshot": true,
+        "DBClusterIdentifier": "test-cluster-prod",
+        "DBClusterParameterGroupName": "default.aurora-postgresql17",
+        "DBSubnetGroupName": {
+          "Ref": "TestAuroraDatabaseDatabaseSubnetGroupF860730E",
+        },
+        "DatabaseName": "testdb",
+        "DeletionProtection": true,
+        "EnableHttpEndpoint": true,
+        "Engine": "aurora-postgresql",
+        "EngineVersion": "17.5",
+        "MasterUserPassword": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "TestAuroraDatabaseDatabaseSecretDB0F5C36",
+              },
+              ":SecretString:password::}}",
+            ],
+          ],
+        },
+        "MasterUsername": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "TestAuroraDatabaseDatabaseSecretDB0F5C36",
+              },
+              ":SecretString:username::}}",
+            ],
+          ],
+        },
+        "Port": 5432,
+        "StorageEncrypted": true,
+        "VpcSecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "TestAuroraDatabaseDatabaseSecurityGroup21740734",
+              "GroupId",
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBCluster",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TestAuroraDatabaseAuroraClusterwriterFEC8BA91": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "TestVpcDatabaseSubnet1RouteTableAssociationE6669ECB",
+        "TestVpcDatabaseSubnet2RouteTableAssociation3ADF1676",
+      ],
+      "Properties": {
+        "DBClusterIdentifier": {
+          "Ref": "TestAuroraDatabaseAuroraClusterD678395E",
+        },
+        "DBInstanceClass": "db.t3.medium",
+        "DBInstanceIdentifier": "writer-instance",
+        "Engine": "aurora-postgresql",
+        "PromotionTier": 0,
+        "PubliclyAccessible": false,
+      },
+      "Type": "AWS::RDS::DBInstance",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TestAuroraDatabaseDatabaseSecretAttachmentDCF2216E": {
+      "Properties": {
+        "SecretId": {
+          "Ref": "TestAuroraDatabaseDatabaseSecretDB0F5C36",
+        },
+        "TargetId": {
+          "Ref": "TestAuroraDatabaseAuroraClusterD678395E",
+        },
+        "TargetType": "AWS::RDS::DBCluster",
+      },
+      "Type": "AWS::SecretsManager::SecretTargetAttachment",
+    },
+    "TestAuroraDatabaseDatabaseSecretDB0F5C36": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "Description": "Aurora PostgreSQL master credentials",
+        "GenerateSecretString": {
+          "ExcludeCharacters": " %+~\`#$&*()|[]{}:;<>?!'/@"\\",
+          "GenerateStringKey": "password",
+          "IncludeSpace": false,
+          "PasswordLength": 32,
+          "SecretStringTemplate": "{"username":"testuser"}",
+        },
+        "Name": "test-secret-prod",
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TestAuroraDatabaseDatabaseSecurityGroup21740734": {
+      "Properties": {
+        "GroupDescription": "Security group for Aurora PostgreSQL cluster",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "VpcId": {
+          "Ref": "TestVpcE77CE678",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "TestAuroraDatabaseDatabaseSubnetGroupF860730E": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "DBSubnetGroupDescription": "Subnet group for Aurora PostgreSQL cluster",
+        "SubnetIds": [
+          {
+            "Ref": "TestVpcDatabaseSubnet1SubnetA8288FEA",
+          },
+          {
+            "Ref": "TestVpcDatabaseSubnet2Subnet2D24BF52",
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBSubnetGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TestVpcDatabaseSubnet1RouteTableAssociationE6669ECB": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "TestVpcDatabaseSubnet1RouteTableF963C438",
+        },
+        "SubnetId": {
+          "Ref": "TestVpcDatabaseSubnet1SubnetA8288FEA",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "TestVpcDatabaseSubnet1RouteTableF963C438": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStackproduction/TestVpc/DatabaseSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "TestVpcE77CE678",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "TestVpcDatabaseSubnet1SubnetA8288FEA": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Database",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStackproduction/TestVpc/DatabaseSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "TestVpcE77CE678",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "TestVpcDatabaseSubnet2RouteTable27CD07FE": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStackproduction/TestVpc/DatabaseSubnet2",
+          },
+        ],
+        "VpcId": {
+          "Ref": "TestVpcE77CE678",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "TestVpcDatabaseSubnet2RouteTableAssociation3ADF1676": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "TestVpcDatabaseSubnet2RouteTable27CD07FE",
+        },
+        "SubnetId": {
+          "Ref": "TestVpcDatabaseSubnet2Subnet2D24BF52",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "TestVpcDatabaseSubnet2Subnet2D24BF52": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.1.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Database",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStackproduction/TestVpc/DatabaseSubnet2",
+          },
+        ],
+        "VpcId": {
+          "Ref": "TestVpcE77CE678",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "TestVpcE77CE678": {
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStackproduction/TestVpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

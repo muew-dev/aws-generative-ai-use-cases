@@ -1,0 +1,4227 @@
+
+> generative-ai-use-cases@5.1.2 cdk:synth
+> npm -w cdk run synth
+
+
+> synth
+> cdk synth --all
+
+[WARNING] aws-cdk-lib.aws_ecs.ClusterProps#containerInsights is deprecated.
+  See {@link containerInsightsV2 }
+  This API will be removed in the next major release.
+[WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+  use `logGroup` instead
+  This API will be removed in the next major release.
+[WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+  use `logGroup` instead
+  This API will be removed in the next major release.
+[WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+  use `logGroup` instead
+  This API will be removed in the next major release.
+[WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+  use `logGroup` instead
+  This API will be removed in the next major release.
+[WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+  use `logGroup` instead
+  This API will be removed in the next major release.
+[WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+  use `logGroup` instead
+  This API will be removed in the next major release.
+[WARNING] aws-cdk-lib.aws_lambda.FunctionOptions#logRetention is deprecated.
+  use `logGroup` instead
+  This API will be removed in the next major release.
+✅ CDK App initialized successfully
+Environment: dev
+Stack Name: generative-ai-use-cases-dev
+[Warning at /generative-ai-use-cases-dev/WebApp/BackendWorkload/SecurityGroup] Ignoring Egress rule since 'allowAllOutbound' is set to true; To add customized rules, set allowAllOutbound=false on the SecurityGroup [ack: @aws-cdk/aws-ec2:ipv4IgnoreEgressRule]
+Resources:
+  VPCVpcA5FA3038:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.26.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev-vpc
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/Resource
+  VPCVpcPublicSubnet1Subnet9F2098CA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1a
+      CidrBlock: 10.26.0.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev/VPC/Vpc/PublicSubnet1
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PublicSubnet1/Subnet
+  VPCVpcPublicSubnet1RouteTable6BB63F1D:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev/VPC/Vpc/PublicSubnet1
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PublicSubnet1/RouteTable
+  VPCVpcPublicSubnet1RouteTableAssociation59CB8E6E:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: VPCVpcPublicSubnet1RouteTable6BB63F1D
+      SubnetId:
+        Ref: VPCVpcPublicSubnet1Subnet9F2098CA
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PublicSubnet1/RouteTableAssociation
+  VPCVpcPublicSubnet1DefaultRouteB186CE4C:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: VPCVpcIGWE699118B
+      RouteTableId:
+        Ref: VPCVpcPublicSubnet1RouteTable6BB63F1D
+    DependsOn:
+      - VPCVpcVPCGW0708525C
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PublicSubnet1/DefaultRoute
+  VPCVpcPublicSubnet2SubnetF5DA8EB4:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1c
+      CidrBlock: 10.26.1.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev/VPC/Vpc/PublicSubnet2
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PublicSubnet2/Subnet
+  VPCVpcPublicSubnet2RouteTableC220B366:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev/VPC/Vpc/PublicSubnet2
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PublicSubnet2/RouteTable
+  VPCVpcPublicSubnet2RouteTableAssociation397EA2A2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: VPCVpcPublicSubnet2RouteTableC220B366
+      SubnetId:
+        Ref: VPCVpcPublicSubnet2SubnetF5DA8EB4
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PublicSubnet2/RouteTableAssociation
+  VPCVpcPublicSubnet2DefaultRoute26004178:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: VPCVpcIGWE699118B
+      RouteTableId:
+        Ref: VPCVpcPublicSubnet2RouteTableC220B366
+    DependsOn:
+      - VPCVpcVPCGW0708525C
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PublicSubnet2/DefaultRoute
+  VPCVpcPrivateSubnet1Subnet99F2AD5A:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1a
+      CidrBlock: 10.26.2.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev/VPC/Vpc/PrivateSubnet1
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PrivateSubnet1/Subnet
+  VPCVpcPrivateSubnet1RouteTable9A30EF8B:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev/VPC/Vpc/PrivateSubnet1
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PrivateSubnet1/RouteTable
+  VPCVpcPrivateSubnet1RouteTableAssociationC5A78C3A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: VPCVpcPrivateSubnet1RouteTable9A30EF8B
+      SubnetId:
+        Ref: VPCVpcPrivateSubnet1Subnet99F2AD5A
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PrivateSubnet1/RouteTableAssociation
+  VPCVpcPrivateSubnet2Subnet1BB88465:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1c
+      CidrBlock: 10.26.3.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev/VPC/Vpc/PrivateSubnet2
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PrivateSubnet2/Subnet
+  VPCVpcPrivateSubnet2RouteTable8560CF03:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev/VPC/Vpc/PrivateSubnet2
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PrivateSubnet2/RouteTable
+  VPCVpcPrivateSubnet2RouteTableAssociation143A1BDA:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: VPCVpcPrivateSubnet2RouteTable8560CF03
+      SubnetId:
+        Ref: VPCVpcPrivateSubnet2Subnet1BB88465
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/PrivateSubnet2/RouteTableAssociation
+  VPCVpcDatabaseSubnet1Subnet8FDD1F97:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1a
+      CidrBlock: 10.26.4.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Database
+        - Key: aws-cdk:subnet-type
+          Value: Isolated
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev/VPC/Vpc/DatabaseSubnet1
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/DatabaseSubnet1/Subnet
+  VPCVpcDatabaseSubnet1RouteTableF1E1A672:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev/VPC/Vpc/DatabaseSubnet1
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/DatabaseSubnet1/RouteTable
+  VPCVpcDatabaseSubnet1RouteTableAssociation4A58BB1A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: VPCVpcDatabaseSubnet1RouteTableF1E1A672
+      SubnetId:
+        Ref: VPCVpcDatabaseSubnet1Subnet8FDD1F97
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/DatabaseSubnet1/RouteTableAssociation
+  VPCVpcDatabaseSubnet2Subnet13D15657:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1c
+      CidrBlock: 10.26.5.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Database
+        - Key: aws-cdk:subnet-type
+          Value: Isolated
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev/VPC/Vpc/DatabaseSubnet2
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/DatabaseSubnet2/Subnet
+  VPCVpcDatabaseSubnet2RouteTable81C50726:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev/VPC/Vpc/DatabaseSubnet2
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/DatabaseSubnet2/RouteTable
+  VPCVpcDatabaseSubnet2RouteTableAssociationF02CEEAC:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: VPCVpcDatabaseSubnet2RouteTable81C50726
+      SubnetId:
+        Ref: VPCVpcDatabaseSubnet2Subnet13D15657
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/DatabaseSubnet2/RouteTableAssociation
+  VPCVpcIGWE699118B:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev-vpc
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/IGW
+  VPCVpcVPCGW0708525C:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId:
+        Ref: VPCVpcIGWE699118B
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/VPCGW
+  VPCVpcRestrictDefaultSecurityGroupCustomResourceD9332591:
+    Type: Custom::VpcRestrictDefaultSG
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E
+          - Arn
+      DefaultSecurityGroupId:
+        Fn::GetAtt:
+          - VPCVpcA5FA3038
+          - DefaultSecurityGroup
+      Account:
+        Ref: AWS::AccountId
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/Vpc/RestrictDefaultSecurityGroupCustomResource/Default
+  VPCS3Endpoint18C9C7CA:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      RouteTableIds:
+        - Ref: VPCVpcPrivateSubnet1RouteTable9A30EF8B
+        - Ref: VPCVpcPrivateSubnet2RouteTable8560CF03
+        - Ref: VPCVpcDatabaseSubnet1RouteTableF1E1A672
+        - Ref: VPCVpcDatabaseSubnet2RouteTable81C50726
+      ServiceName:
+        Fn::Join:
+          - ""
+          - - com.amazonaws.
+            - Ref: AWS::Region
+            - .s3
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      VpcEndpointType: Gateway
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/S3Endpoint/Resource
+  VPCVpcEndpointSecurityGroup9E605EBE:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for VPC endpoints
+      SecurityGroupEgress:
+        - CidrIp: 255.255.255.255/32
+          Description: Disallow all traffic
+          FromPort: 252
+          IpProtocol: icmp
+          ToPort: 86
+      SecurityGroupIngress:
+        - CidrIp:
+            Fn::GetAtt:
+              - VPCVpcA5FA3038
+              - CidrBlock
+          Description: Allow HTTPS from VPC resources
+          FromPort: 443
+          IpProtocol: tcp
+          ToPort: 443
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/VpcEndpointSecurityGroup/Resource
+  VPCCloudWatchLogsEndpointE175AF65:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: true
+      SecurityGroupIds:
+        - Fn::GetAtt:
+            - VPCVpcEndpointSecurityGroup9E605EBE
+            - GroupId
+      ServiceName:
+        Fn::Join:
+          - ""
+          - - com.amazonaws.
+            - Ref: AWS::Region
+            - .logs
+      SubnetIds:
+        - Ref: VPCVpcPrivateSubnet1Subnet99F2AD5A
+        - Ref: VPCVpcPrivateSubnet2Subnet1BB88465
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      VpcEndpointType: Interface
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/CloudWatchLogsEndpoint/Resource
+  VPCNatGatewayEIPapnortheast1aD694F29F:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev-vpc-nat-gateway-eip-ap-northeast-1a
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/NatGatewayEIP-ap-northeast-1a
+  VPCNatGatewayapnortheast1aA616D6E3:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - VPCNatGatewayEIPapnortheast1aD694F29F
+          - AllocationId
+      SubnetId:
+        Ref: VPCVpcPublicSubnet1Subnet9F2098CA
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev-vpc-nat-gateway-ap-northeast-1a
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/NatGateway-ap-northeast-1a
+  VPCNatGatewayRoute1D7069165:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: VPCNatGatewayapnortheast1aA616D6E3
+      RouteTableId:
+        Ref: VPCVpcPrivateSubnet1RouteTable9A30EF8B
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/NatGatewayRoute1
+  VPCNatGatewayRoute22E8D69DC:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: VPCNatGatewayapnortheast1aA616D6E3
+      RouteTableId:
+        Ref: VPCVpcPrivateSubnet2RouteTable8560CF03
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/VPC/NatGatewayRoute2
+  CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+      ManagedPolicyArns:
+        - Fn::Sub: arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: Inline
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ec2:AuthorizeSecurityGroupIngress
+                  - ec2:AuthorizeSecurityGroupEgress
+                  - ec2:RevokeSecurityGroupIngress
+                  - ec2:RevokeSecurityGroupEgress
+                Resource:
+                  - Fn::Join:
+                      - ""
+                      - - "arn:"
+                        - Ref: AWS::Partition
+                        - ":ec2:"
+                        - Ref: AWS::Region
+                        - ":"
+                        - Ref: AWS::AccountId
+                        - :security-group/
+                        - Fn::GetAtt:
+                            - VPCVpcA5FA3038
+                            - DefaultSecurityGroup
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role
+  CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}
+        S3Key: 7fa1e366ee8a9ded01fc355f704cff92bfd179574e6f9cfee800a3541df1b200.zip
+      Timeout: 900
+      MemorySize: 128
+      Handler: __entrypoint__.handler
+      Role:
+        Fn::GetAtt:
+          - CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0
+          - Arn
+      Runtime: nodejs22.x
+      Description: Lambda function for removing all inbound/outbound rules from the VPC default security group
+    DependsOn:
+      - CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler
+      aws:asset:path: asset.7fa1e366ee8a9ded01fc355f704cff92bfd179574e6f9cfee800a3541df1b200
+      aws:asset:property: Code
+  AuthUserPool8115E87F:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+      AliasAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      EmailVerificationMessage: The verification code to your new account is {####}
+      EmailVerificationSubject: Verify your new account
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: false
+          RequireUppercase: true
+      Schema:
+        - AttributeDataType: String
+          Name: role
+          StringAttributeConstraints:
+            MaxLength: "50"
+      SmsVerificationMessage: The verification code to your new account is {####}
+      UserPoolName: generative-ai-use-cases-dev-user-pool
+      UserPoolTags:
+        ManagedBy: CDK
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_CODE
+        EmailMessage: The verification code to your new account is {####}
+        EmailSubject: Verify your new account
+        SmsMessage: The verification code to your new account is {####}
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Auth/UserPool/Resource
+  AuthUserPoolClient0AA456E4:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      AccessTokenValidity: 60
+      AllowedOAuthFlows:
+        - code
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthScopes:
+        - openid
+        - email
+        - profile
+      CallbackURLs:
+        - https://genu.muew.dev/oauth2/idpresponse
+      ClientName: generative-ai-use-cases-user-pool-client
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_ADMIN_USER_PASSWORD_AUTH
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      GenerateSecret: true
+      IdTokenValidity: 60
+      LogoutURLs:
+        - https://genu.muew.dev/
+      PreventUserExistenceErrors: ENABLED
+      RefreshTokenValidity: 43200
+      SupportedIdentityProviders:
+        - COGNITO
+      TokenValidityUnits:
+        AccessToken: minutes
+        IdToken: minutes
+        RefreshToken: minutes
+      UserPoolId:
+        Ref: AuthUserPool8115E87F
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Auth/UserPoolClient/Resource
+  AuthUserPoolClientDescribeCognitoUserPoolClientC820BD08:
+    Type: Custom::DescribeCognitoUserPoolClient
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        Fn::Join:
+          - ""
+          - - '{"region":"'
+            - Ref: AWS::Region
+            - '","service":"CognitoIdentityServiceProvider","action":"describeUserPoolClient","parameters":{"UserPoolId":"'
+            - Ref: AuthUserPool8115E87F
+            - '","ClientId":"'
+            - Ref: AuthUserPoolClient0AA456E4
+            - '"},"physicalResourceId":{"id":"'
+            - Ref: AuthUserPoolClient0AA456E4
+            - '"},"logApiResponseData":false}'
+      Update:
+        Fn::Join:
+          - ""
+          - - '{"region":"'
+            - Ref: AWS::Region
+            - '","service":"CognitoIdentityServiceProvider","action":"describeUserPoolClient","parameters":{"UserPoolId":"'
+            - Ref: AuthUserPool8115E87F
+            - '","ClientId":"'
+            - Ref: AuthUserPoolClient0AA456E4
+            - '"},"physicalResourceId":{"id":"'
+            - Ref: AuthUserPoolClient0AA456E4
+            - '"},"logApiResponseData":false}'
+      InstallLatestAwsSdk: false
+    DependsOn:
+      - AuthUserPoolClientDescribeCognitoUserPoolClientCustomResourcePolicy02046D9C
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Auth/UserPoolClient/DescribeCognitoUserPoolClient/Resource/Default
+  AuthUserPoolClientDescribeCognitoUserPoolClientCustomResourcePolicy02046D9C:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: cognito-idp:DescribeUserPoolClient
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - AuthUserPool8115E87F
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: AuthUserPoolClientDescribeCognitoUserPoolClientCustomResourcePolicy02046D9C
+      Roles:
+        - Ref: AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Auth/UserPoolClient/DescribeCognitoUserPoolClient/CustomResourcePolicy/Resource
+  AuthUserPoolDomain97947401:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: genu-muew-dev
+      UserPoolId:
+        Ref: AuthUserPool8115E87F
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Auth/UserPoolDomain/Resource
+  AuroraDatabaseSecurityGroupBD30CB2F:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Aurora PostgreSQL cluster
+      SecurityGroupEgress:
+        - CidrIp: 255.255.255.255/32
+          Description: Disallow all traffic
+          FromPort: 252
+          IpProtocol: icmp
+          ToPort: 86
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Aurora/DatabaseSecurityGroup/Resource
+  AuroraDatabaseSecurityGroupfromgenerativeaiusecasesdevBastionBastionSecurityGroupF6881BFF543240698A57:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Allow PostgreSQL access from bastion host
+      FromPort: 5432
+      GroupId:
+        Fn::GetAtt:
+          - AuroraDatabaseSecurityGroupBD30CB2F
+          - GroupId
+      IpProtocol: tcp
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - BastionBastionSecurityGroupED5052E4
+          - GroupId
+      ToPort: 5432
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Aurora/DatabaseSecurityGroup/from generativeaiusecasesdevBastionBastionSecurityGroupF6881BFF:5432
+  AuroraDatabaseSecurityGroupfromgenerativeaiusecasesdevWebAppBackendWorkloadSecurityGroupE22EFF0654324C04D833:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Backend service to Aurora
+      FromPort: 5432
+      GroupId:
+        Fn::GetAtt:
+          - AuroraDatabaseSecurityGroupBD30CB2F
+          - GroupId
+      IpProtocol: tcp
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - WebAppBackendWorkloadSecurityGroup8617E800
+          - GroupId
+      ToPort: 5432
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Aurora/DatabaseSecurityGroup/from generativeaiusecasesdevWebAppBackendWorkloadSecurityGroupE22EFF06:5432
+  AuroraDatabaseSubnetGroupE065B211:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnet group for Aurora PostgreSQL cluster
+      SubnetIds:
+        - Ref: VPCVpcDatabaseSubnet1Subnet8FDD1F97
+        - Ref: VPCVpcDatabaseSubnet2Subnet13D15657
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Aurora/DatabaseSubnetGroup/Default
+  AuroraDatabaseSecret44ABC0E4:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: Aurora PostgreSQL master credentials
+      GenerateSecretString:
+        ExcludeCharacters: " %+~`#$&*()|[]{}:;<>?!'/@\"\\"
+        GenerateStringKey: password
+        IncludeSpace: false
+        PasswordLength: 32
+        SecretStringTemplate: '{"username":"postgres"}'
+      Name: generative-ai-use-cases/aurora-credentials
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Aurora/DatabaseSecret/Resource
+  AuroraDatabaseSecretAttachment92ED906C:
+    Type: AWS::SecretsManager::SecretTargetAttachment
+    Properties:
+      SecretId:
+        Ref: AuroraDatabaseSecret44ABC0E4
+      TargetId:
+        Ref: AuroraAuroraCluster557FDB85
+      TargetType: AWS::RDS::DBCluster
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Aurora/DatabaseSecret/Attachment/Resource
+  AuroraAuroraCluster557FDB85:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      BackupRetentionPeriod: 7
+      CopyTagsToSnapshot: true
+      DBClusterIdentifier: generative-ai-use-cases-dev-aurora-cluster
+      DBClusterParameterGroupName: default.aurora-postgresql17
+      DBSubnetGroupName:
+        Ref: AuroraDatabaseSubnetGroupE065B211
+      DatabaseName: generative_ai_db
+      DeletionProtection: false
+      EnableHttpEndpoint: true
+      Engine: aurora-postgresql
+      EngineVersion: "17.5"
+      MasterUserPassword:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: AuroraDatabaseSecret44ABC0E4
+            - :SecretString:password::}}
+      MasterUsername:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: AuroraDatabaseSecret44ABC0E4
+            - :SecretString:username::}}
+      Port: 5432
+      StorageEncrypted: true
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      VpcSecurityGroupIds:
+        - Fn::GetAtt:
+            - AuroraDatabaseSecurityGroupBD30CB2F
+            - GroupId
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Aurora/AuroraCluster/Resource
+  AuroraAuroraClusterwriter20B15063:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBClusterIdentifier:
+        Ref: AuroraAuroraCluster557FDB85
+      DBInstanceClass: db.t3.medium
+      DBInstanceIdentifier: writer-instance
+      Engine: aurora-postgresql
+      PromotionTier: 0
+      PubliclyAccessible: false
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    DependsOn:
+      - VPCVpcPrivateSubnet1RouteTableAssociationC5A78C3A
+      - VPCVpcPrivateSubnet2RouteTableAssociation143A1BDA
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Aurora/AuroraCluster/writer/Resource
+  ECSECSClusterD3E7BECE:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: generative-ai-use-cases-dev-ecs-cluster
+      ClusterSettings:
+        - Name: containerInsights
+          Value: enabled
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/ECS/ECSCluster/Resource
+  ECSECSCluster516D7426:
+    Type: AWS::ECS::ClusterCapacityProviderAssociations
+    Properties:
+      CapacityProviders:
+        - FARGATE
+        - FARGATE_SPOT
+      Cluster:
+        Ref: ECSECSClusterD3E7BECE
+      DefaultCapacityProviderStrategy: []
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/ECS/ECSCluster/ECSCluster
+  Certificate4E7ABB08:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: genu.muew.dev
+      DomainValidationOptions:
+        - DomainName: genu.muew.dev
+          HostedZoneId: Z06924452U2Z12SVXR7YX
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev/Certificate
+      ValidationMethod: DNS
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Certificate/Resource
+  WebAppALBAlbSecurityGroup59798D68:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Application Load Balancer
+      SecurityGroupEgress:
+        - CidrIp:
+            Fn::GetAtt:
+              - VPCVpcA5FA3038
+              - CidrBlock
+          Description: Allow outbound traffic to VPC (ECS services)
+          IpProtocol: "-1"
+        - CidrIp: 0.0.0.0/0
+          Description: Allow to IdP endpoint
+          FromPort: 443
+          IpProtocol: tcp
+          ToPort: 443
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow HTTPS traffic from NLB and internet
+          FromPort: 443
+          IpProtocol: tcp
+          ToPort: 443
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/AlbSecurityGroup/Resource
+  WebAppALBAlbSecurityGrouptogenerativeaiusecasesdevWebAppFrontendWorkloadSecurityGroupC214F72530002AEC4A78:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: Load balancer to target
+      DestinationSecurityGroupId:
+        Fn::GetAtt:
+          - WebAppFrontendWorkloadSecurityGroup748DE88D
+          - GroupId
+      FromPort: 3000
+      GroupId:
+        Fn::GetAtt:
+          - WebAppALBAlbSecurityGroup59798D68
+          - GroupId
+      IpProtocol: tcp
+      ToPort: 3000
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/AlbSecurityGroup/to generativeaiusecasesdevWebAppFrontendWorkloadSecurityGroupC214F725:3000
+  WebAppALBAlbSecurityGrouptogenerativeaiusecasesdevWebAppFrontendHealthWorkloadSecurityGroup513CB4E93000D0FE2A80:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: Load balancer to target
+      DestinationSecurityGroupId:
+        Fn::GetAtt:
+          - WebAppFrontendHealthWorkloadSecurityGroupA975B1C3
+          - GroupId
+      FromPort: 3000
+      GroupId:
+        Fn::GetAtt:
+          - WebAppALBAlbSecurityGroup59798D68
+          - GroupId
+      IpProtocol: tcp
+      ToPort: 3000
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/AlbSecurityGroup/to generativeaiusecasesdevWebAppFrontendHealthWorkloadSecurityGroup513CB4E9:3000
+  WebAppALBAlbSecurityGrouptogenerativeaiusecasesdevWebAppBackendWorkloadSecurityGroupE22EFF0680008909590B:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: Load balancer to target
+      DestinationSecurityGroupId:
+        Fn::GetAtt:
+          - WebAppBackendWorkloadSecurityGroup8617E800
+          - GroupId
+      FromPort: 8000
+      GroupId:
+        Fn::GetAtt:
+          - WebAppALBAlbSecurityGroup59798D68
+          - GroupId
+      IpProtocol: tcp
+      ToPort: 8000
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/AlbSecurityGroup/to generativeaiusecasesdevWebAppBackendWorkloadSecurityGroupE22EFF06:8000
+  WebAppALBAlbSecurityGrouptogenerativeaiusecasesdevWebAppBackendHealthWorkloadSecurityGroup6A338798800009DEEAE4:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: Load balancer to target
+      DestinationSecurityGroupId:
+        Fn::GetAtt:
+          - WebAppBackendHealthWorkloadSecurityGroupA3EAEF57
+          - GroupId
+      FromPort: 8000
+      GroupId:
+        Fn::GetAtt:
+          - WebAppALBAlbSecurityGroup59798D68
+          - GroupId
+      IpProtocol: tcp
+      ToPort: 8000
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/AlbSecurityGroup/to generativeaiusecasesdevWebAppBackendHealthWorkloadSecurityGroup6A338798:8000
+  WebAppALBApplicationLoadBalancerC3702787:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      LoadBalancerAttributes:
+        - Key: deletion_protection.enabled
+          Value: "false"
+      Name: generative-ai-use-cases-alb
+      Scheme: internet-facing
+      SecurityGroups:
+        - Fn::GetAtt:
+            - WebAppALBAlbSecurityGroup59798D68
+            - GroupId
+      Subnets:
+        - Ref: VPCVpcPublicSubnet1Subnet9F2098CA
+        - Ref: VPCVpcPublicSubnet2SubnetF5DA8EB4
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      Type: application
+    DependsOn:
+      - VPCVpcPublicSubnet1DefaultRouteB186CE4C
+      - VPCVpcPublicSubnet1RouteTableAssociation59CB8E6E
+      - VPCVpcPublicSubnet2DefaultRoute26004178
+      - VPCVpcPublicSubnet2RouteTableAssociation397EA2A2
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/ApplicationLoadBalancer/Resource
+  WebAppALBApplicationLoadBalancerHttpsListener285F211E:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      Certificates:
+        - CertificateArn:
+            Ref: Certificate4E7ABB08
+      DefaultActions:
+        - FixedResponseConfig:
+            MessageBody: Not Found
+            StatusCode: "404"
+          Type: fixed-response
+      LoadBalancerArn:
+        Ref: WebAppALBApplicationLoadBalancerC3702787
+      Port: 443
+      Protocol: HTTPS
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/ApplicationLoadBalancer/HttpsListener/Resource
+  WebAppALBTargetGroupAA6CA23F:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /health
+      HealthCheckPort: "3000"
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Matcher:
+        HttpCode: "200"
+      Port: 3000
+      Protocol: HTTP
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: "30"
+        - Key: stickiness.enabled
+          Value: "false"
+      TargetType: ip
+      UnhealthyThresholdCount: 5
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/TargetGroup/Resource
+  WebAppALBListenerRule6F68509F:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - AuthenticateOidcConfig:
+            AuthorizationEndpoint:
+              Fn::Join:
+                - ""
+                - - https://
+                  - Ref: AuthUserPoolDomain97947401
+                  - .auth.
+                  - Ref: AWS::Region
+                  - .amazoncognito.com/oauth2/authorize
+            ClientId:
+              Ref: AuthUserPoolClient0AA456E4
+            ClientSecret:
+              Fn::GetAtt:
+                - AuthUserPoolClientDescribeCognitoUserPoolClientC820BD08
+                - UserPoolClient.ClientSecret
+            Issuer:
+              Fn::Join:
+                - ""
+                - - https://cognito-idp.
+                  - Ref: AWS::Region
+                  - .amazonaws.com/
+                  - Ref: AuthUserPool8115E87F
+            OnUnauthenticatedRequest: authenticate
+            TokenEndpoint:
+              Fn::Join:
+                - ""
+                - - https://
+                  - Ref: AuthUserPoolDomain97947401
+                  - .auth.
+                  - Ref: AWS::Region
+                  - .amazoncognito.com/oauth2/token
+            UserInfoEndpoint:
+              Fn::Join:
+                - ""
+                - - https://
+                  - Ref: AuthUserPoolDomain97947401
+                  - .auth.
+                  - Ref: AWS::Region
+                  - .amazoncognito.com/oauth2/userInfo
+          Order: 1
+          Type: authenticate-oidc
+        - Order: 2
+          TargetGroupArn:
+            Ref: WebAppALBTargetGroupAA6CA23F
+          Type: forward
+      Conditions:
+        - Field: path-pattern
+          PathPatternConfig:
+            Values:
+              - /*
+      ListenerArn:
+        Ref: WebAppALBApplicationLoadBalancerHttpsListener285F211E
+      Priority: 200
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/ListenerRule/Resource
+  WebAppALBTargetGrouphealthC1C21EC3:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /health
+      HealthCheckPort: "3000"
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Matcher:
+        HttpCode: "200"
+      Port: 3000
+      Protocol: HTTP
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: "30"
+        - Key: stickiness.enabled
+          Value: "false"
+      TargetType: ip
+      UnhealthyThresholdCount: 5
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/TargetGrouphealth/Resource
+  WebAppALBListenerRulehealthA48346B7:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - TargetGroupArn:
+            Ref: WebAppALBTargetGrouphealthC1C21EC3
+          Type: forward
+      Conditions:
+        - Field: path-pattern
+          PathPatternConfig:
+            Values:
+              - /health
+      ListenerArn:
+        Ref: WebAppALBApplicationLoadBalancerHttpsListener285F211E
+      Priority: 100
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/ListenerRulehealth/Resource
+  WebAppALBTargetGroupapiD3193C6D:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /api/health
+      HealthCheckPort: "8000"
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Matcher:
+        HttpCode: "200"
+      Port: 8000
+      Protocol: HTTP
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: "30"
+        - Key: stickiness.enabled
+          Value: "false"
+      TargetType: ip
+      UnhealthyThresholdCount: 5
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/TargetGroupapi/Resource
+  WebAppALBListenerRuleapiBBA3F233:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - AuthenticateOidcConfig:
+            AuthorizationEndpoint:
+              Fn::Join:
+                - ""
+                - - https://
+                  - Ref: AuthUserPoolDomain97947401
+                  - .auth.
+                  - Ref: AWS::Region
+                  - .amazoncognito.com/oauth2/authorize
+            ClientId:
+              Ref: AuthUserPoolClient0AA456E4
+            ClientSecret:
+              Fn::GetAtt:
+                - AuthUserPoolClientDescribeCognitoUserPoolClientC820BD08
+                - UserPoolClient.ClientSecret
+            Issuer:
+              Fn::Join:
+                - ""
+                - - https://cognito-idp.
+                  - Ref: AWS::Region
+                  - .amazonaws.com/
+                  - Ref: AuthUserPool8115E87F
+            OnUnauthenticatedRequest: authenticate
+            TokenEndpoint:
+              Fn::Join:
+                - ""
+                - - https://
+                  - Ref: AuthUserPoolDomain97947401
+                  - .auth.
+                  - Ref: AWS::Region
+                  - .amazoncognito.com/oauth2/token
+            UserInfoEndpoint:
+              Fn::Join:
+                - ""
+                - - https://
+                  - Ref: AuthUserPoolDomain97947401
+                  - .auth.
+                  - Ref: AWS::Region
+                  - .amazoncognito.com/oauth2/userInfo
+          Order: 1
+          Type: authenticate-oidc
+        - Order: 2
+          TargetGroupArn:
+            Ref: WebAppALBTargetGroupapiD3193C6D
+          Type: forward
+      Conditions:
+        - Field: path-pattern
+          PathPatternConfig:
+            Values:
+              - /api/*
+      ListenerArn:
+        Ref: WebAppALBApplicationLoadBalancerHttpsListener285F211E
+      Priority: 150
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/ListenerRuleapi/Resource
+  WebAppALBTargetGroupapihealth6528E261:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /api/health
+      HealthCheckPort: "8000"
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Matcher:
+        HttpCode: "200"
+      Port: 8000
+      Protocol: HTTP
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: "30"
+        - Key: stickiness.enabled
+          Value: "false"
+      TargetType: ip
+      UnhealthyThresholdCount: 5
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/TargetGroupapihealth/Resource
+  WebAppALBListenerRuleapihealth872116C8:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - TargetGroupArn:
+            Ref: WebAppALBTargetGroupapihealth6528E261
+          Type: forward
+      Conditions:
+        - Field: path-pattern
+          PathPatternConfig:
+            Values:
+              - /api/health
+      ListenerArn:
+        Ref: WebAppALBApplicationLoadBalancerHttpsListener285F211E
+      Priority: 50
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/ALB/ListenerRuleapihealth/Resource
+  WebAppFrontendWorkloadSecurityGroup748DE88D:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for frontend-service Fargate workload
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendWorkload/SecurityGroup/Resource
+  WebAppFrontendWorkloadSecurityGroupfromgenerativeaiusecasesdevWebAppALBAlbSecurityGroup17B376393000F870DC38:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Load balancer to target
+      FromPort: 3000
+      GroupId:
+        Fn::GetAtt:
+          - WebAppFrontendWorkloadSecurityGroup748DE88D
+          - GroupId
+      IpProtocol: tcp
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - WebAppALBAlbSecurityGroup59798D68
+          - GroupId
+      ToPort: 3000
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendWorkload/SecurityGroup/from generativeaiusecasesdevWebAppALBAlbSecurityGroup17B37639:3000
+  WebAppFrontendWorkloadLogGroup39CE0986:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /ecs/frontend-service
+      RetentionInDays: 7
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendWorkload/LogGroup/Resource
+  WebAppFrontendWorkloadTaskExecutionRoleD52B7F0F:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Description: Task execution role for frontend-service
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendWorkload/TaskExecutionRole/Resource
+  WebAppFrontendWorkloadTaskExecutionRoleDefaultPolicy85191602:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:BatchGetImage
+              - ecr:GetAuthorizationToken
+              - ecr:GetDownloadUrlForLayer
+            Effect: Allow
+            Resource: "*"
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:secretsmanager:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - :secret:generative-ai-use-cases/aurora-credentials*
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - WebAppFrontendWorkloadLogGroup39CE0986
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: WebAppFrontendWorkloadTaskExecutionRoleDefaultPolicy85191602
+      Roles:
+        - Ref: WebAppFrontendWorkloadTaskExecutionRoleD52B7F0F
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendWorkload/TaskExecutionRole/DefaultPolicy/Resource
+  WebAppFrontendWorkloadTaskRole120F253D:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Description: Task role for frontend-service
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendWorkload/TaskRole/Resource
+  WebAppFrontendWorkloadTaskRoleDefaultPolicyE2DC2AE5:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - bedrock:InvokeModel
+              - bedrock:InvokeModelWithResponseStream
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:bedrock:"
+                    - Ref: AWS::Region
+                    - ::foundation-model/amazon.titan-embed-text-v2:0
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:bedrock:"
+                    - Ref: AWS::Region
+                    - ::foundation-model/anthropic.claude-3-5-sonnet-20240620-v1:0
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:secretsmanager:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - :secret:generative-ai-use-cases/aurora-credentials*
+        Version: "2012-10-17"
+      PolicyName: WebAppFrontendWorkloadTaskRoleDefaultPolicyE2DC2AE5
+      Roles:
+        - Ref: WebAppFrontendWorkloadTaskRole120F253D
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendWorkload/TaskRole/DefaultPolicy/Resource
+  WebAppFrontendWorkloadTaskDefinitionF102ADB7:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Environment:
+            - Name: AWS_DEFAULT_REGION
+              Value:
+                Ref: AWS::Region
+            - Name: NODE_ENV
+              Value: production
+            - Name: NEXT_PUBLIC_API_ENDPOINT
+              Value: https://genu.muew.dev/api
+            - Name: NEXT_PUBLIC_COGNITO_USER_POOL_ID
+              Value:
+                Ref: AuthUserPool8115E87F
+            - Name: NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID
+              Value:
+                Ref: AuthUserPoolClient0AA456E4
+            - Name: NEXT_PUBLIC_COGNITO_REGION
+              Value:
+                Ref: AWS::Region
+            - Name: PORT
+              Value: "3000"
+            - Name: HOSTNAME
+              Value: 0.0.0.0
+          Essential: true
+          Image:
+            Fn::Sub: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:044e1973c5b6e69ff997a308a6a9803953e4481af27a82bdfaa50aa5ccdb69c2
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: WebAppFrontendWorkloadLogGroup39CE0986
+              awslogs-stream-prefix: ecs
+              awslogs-region:
+                Ref: AWS::Region
+          Name: frontend-container
+          PortMappings:
+            - ContainerPort: 3000
+              Protocol: tcp
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - WebAppFrontendWorkloadTaskExecutionRoleD52B7F0F
+          - Arn
+      Family: frontend-task
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      RuntimePlatform:
+        CpuArchitecture: ARM64
+        OperatingSystemFamily: LINUX
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      TaskRoleArn:
+        Fn::GetAtt:
+          - WebAppFrontendWorkloadTaskRole120F253D
+          - Arn
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendWorkload/TaskDefinition/Resource
+  WebAppFrontendWorkloadFargateService6A139B57:
+    Type: AWS::ECS::Service
+    Properties:
+      AvailabilityZoneRebalancing: ENABLED
+      Cluster:
+        Ref: ECSECSClusterD3E7BECE
+      DeploymentConfiguration:
+        Alarms:
+          AlarmNames: []
+          Enable: false
+          Rollback: false
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 1
+      EnableECSManagedTags: false
+      EnableExecuteCommand: false
+      HealthCheckGracePeriodSeconds: 60
+      LaunchType: FARGATE
+      LoadBalancers:
+        - ContainerName: frontend-container
+          ContainerPort: 3000
+          TargetGroupArn:
+            Ref: WebAppALBTargetGroupAA6CA23F
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::GetAtt:
+                - WebAppFrontendWorkloadSecurityGroup748DE88D
+                - GroupId
+          Subnets:
+            - Ref: VPCVpcPrivateSubnet1Subnet99F2AD5A
+            - Ref: VPCVpcPrivateSubnet2Subnet1BB88465
+      ServiceName: frontend-service
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      TaskDefinition:
+        Ref: WebAppFrontendWorkloadTaskDefinitionF102ADB7
+    DependsOn:
+      - WebAppALBListenerRule6F68509F
+      - WebAppFrontendWorkloadTaskRoleDefaultPolicyE2DC2AE5
+      - WebAppFrontendWorkloadTaskRole120F253D
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendWorkload/FargateService/Service
+  WebAppFrontendWorkloadFargateServiceTaskCountTargetF5FBD0E4:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: 4
+      MinCapacity: 1
+      ResourceId:
+        Fn::Join:
+          - ""
+          - - service/
+            - Ref: ECSECSClusterD3E7BECE
+            - /
+            - Fn::GetAtt:
+                - WebAppFrontendWorkloadFargateService6A139B57
+                - Name
+      RoleARN:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":iam::"
+            - Ref: AWS::AccountId
+            - :role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+    DependsOn:
+      - WebAppFrontendWorkloadTaskRoleDefaultPolicyE2DC2AE5
+      - WebAppFrontendWorkloadTaskRole120F253D
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendWorkload/FargateService/TaskCount/Target/Resource
+  WebAppFrontendWorkloadFargateServiceTaskCountTargetCpuScaling0A6F20E4:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: generativeaiusecasesdevWebAppFrontendWorkloadFargateServiceTaskCountTargetCpuScaling694CAC8C
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId:
+        Ref: WebAppFrontendWorkloadFargateServiceTaskCountTargetF5FBD0E4
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        ScaleInCooldown: 300
+        ScaleOutCooldown: 120
+        TargetValue: 70
+    DependsOn:
+      - WebAppFrontendWorkloadTaskRoleDefaultPolicyE2DC2AE5
+      - WebAppFrontendWorkloadTaskRole120F253D
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendWorkload/FargateService/TaskCount/Target/CpuScaling/Resource
+  WebAppFrontendHealthWorkloadSecurityGroupA975B1C3:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for frontend-service-health Fargate workload
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendHealthWorkload/SecurityGroup/Resource
+  WebAppFrontendHealthWorkloadSecurityGroupfromgenerativeaiusecasesdevWebAppALBAlbSecurityGroup17B376393000D2D6B038:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Load balancer to target
+      FromPort: 3000
+      GroupId:
+        Fn::GetAtt:
+          - WebAppFrontendHealthWorkloadSecurityGroupA975B1C3
+          - GroupId
+      IpProtocol: tcp
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - WebAppALBAlbSecurityGroup59798D68
+          - GroupId
+      ToPort: 3000
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendHealthWorkload/SecurityGroup/from generativeaiusecasesdevWebAppALBAlbSecurityGroup17B37639:3000
+  WebAppFrontendHealthWorkloadLogGroupEAAFE27E:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /ecs/frontend-service-health
+      RetentionInDays: 7
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendHealthWorkload/LogGroup/Resource
+  WebAppFrontendHealthWorkloadTaskExecutionRole5D0AB0A6:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Description: Task execution role for frontend-service-health
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendHealthWorkload/TaskExecutionRole/Resource
+  WebAppFrontendHealthWorkloadTaskExecutionRoleDefaultPolicy05F63E2A:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:BatchGetImage
+              - ecr:GetAuthorizationToken
+              - ecr:GetDownloadUrlForLayer
+            Effect: Allow
+            Resource: "*"
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:secretsmanager:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - :secret:generative-ai-use-cases/aurora-credentials*
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - WebAppFrontendHealthWorkloadLogGroupEAAFE27E
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: WebAppFrontendHealthWorkloadTaskExecutionRoleDefaultPolicy05F63E2A
+      Roles:
+        - Ref: WebAppFrontendHealthWorkloadTaskExecutionRole5D0AB0A6
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendHealthWorkload/TaskExecutionRole/DefaultPolicy/Resource
+  WebAppFrontendHealthWorkloadTaskRole1D1A2416:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Description: Task role for frontend-service-health
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendHealthWorkload/TaskRole/Resource
+  WebAppFrontendHealthWorkloadTaskRoleDefaultPolicyE9DC1742:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - bedrock:InvokeModel
+              - bedrock:InvokeModelWithResponseStream
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:bedrock:"
+                    - Ref: AWS::Region
+                    - ::foundation-model/amazon.titan-embed-text-v2:0
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:bedrock:"
+                    - Ref: AWS::Region
+                    - ::foundation-model/anthropic.claude-3-5-sonnet-20240620-v1:0
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:secretsmanager:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - :secret:generative-ai-use-cases/aurora-credentials*
+        Version: "2012-10-17"
+      PolicyName: WebAppFrontendHealthWorkloadTaskRoleDefaultPolicyE9DC1742
+      Roles:
+        - Ref: WebAppFrontendHealthWorkloadTaskRole1D1A2416
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendHealthWorkload/TaskRole/DefaultPolicy/Resource
+  WebAppFrontendHealthWorkloadTaskDefinitionAD7AAFB4:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Environment:
+            - Name: AWS_DEFAULT_REGION
+              Value:
+                Ref: AWS::Region
+            - Name: NODE_ENV
+              Value: production
+            - Name: PORT
+              Value: "3000"
+            - Name: HOSTNAME
+              Value: 0.0.0.0
+          Essential: true
+          Image:
+            Fn::Sub: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:044e1973c5b6e69ff997a308a6a9803953e4481af27a82bdfaa50aa5ccdb69c2
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: WebAppFrontendHealthWorkloadLogGroupEAAFE27E
+              awslogs-stream-prefix: ecs
+              awslogs-region:
+                Ref: AWS::Region
+          Name: frontend-container
+          PortMappings:
+            - ContainerPort: 3000
+              Protocol: tcp
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - WebAppFrontendHealthWorkloadTaskExecutionRole5D0AB0A6
+          - Arn
+      Family: frontend-task-health
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      RuntimePlatform:
+        CpuArchitecture: ARM64
+        OperatingSystemFamily: LINUX
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      TaskRoleArn:
+        Fn::GetAtt:
+          - WebAppFrontendHealthWorkloadTaskRole1D1A2416
+          - Arn
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendHealthWorkload/TaskDefinition/Resource
+  WebAppFrontendHealthWorkloadFargateService763439C4:
+    Type: AWS::ECS::Service
+    Properties:
+      AvailabilityZoneRebalancing: ENABLED
+      Cluster:
+        Ref: ECSECSClusterD3E7BECE
+      DeploymentConfiguration:
+        Alarms:
+          AlarmNames: []
+          Enable: false
+          Rollback: false
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 1
+      EnableECSManagedTags: false
+      EnableExecuteCommand: false
+      HealthCheckGracePeriodSeconds: 60
+      LaunchType: FARGATE
+      LoadBalancers:
+        - ContainerName: frontend-container
+          ContainerPort: 3000
+          TargetGroupArn:
+            Ref: WebAppALBTargetGrouphealthC1C21EC3
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::GetAtt:
+                - WebAppFrontendHealthWorkloadSecurityGroupA975B1C3
+                - GroupId
+          Subnets:
+            - Ref: VPCVpcPrivateSubnet1Subnet99F2AD5A
+            - Ref: VPCVpcPrivateSubnet2Subnet1BB88465
+      ServiceName: frontend-service-health
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      TaskDefinition:
+        Ref: WebAppFrontendHealthWorkloadTaskDefinitionAD7AAFB4
+    DependsOn:
+      - WebAppALBListenerRulehealthA48346B7
+      - WebAppFrontendHealthWorkloadTaskRoleDefaultPolicyE9DC1742
+      - WebAppFrontendHealthWorkloadTaskRole1D1A2416
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendHealthWorkload/FargateService/Service
+  WebAppFrontendHealthWorkloadFargateServiceTaskCountTarget5BC6646E:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: 4
+      MinCapacity: 1
+      ResourceId:
+        Fn::Join:
+          - ""
+          - - service/
+            - Ref: ECSECSClusterD3E7BECE
+            - /
+            - Fn::GetAtt:
+                - WebAppFrontendHealthWorkloadFargateService763439C4
+                - Name
+      RoleARN:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":iam::"
+            - Ref: AWS::AccountId
+            - :role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+    DependsOn:
+      - WebAppFrontendHealthWorkloadTaskRoleDefaultPolicyE9DC1742
+      - WebAppFrontendHealthWorkloadTaskRole1D1A2416
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendHealthWorkload/FargateService/TaskCount/Target/Resource
+  WebAppFrontendHealthWorkloadFargateServiceTaskCountTargetCpuScaling5EB0A937:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: generativeaiusecasesdevWebAppFrontendHealthWorkloadFargateServiceTaskCountTargetCpuScalingBDBFEB56
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId:
+        Ref: WebAppFrontendHealthWorkloadFargateServiceTaskCountTarget5BC6646E
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        ScaleInCooldown: 300
+        ScaleOutCooldown: 120
+        TargetValue: 70
+    DependsOn:
+      - WebAppFrontendHealthWorkloadTaskRoleDefaultPolicyE9DC1742
+      - WebAppFrontendHealthWorkloadTaskRole1D1A2416
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/FrontendHealthWorkload/FargateService/TaskCount/Target/CpuScaling/Resource
+  WebAppBackendWorkloadSecurityGroup8617E800:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for backend-service Fargate workload
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendWorkload/SecurityGroup/Resource
+  WebAppBackendWorkloadSecurityGroupfromgenerativeaiusecasesdevWebAppALBAlbSecurityGroup17B3763980003E739D7B:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Load balancer to target
+      FromPort: 8000
+      GroupId:
+        Fn::GetAtt:
+          - WebAppBackendWorkloadSecurityGroup8617E800
+          - GroupId
+      IpProtocol: tcp
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - WebAppALBAlbSecurityGroup59798D68
+          - GroupId
+      ToPort: 8000
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendWorkload/SecurityGroup/from generativeaiusecasesdevWebAppALBAlbSecurityGroup17B37639:8000
+  WebAppBackendWorkloadLogGroupBF7A2680:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /ecs/backend-service
+      RetentionInDays: 7
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendWorkload/LogGroup/Resource
+  WebAppBackendWorkloadTaskExecutionRole15A7E9C3:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Description: Task execution role for backend-service
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendWorkload/TaskExecutionRole/Resource
+  WebAppBackendWorkloadTaskExecutionRoleDefaultPolicy7F27615A:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:BatchGetImage
+              - ecr:GetAuthorizationToken
+              - ecr:GetDownloadUrlForLayer
+            Effect: Allow
+            Resource: "*"
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:secretsmanager:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - :secret:generative-ai-use-cases/aurora-credentials*
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - WebAppBackendWorkloadLogGroupBF7A2680
+                - Arn
+          - Action:
+              - secretsmanager:DescribeSecret
+              - secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: AuroraDatabaseSecret44ABC0E4
+        Version: "2012-10-17"
+      PolicyName: WebAppBackendWorkloadTaskExecutionRoleDefaultPolicy7F27615A
+      Roles:
+        - Ref: WebAppBackendWorkloadTaskExecutionRole15A7E9C3
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendWorkload/TaskExecutionRole/DefaultPolicy/Resource
+  WebAppBackendWorkloadTaskRole6B582A47:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Description: Task role for backend-service
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendWorkload/TaskRole/Resource
+  WebAppBackendWorkloadTaskRoleDefaultPolicy90CC26D1:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - bedrock:InvokeModel
+              - bedrock:InvokeModelWithResponseStream
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:bedrock:"
+                    - Ref: AWS::Region
+                    - ::foundation-model/amazon.titan-embed-text-v2:0
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:bedrock:"
+                    - Ref: AWS::Region
+                    - ::foundation-model/anthropic.claude-3-5-sonnet-20240620-v1:0
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:secretsmanager:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - :secret:generative-ai-use-cases/aurora-credentials*
+        Version: "2012-10-17"
+      PolicyName: WebAppBackendWorkloadTaskRoleDefaultPolicy90CC26D1
+      Roles:
+        - Ref: WebAppBackendWorkloadTaskRole6B582A47
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendWorkload/TaskRole/DefaultPolicy/Resource
+  WebAppBackendWorkloadTaskDefinitionB4AC2F75:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Environment:
+            - Name: AWS_DEFAULT_REGION
+              Value:
+                Ref: AWS::Region
+            - Name: DATABASE_HOST
+              Value:
+                Fn::GetAtt:
+                  - AuroraAuroraCluster557FDB85
+                  - Endpoint.Address
+            - Name: DATABASE_PORT
+              Value: "5432"
+            - Name: DATABASE_NAME
+              Value: generative_ai_db
+            - Name: DATABASE_USER
+              Value: postgres
+            - Name: CORS_ALLOWED_ORIGINS
+              Value: http://localhost:3000,https://localhost:3000,https://genu.muew.dev
+          Essential: true
+          Image:
+            Fn::Sub: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:960879121af4251d4fec02db5869e862c38a798692dbc0ad7508ec24994fb376
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: WebAppBackendWorkloadLogGroupBF7A2680
+              awslogs-stream-prefix: ecs
+              awslogs-region:
+                Ref: AWS::Region
+          Name: backend-container
+          PortMappings:
+            - ContainerPort: 8000
+              Protocol: tcp
+          Secrets:
+            - Name: DATABASE_PASSWORD
+              ValueFrom:
+                Fn::Join:
+                  - ""
+                  - - Ref: AuroraDatabaseSecret44ABC0E4
+                    - ":password::"
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - WebAppBackendWorkloadTaskExecutionRole15A7E9C3
+          - Arn
+      Family: backend-task
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      RuntimePlatform:
+        CpuArchitecture: ARM64
+        OperatingSystemFamily: LINUX
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      TaskRoleArn:
+        Fn::GetAtt:
+          - WebAppBackendWorkloadTaskRole6B582A47
+          - Arn
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendWorkload/TaskDefinition/Resource
+  WebAppBackendWorkloadFargateService88680877:
+    Type: AWS::ECS::Service
+    Properties:
+      AvailabilityZoneRebalancing: ENABLED
+      Cluster:
+        Ref: ECSECSClusterD3E7BECE
+      DeploymentConfiguration:
+        Alarms:
+          AlarmNames: []
+          Enable: false
+          Rollback: false
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 1
+      EnableECSManagedTags: false
+      EnableExecuteCommand: false
+      HealthCheckGracePeriodSeconds: 60
+      LaunchType: FARGATE
+      LoadBalancers:
+        - ContainerName: backend-container
+          ContainerPort: 8000
+          TargetGroupArn:
+            Ref: WebAppALBTargetGroupapiD3193C6D
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::GetAtt:
+                - WebAppBackendWorkloadSecurityGroup8617E800
+                - GroupId
+          Subnets:
+            - Ref: VPCVpcPrivateSubnet1Subnet99F2AD5A
+            - Ref: VPCVpcPrivateSubnet2Subnet1BB88465
+      ServiceName: backend-service
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      TaskDefinition:
+        Ref: WebAppBackendWorkloadTaskDefinitionB4AC2F75
+    DependsOn:
+      - WebAppALBListenerRuleapiBBA3F233
+      - WebAppBackendWorkloadTaskRoleDefaultPolicy90CC26D1
+      - WebAppBackendWorkloadTaskRole6B582A47
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendWorkload/FargateService/Service
+  WebAppBackendWorkloadFargateServiceTaskCountTargetE38C800A:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: 4
+      MinCapacity: 1
+      ResourceId:
+        Fn::Join:
+          - ""
+          - - service/
+            - Ref: ECSECSClusterD3E7BECE
+            - /
+            - Fn::GetAtt:
+                - WebAppBackendWorkloadFargateService88680877
+                - Name
+      RoleARN:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":iam::"
+            - Ref: AWS::AccountId
+            - :role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+    DependsOn:
+      - WebAppBackendWorkloadTaskRoleDefaultPolicy90CC26D1
+      - WebAppBackendWorkloadTaskRole6B582A47
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendWorkload/FargateService/TaskCount/Target/Resource
+  WebAppBackendWorkloadFargateServiceTaskCountTargetCpuScalingC2F453C9:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: generativeaiusecasesdevWebAppBackendWorkloadFargateServiceTaskCountTargetCpuScaling11C7A324
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId:
+        Ref: WebAppBackendWorkloadFargateServiceTaskCountTargetE38C800A
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        ScaleInCooldown: 300
+        ScaleOutCooldown: 120
+        TargetValue: 70
+    DependsOn:
+      - WebAppBackendWorkloadTaskRoleDefaultPolicy90CC26D1
+      - WebAppBackendWorkloadTaskRole6B582A47
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendWorkload/FargateService/TaskCount/Target/CpuScaling/Resource
+  WebAppBackendHealthWorkloadSecurityGroupA3EAEF57:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for backend-service-health Fargate workload
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendHealthWorkload/SecurityGroup/Resource
+  WebAppBackendHealthWorkloadSecurityGroupfromgenerativeaiusecasesdevWebAppALBAlbSecurityGroup17B376398000F4EAB8A1:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Load balancer to target
+      FromPort: 8000
+      GroupId:
+        Fn::GetAtt:
+          - WebAppBackendHealthWorkloadSecurityGroupA3EAEF57
+          - GroupId
+      IpProtocol: tcp
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - WebAppALBAlbSecurityGroup59798D68
+          - GroupId
+      ToPort: 8000
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendHealthWorkload/SecurityGroup/from generativeaiusecasesdevWebAppALBAlbSecurityGroup17B37639:8000
+  WebAppBackendHealthWorkloadLogGroup8AFD7EBC:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /ecs/backend-service-health
+      RetentionInDays: 7
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendHealthWorkload/LogGroup/Resource
+  WebAppBackendHealthWorkloadTaskExecutionRole9B8BFC2C:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Description: Task execution role for backend-service-health
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendHealthWorkload/TaskExecutionRole/Resource
+  WebAppBackendHealthWorkloadTaskExecutionRoleDefaultPolicy363FD903:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:BatchGetImage
+              - ecr:GetAuthorizationToken
+              - ecr:GetDownloadUrlForLayer
+            Effect: Allow
+            Resource: "*"
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:secretsmanager:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - :secret:generative-ai-use-cases/aurora-credentials*
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - WebAppBackendHealthWorkloadLogGroup8AFD7EBC
+                - Arn
+          - Action:
+              - secretsmanager:DescribeSecret
+              - secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: AuroraDatabaseSecret44ABC0E4
+        Version: "2012-10-17"
+      PolicyName: WebAppBackendHealthWorkloadTaskExecutionRoleDefaultPolicy363FD903
+      Roles:
+        - Ref: WebAppBackendHealthWorkloadTaskExecutionRole9B8BFC2C
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendHealthWorkload/TaskExecutionRole/DefaultPolicy/Resource
+  WebAppBackendHealthWorkloadTaskRole81B7738E:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Description: Task role for backend-service-health
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendHealthWorkload/TaskRole/Resource
+  WebAppBackendHealthWorkloadTaskRoleDefaultPolicy17DE0741:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - bedrock:InvokeModel
+              - bedrock:InvokeModelWithResponseStream
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:bedrock:"
+                    - Ref: AWS::Region
+                    - ::foundation-model/amazon.titan-embed-text-v2:0
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:bedrock:"
+                    - Ref: AWS::Region
+                    - ::foundation-model/anthropic.claude-3-5-sonnet-20240620-v1:0
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:secretsmanager:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - :secret:generative-ai-use-cases/aurora-credentials*
+        Version: "2012-10-17"
+      PolicyName: WebAppBackendHealthWorkloadTaskRoleDefaultPolicy17DE0741
+      Roles:
+        - Ref: WebAppBackendHealthWorkloadTaskRole81B7738E
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendHealthWorkload/TaskRole/DefaultPolicy/Resource
+  WebAppBackendHealthWorkloadTaskDefinition1D722E87:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Environment:
+            - Name: AWS_DEFAULT_REGION
+              Value:
+                Ref: AWS::Region
+            - Name: DATABASE_HOST
+              Value:
+                Fn::GetAtt:
+                  - AuroraAuroraCluster557FDB85
+                  - Endpoint.Address
+            - Name: DATABASE_PORT
+              Value: "5432"
+            - Name: DATABASE_NAME
+              Value: generative_ai_db
+            - Name: DATABASE_USER
+              Value: postgres
+          Essential: true
+          Image:
+            Fn::Sub: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:960879121af4251d4fec02db5869e862c38a798692dbc0ad7508ec24994fb376
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: WebAppBackendHealthWorkloadLogGroup8AFD7EBC
+              awslogs-stream-prefix: ecs
+              awslogs-region:
+                Ref: AWS::Region
+          Name: backend-container
+          PortMappings:
+            - ContainerPort: 8000
+              Protocol: tcp
+          Secrets:
+            - Name: DATABASE_PASSWORD
+              ValueFrom:
+                Fn::Join:
+                  - ""
+                  - - Ref: AuroraDatabaseSecret44ABC0E4
+                    - ":password::"
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - WebAppBackendHealthWorkloadTaskExecutionRole9B8BFC2C
+          - Arn
+      Family: backend-task-health
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      RuntimePlatform:
+        CpuArchitecture: ARM64
+        OperatingSystemFamily: LINUX
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      TaskRoleArn:
+        Fn::GetAtt:
+          - WebAppBackendHealthWorkloadTaskRole81B7738E
+          - Arn
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendHealthWorkload/TaskDefinition/Resource
+  WebAppBackendHealthWorkloadFargateServiceC4B8497A:
+    Type: AWS::ECS::Service
+    Properties:
+      AvailabilityZoneRebalancing: ENABLED
+      Cluster:
+        Ref: ECSECSClusterD3E7BECE
+      DeploymentConfiguration:
+        Alarms:
+          AlarmNames: []
+          Enable: false
+          Rollback: false
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 1
+      EnableECSManagedTags: false
+      EnableExecuteCommand: false
+      HealthCheckGracePeriodSeconds: 60
+      LaunchType: FARGATE
+      LoadBalancers:
+        - ContainerName: backend-container
+          ContainerPort: 8000
+          TargetGroupArn:
+            Ref: WebAppALBTargetGroupapihealth6528E261
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::GetAtt:
+                - WebAppBackendHealthWorkloadSecurityGroupA3EAEF57
+                - GroupId
+          Subnets:
+            - Ref: VPCVpcPrivateSubnet1Subnet99F2AD5A
+            - Ref: VPCVpcPrivateSubnet2Subnet1BB88465
+      ServiceName: backend-service-health
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      TaskDefinition:
+        Ref: WebAppBackendHealthWorkloadTaskDefinition1D722E87
+    DependsOn:
+      - WebAppALBListenerRuleapihealth872116C8
+      - WebAppBackendHealthWorkloadTaskRoleDefaultPolicy17DE0741
+      - WebAppBackendHealthWorkloadTaskRole81B7738E
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendHealthWorkload/FargateService/Service
+  WebAppBackendHealthWorkloadFargateServiceTaskCountTarget8BEB3F01:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: 4
+      MinCapacity: 1
+      ResourceId:
+        Fn::Join:
+          - ""
+          - - service/
+            - Ref: ECSECSClusterD3E7BECE
+            - /
+            - Fn::GetAtt:
+                - WebAppBackendHealthWorkloadFargateServiceC4B8497A
+                - Name
+      RoleARN:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":iam::"
+            - Ref: AWS::AccountId
+            - :role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+    DependsOn:
+      - WebAppBackendHealthWorkloadTaskRoleDefaultPolicy17DE0741
+      - WebAppBackendHealthWorkloadTaskRole81B7738E
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendHealthWorkload/FargateService/TaskCount/Target/Resource
+  WebAppBackendHealthWorkloadFargateServiceTaskCountTargetCpuScaling913B461E:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: generativeaiusecasesdevWebAppBackendHealthWorkloadFargateServiceTaskCountTargetCpuScalingA174AAF7
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId:
+        Ref: WebAppBackendHealthWorkloadFargateServiceTaskCountTarget8BEB3F01
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        ScaleInCooldown: 300
+        ScaleOutCooldown: 120
+        TargetValue: 70
+    DependsOn:
+      - WebAppBackendHealthWorkloadTaskRoleDefaultPolicy17DE0741
+      - WebAppBackendHealthWorkloadTaskRole81B7738E
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/WebApp/BackendHealthWorkload/FargateService/TaskCount/Target/CpuScaling/Resource
+  BastionBastionSecurityGroupED5052E4:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Bastion Host
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: HTTPS for package updates and AWS API calls
+          FromPort: 443
+          IpProtocol: tcp
+          ToPort: 443
+        - CidrIp: 0.0.0.0/0
+          Description: HTTP for package repository access
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+        - CidrIp:
+            Fn::GetAtt:
+              - VPCVpcA5FA3038
+              - CidrBlock
+          Description: All traffic within VPC for database access
+          IpProtocol: "-1"
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Bastion/BastionSecurityGroup/Resource
+  BastionBastionRole0D06DDB9:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+        Version: "2012-10-17"
+      Description: IAM role for Bastion Host with SSM access
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/AmazonSSMManagedInstanceCore
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Bastion/BastionRole/Resource
+  BastionBastionRoleDefaultPolicyA5E1C57E:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - secretsmanager:GetSecretValue
+              - ssm:GetParameter
+              - ssm:GetParameters
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: BastionBastionRoleDefaultPolicyA5E1C57E
+      Roles:
+        - Ref: BastionBastionRole0D06DDB9
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Bastion/BastionRole/DefaultPolicy/Resource
+  BastionBastionInstanceInstanceProfile7DF9477B:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - Ref: BastionBastionRole0D06DDB9
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Bastion/BastionInstance/InstanceProfile
+  BastionBastionInstance17613F1A:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone: ap-northeast-1a
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            DeleteOnTermination: true
+            Encrypted: true
+            VolumeSize: 30
+            VolumeType: gp3
+      IamInstanceProfile:
+        Ref: BastionBastionInstanceInstanceProfile7DF9477B
+      ImageId:
+        Ref: SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter
+      InstanceType: t3.micro
+      LaunchTemplate:
+        LaunchTemplateName: generativeaiusecasesdevBastionBastionInstanceLaunchTemplate5553917E
+        Version:
+          Fn::GetAtt:
+            - BastionBastionInstanceLaunchTemplate6CE594A8
+            - LatestVersionNumber
+      SecurityGroupIds:
+        - Fn::GetAtt:
+            - BastionBastionSecurityGroupED5052E4
+            - GroupId
+      SubnetId:
+        Ref: VPCVpcPrivateSubnet1Subnet99F2AD5A
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev-bastion-host
+      UserData:
+        Fn::Base64: |-
+          #!/bin/bash
+          #!/bin/bash
+          set -e
+
+          # システムアップデート
+          dnf update -y
+
+          # SSM Agent インストール・起動（最新Amazon Linuxでは標準インストール済み）
+          dnf install -y amazon-ssm-agent
+          systemctl enable amazon-ssm-agent
+          systemctl start amazon-ssm-agent
+
+          # PostgreSQL CLI ツールインストール
+          dnf install -y postgresql15
+
+          # 便利ツールのインストール
+          dnf install -y htop nano curl wget git
+
+          # ログ出力
+          echo "Bastion Host initialization completed at $(date)" >> /var/log/bastion-init.log
+    DependsOn:
+      - BastionBastionRoleDefaultPolicyA5E1C57E
+      - BastionBastionRole0D06DDB9
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Bastion/BastionInstance/Resource
+  BastionBastionInstanceLaunchTemplate6CE594A8:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        MetadataOptions:
+          HttpTokens: required
+      LaunchTemplateName: generativeaiusecasesdevBastionBastionInstanceLaunchTemplate5553917E
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Bastion/BastionInstance/LaunchTemplate
+  RagDocumentsRagDocumentBucket2AF1B294:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      BucketName: gen-ai-rag-docs-generative-ai-use-cases-dev-dev
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - GET
+              - PUT
+              - POST
+            AllowedOrigins:
+              - "*"
+            ExposedHeaders:
+              - ETag
+            MaxAge: 3000
+      LifecycleConfiguration:
+        Rules:
+          - AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 7
+            Id: delete-incomplete-multipart-uploads
+            Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: aws-cdk:auto-delete-objects
+          Value: "true"
+        - Key: Environment
+          Value: dev
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Purpose
+          Value: RAG-Documents
+        - Key: Service
+          Value: Bedrock-Knowledge-Base
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/RagDocuments/RagDocumentBucket/Resource
+  RagDocumentsRagDocumentBucketPolicyBFBCF00F:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: RagDocumentsRagDocumentBucket2AF1B294
+      PolicyDocument:
+        Statement:
+          - Action: s3:*
+            Condition:
+              Bool:
+                aws:SecureTransport: "false"
+            Effect: Deny
+            Principal:
+              AWS: "*"
+            Resource:
+              - Fn::GetAtt:
+                  - RagDocumentsRagDocumentBucket2AF1B294
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - RagDocumentsRagDocumentBucket2AF1B294
+                        - Arn
+                    - /*
+          - Action:
+              - s3:DeleteObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:PutBucketPolicy
+            Effect: Allow
+            Principal:
+              AWS:
+                Fn::GetAtt:
+                  - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+                  - Arn
+            Resource:
+              - Fn::GetAtt:
+                  - RagDocumentsRagDocumentBucket2AF1B294
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - RagDocumentsRagDocumentBucket2AF1B294
+                        - Arn
+                    - /*
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/RagDocuments/RagDocumentBucket/Policy/Resource
+  RagDocumentsRagDocumentBucketAutoDeleteObjectsCustomResource15CD9CF2:
+    Type: Custom::S3AutoDeleteObjects
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F
+          - Arn
+      BucketName:
+        Ref: RagDocumentsRagDocumentBucket2AF1B294
+    DependsOn:
+      - RagDocumentsRagDocumentBucketPolicyBFBCF00F
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/RagDocuments/RagDocumentBucket/AutoDeleteObjectsCustomResource/Default
+  RagDocumentsRagDocumentBucketNotificationsA957F289:
+    Type: Custom::S3BucketNotifications
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691
+          - Arn
+      BucketName:
+        Ref: RagDocumentsRagDocumentBucket2AF1B294
+      NotificationConfiguration:
+        EventBridgeConfiguration: {}
+      Managed: true
+      SkipDestinationValidation: false
+    DependsOn:
+      - RagDocumentsRagDocumentBucketPolicyBFBCF00F
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/RagDocuments/RagDocumentBucket/Notifications/Resource
+  CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+      ManagedPolicyArns:
+        - Fn::Sub: arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role
+  CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}
+        S3Key: faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip
+      Timeout: 900
+      MemorySize: 128
+      Handler: index.handler
+      Role:
+        Fn::GetAtt:
+          - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+          - Arn
+      Runtime: nodejs22.x
+      Description:
+        Fn::Join:
+          - ""
+          - - "Lambda function for auto-deleting objects in "
+            - Ref: RagDocumentsRagDocumentBucket2AF1B294
+            - " S3 bucket."
+    DependsOn:
+      - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler
+      aws:asset:path: asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6
+      aws:asset:property: Code
+  BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/Resource
+  BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: s3:PutBucketNotification
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - RagDocumentsRagDocumentBucket2AF1B294
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36
+      Roles:
+        - Ref: BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/DefaultPolicy/Resource
+  BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: AWS CloudFormation handler for "Custom::S3BucketNotifications" resources (@aws-cdk/aws-s3)
+      Code:
+        ZipFile: |-
+          import boto3  # type: ignore
+          import json
+          import logging
+          import urllib.request
+
+          s3 = boto3.client("s3")
+
+          EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
+          CONFIGURATION_TYPES = ["TopicConfigurations", "QueueConfigurations", "LambdaFunctionConfigurations"]
+
+          def handler(event: dict, context):
+            response_status = "SUCCESS"
+            error_message = ""
+            try:
+              props = event["ResourceProperties"]
+              notification_configuration = props["NotificationConfiguration"]
+              managed = props.get('Managed', 'true').lower() == 'true'
+              skipDestinationValidation = props.get('SkipDestinationValidation', 'false').lower() == 'true'
+              stack_id = event['StackId']
+              old = event.get("OldResourceProperties", {}).get("NotificationConfiguration", {})
+              if managed:
+                config = handle_managed(event["RequestType"], notification_configuration)
+              else:
+                config = handle_unmanaged(props["BucketName"], stack_id, event["RequestType"], notification_configuration, old)
+              s3.put_bucket_notification_configuration(Bucket=props["BucketName"], NotificationConfiguration=config, SkipDestinationValidation=skipDestinationValidation)
+            except Exception as e:
+              logging.exception("Failed to put bucket notification configuration")
+              response_status = "FAILED"
+              error_message = f"Error: {str(e)}. "
+            finally:
+              submit_response(event, context, response_status, error_message)
+
+          def handle_managed(request_type, notification_configuration):
+            if request_type == 'Delete':
+              return {}
+            return notification_configuration
+
+          def handle_unmanaged(bucket, stack_id, request_type, notification_configuration, old):
+            def get_id(n):
+              n['Id'] = ''
+              sorted_notifications = sort_filter_rules(n)
+              strToHash=json.dumps(sorted_notifications, sort_keys=True).replace('"Name": "prefix"', '"Name": "Prefix"').replace('"Name": "suffix"', '"Name": "Suffix"')
+              return f"{stack_id}-{hash(strToHash)}"
+            def with_id(n):
+              n['Id'] = get_id(n)
+              return n
+
+            external_notifications = {}
+            existing_notifications = s3.get_bucket_notification_configuration(Bucket=bucket)
+            for t in CONFIGURATION_TYPES:
+              if request_type == 'Update':
+                  old_incoming_ids = [get_id(n) for n in old.get(t, [])]
+                  external_notifications[t] = [n for n in existing_notifications.get(t, []) if not get_id(n) in old_incoming_ids]      
+              elif request_type == 'Delete':
+                  external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f"{stack_id}-")]
+              elif request_type == 'Create':
+                  external_notifications[t] = [n for n in existing_notifications.get(t, [])]
+            if EVENTBRIDGE_CONFIGURATION in existing_notifications:
+              external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
+
+            if request_type == 'Delete':
+              return external_notifications
+
+            notifications = {}
+            for t in CONFIGURATION_TYPES:
+              external = external_notifications.get(t, [])
+              incoming = [with_id(n) for n in notification_configuration.get(t, [])]
+              notifications[t] = external + incoming
+
+            if EVENTBRIDGE_CONFIGURATION in notification_configuration:
+              notifications[EVENTBRIDGE_CONFIGURATION] = notification_configuration[EVENTBRIDGE_CONFIGURATION]
+            elif EVENTBRIDGE_CONFIGURATION in external_notifications:
+              notifications[EVENTBRIDGE_CONFIGURATION] = external_notifications[EVENTBRIDGE_CONFIGURATION]
+
+            return notifications
+
+          def submit_response(event: dict, context, response_status: str, error_message: str):
+            response_body = json.dumps(
+              {
+                "Status": response_status,
+                "Reason": f"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}",
+                "PhysicalResourceId": event.get("PhysicalResourceId") or event["LogicalResourceId"],
+                "StackId": event["StackId"],
+                "RequestId": event["RequestId"],
+                "LogicalResourceId": event["LogicalResourceId"],
+                "NoEcho": False,
+              }
+            ).encode("utf-8")
+            headers = {"content-type": "", "content-length": str(len(response_body))}
+            try:
+              req = urllib.request.Request(url=event["ResponseURL"], headers=headers, data=response_body, method="PUT")
+              with urllib.request.urlopen(req) as response:
+                print(response.read().decode("utf-8"))
+              print("Status code: " + response.reason)
+            except Exception as e:
+                print("send(..) failed executing request.urlopen(..): " + str(e))
+
+          def sort_filter_rules(json_obj):
+            if not isinstance(json_obj, dict):
+                return json_obj
+            for key, value in json_obj.items():
+                if isinstance(value, dict):
+                    json_obj[key] = sort_filter_rules(value)
+                elif isinstance(value, list):
+                    json_obj[key] = [sort_filter_rules(item) for item in value]
+            if "Filter" in json_obj and "Key" in json_obj["Filter"] and "FilterRules" in json_obj["Filter"]["Key"]:
+                filter_rules = json_obj["Filter"]["Key"]["FilterRules"]
+                sorted_filter_rules = sorted(filter_rules, key=lambda x: x["Name"])
+                json_obj["Filter"]["Key"]["FilterRules"] = sorted_filter_rules
+            return json_obj
+      Handler: index.handler
+      Role:
+        Fn::GetAtt:
+          - BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC
+          - Arn
+      Runtime: python3.13
+      Timeout: 300
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    DependsOn:
+      - BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36
+      - BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Resource
+  BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: Bedrock Knowledge Base用のデータベースユーザー認証情報
+      GenerateSecretString:
+        ExcludeCharacters: " %+~`#$&*()|[]{}:;<>?!'/@\"\\"
+        GenerateStringKey: password
+        IncludeSpace: false
+        PasswordLength: 32
+        SecretStringTemplate: '{"username":"bedrock_user"}'
+      Name: generative-ai-use-cases/bedrock-user-credentials
+      Tags:
+        - Key: Component
+          Value: RAG
+        - Key: Environment
+          Value: dev
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Service
+          Value: Bedrock-Knowledge-Base
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/RdsKnowledgeBaseSetup/BedrockUserSecret/Resource
+  BedrockRagRdsKnowledgeBaseSetupCreateBedrockSchema008B84B3:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        Fn::Join:
+          - ""
+          - - '{"service":"RDSDataService","action":"executeStatement","parameters":{"resourceArn":"arn:'
+            - Ref: AWS::Partition
+            - ":rds:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":cluster:"
+            - Ref: AuroraAuroraCluster557FDB85
+            - '","secretArn":"'
+            - Ref: AuroraDatabaseSecret44ABC0E4
+            - '","database":"generative_ai_db","sql":"CREATE SCHEMA IF NOT EXISTS bedrock_integration;"},"physicalResourceId":{"id":"bedrock-schema-creation"}}'
+      Delete:
+        Fn::Join:
+          - ""
+          - - '{"service":"RDSDataService","action":"executeStatement","parameters":{"resourceArn":"arn:'
+            - Ref: AWS::Partition
+            - ":rds:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":cluster:"
+            - Ref: AuroraAuroraCluster557FDB85
+            - '","secretArn":"'
+            - Ref: AuroraDatabaseSecret44ABC0E4
+            - '","database":"generative_ai_db","sql":"DROP SCHEMA IF EXISTS bedrock_integration CASCADE;"}}'
+      InstallLatestAwsSdk: false
+    DependsOn:
+      - BedrockRagRdsKnowledgeBaseSetupCreateBedrockSchemaCustomResourcePolicyFA9713E6
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/RdsKnowledgeBaseSetup/CreateBedrockSchema/Resource/Default
+  BedrockRagRdsKnowledgeBaseSetupCreateBedrockSchemaCustomResourcePolicyFA9713E6:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - rds-data:BatchExecuteStatement
+              - rds-data:BeginTransaction
+              - rds-data:CommitTransaction
+              - rds-data:ExecuteStatement
+              - rds-data:RollbackTransaction
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":rds:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":cluster:"
+                  - Ref: AuroraAuroraCluster557FDB85
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              - Ref: AuroraDatabaseSecret44ABC0E4
+              - Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+        Version: "2012-10-17"
+      PolicyName: BedrockRagRdsKnowledgeBaseSetupCreateBedrockSchemaCustomResourcePolicyFA9713E6
+      Roles:
+        - Ref: AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/RdsKnowledgeBaseSetup/CreateBedrockSchema/CustomResourcePolicy/Resource
+  BedrockRagRdsKnowledgeBaseSetupEnablePgvectorExtension7B9F4BA9:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        Fn::Join:
+          - ""
+          - - '{"service":"RDSDataService","action":"executeStatement","parameters":{"resourceArn":"arn:'
+            - Ref: AWS::Partition
+            - ":rds:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":cluster:"
+            - Ref: AuroraAuroraCluster557FDB85
+            - '","secretArn":"'
+            - Ref: AuroraDatabaseSecret44ABC0E4
+            - '","database":"generative_ai_db","sql":"CREATE EXTENSION IF NOT EXISTS vector;"},"physicalResourceId":{"id":"pgvector-extension-creation"}}'
+      InstallLatestAwsSdk: false
+    DependsOn:
+      - BedrockRagRdsKnowledgeBaseSetupCreateBedrockSchemaCustomResourcePolicyFA9713E6
+      - BedrockRagRdsKnowledgeBaseSetupCreateBedrockSchema008B84B3
+      - BedrockRagRdsKnowledgeBaseSetupEnablePgvectorExtensionCustomResourcePolicyE0922F9C
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/RdsKnowledgeBaseSetup/EnablePgvectorExtension/Resource/Default
+  BedrockRagRdsKnowledgeBaseSetupEnablePgvectorExtensionCustomResourcePolicyE0922F9C:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - rds-data:BatchExecuteStatement
+              - rds-data:BeginTransaction
+              - rds-data:CommitTransaction
+              - rds-data:ExecuteStatement
+              - rds-data:RollbackTransaction
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":rds:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":cluster:"
+                  - Ref: AuroraAuroraCluster557FDB85
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              - Ref: AuroraDatabaseSecret44ABC0E4
+              - Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+        Version: "2012-10-17"
+      PolicyName: BedrockRagRdsKnowledgeBaseSetupEnablePgvectorExtensionCustomResourcePolicyE0922F9C
+      Roles:
+        - Ref: AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+    DependsOn:
+      - BedrockRagRdsKnowledgeBaseSetupCreateBedrockSchemaCustomResourcePolicyFA9713E6
+      - BedrockRagRdsKnowledgeBaseSetupCreateBedrockSchema008B84B3
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/RdsKnowledgeBaseSetup/EnablePgvectorExtension/CustomResourcePolicy/Resource
+  BedrockRagRdsKnowledgeBaseSetupCreateBedrockTableDA88A73A:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        Fn::Join:
+          - ""
+          - - '{"service":"RDSDataService","action":"executeStatement","parameters":{"resourceArn":"arn:'
+            - Ref: AWS::Partition
+            - ":rds:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":cluster:"
+            - Ref: AuroraAuroraCluster557FDB85
+            - '","secretArn":"'
+            - Ref: AuroraDatabaseSecret44ABC0E4
+            - "\",\"database\":\"generative_ai_db\",\"sql\":\"\\n      CREATE TABLE IF NOT EXISTS bedrock_integration.bedrock_kb (\\n        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\\n        embedding vector(1024) NOT NULL,\\n        chunks TEXT NOT NULL,\\n        metadata JSON DEFAULT '{}',\\n        custom_metadata JSONB DEFAULT '{}'\\n      );\\n    \"},\"physicalResourceId\":{\"id\":\"bedrock-table-creation\"}}"
+      Delete:
+        Fn::Join:
+          - ""
+          - - '{"service":"RDSDataService","action":"executeStatement","parameters":{"resourceArn":"arn:'
+            - Ref: AWS::Partition
+            - ":rds:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":cluster:"
+            - Ref: AuroraAuroraCluster557FDB85
+            - '","secretArn":"'
+            - Ref: AuroraDatabaseSecret44ABC0E4
+            - '","database":"generative_ai_db","sql":"DROP TABLE IF EXISTS bedrock_integration.bedrock_kb;"}}'
+      InstallLatestAwsSdk: false
+    DependsOn:
+      - BedrockRagRdsKnowledgeBaseSetupCreateBedrockTableCustomResourcePolicy19E13529
+      - BedrockRagRdsKnowledgeBaseSetupEnablePgvectorExtensionCustomResourcePolicyE0922F9C
+      - BedrockRagRdsKnowledgeBaseSetupEnablePgvectorExtension7B9F4BA9
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/RdsKnowledgeBaseSetup/CreateBedrockTable/Resource/Default
+  BedrockRagRdsKnowledgeBaseSetupCreateBedrockTableCustomResourcePolicy19E13529:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - rds-data:BatchExecuteStatement
+              - rds-data:BeginTransaction
+              - rds-data:CommitTransaction
+              - rds-data:ExecuteStatement
+              - rds-data:RollbackTransaction
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":rds:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":cluster:"
+                  - Ref: AuroraAuroraCluster557FDB85
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              - Ref: AuroraDatabaseSecret44ABC0E4
+              - Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+        Version: "2012-10-17"
+      PolicyName: BedrockRagRdsKnowledgeBaseSetupCreateBedrockTableCustomResourcePolicy19E13529
+      Roles:
+        - Ref: AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+    DependsOn:
+      - BedrockRagRdsKnowledgeBaseSetupEnablePgvectorExtensionCustomResourcePolicyE0922F9C
+      - BedrockRagRdsKnowledgeBaseSetupEnablePgvectorExtension7B9F4BA9
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/RdsKnowledgeBaseSetup/CreateBedrockTable/CustomResourcePolicy/Resource
+  BedrockRagRdsKnowledgeBaseSetupCreateVectorIndex78549695:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        Fn::Join:
+          - ""
+          - - '{"service":"RDSDataService","action":"executeStatement","parameters":{"resourceArn":"arn:'
+            - Ref: AWS::Partition
+            - ":rds:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":cluster:"
+            - Ref: AuroraAuroraCluster557FDB85
+            - '","secretArn":"'
+            - Ref: AuroraDatabaseSecret44ABC0E4
+            - '","database":"generative_ai_db","sql":"\n      CREATE INDEX IF NOT EXISTS idx_bedrock_kb_embedding_cosine \n      ON bedrock_integration.bedrock_kb \n      USING hnsw (embedding vector_cosine_ops) \n      WITH (ef_construction = 256, m = 16);\n    "},"physicalResourceId":{"id":"bedrock-vector-index-creation"}}'
+      Delete:
+        Fn::Join:
+          - ""
+          - - '{"service":"RDSDataService","action":"executeStatement","parameters":{"resourceArn":"arn:'
+            - Ref: AWS::Partition
+            - ":rds:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":cluster:"
+            - Ref: AuroraAuroraCluster557FDB85
+            - '","secretArn":"'
+            - Ref: AuroraDatabaseSecret44ABC0E4
+            - '","database":"generative_ai_db","sql":"DROP INDEX IF EXISTS bedrock_integration.idx_bedrock_kb_embedding_cosine;"}}'
+      InstallLatestAwsSdk: false
+    DependsOn:
+      - BedrockRagRdsKnowledgeBaseSetupCreateBedrockTableCustomResourcePolicy19E13529
+      - BedrockRagRdsKnowledgeBaseSetupCreateBedrockTableDA88A73A
+      - BedrockRagRdsKnowledgeBaseSetupCreateVectorIndexCustomResourcePolicyB4DA2043
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/RdsKnowledgeBaseSetup/CreateVectorIndex/Resource/Default
+  BedrockRagRdsKnowledgeBaseSetupCreateVectorIndexCustomResourcePolicyB4DA2043:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - rds-data:BatchExecuteStatement
+              - rds-data:BeginTransaction
+              - rds-data:CommitTransaction
+              - rds-data:ExecuteStatement
+              - rds-data:RollbackTransaction
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":rds:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":cluster:"
+                  - Ref: AuroraAuroraCluster557FDB85
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              - Ref: AuroraDatabaseSecret44ABC0E4
+              - Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+        Version: "2012-10-17"
+      PolicyName: BedrockRagRdsKnowledgeBaseSetupCreateVectorIndexCustomResourcePolicyB4DA2043
+      Roles:
+        - Ref: AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+    DependsOn:
+      - BedrockRagRdsKnowledgeBaseSetupCreateBedrockTableCustomResourcePolicy19E13529
+      - BedrockRagRdsKnowledgeBaseSetupCreateBedrockTableDA88A73A
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/RdsKnowledgeBaseSetup/CreateVectorIndex/CustomResourcePolicy/Resource
+  BedrockRagRdsKnowledgeBaseSetupCreateTextIndex47AE4787:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        Fn::Join:
+          - ""
+          - - '{"service":"RDSDataService","action":"executeStatement","parameters":{"resourceArn":"arn:'
+            - Ref: AWS::Partition
+            - ":rds:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":cluster:"
+            - Ref: AuroraAuroraCluster557FDB85
+            - '","secretArn":"'
+            - Ref: AuroraDatabaseSecret44ABC0E4
+            - "\",\"database\":\"generative_ai_db\",\"sql\":\"\\n      CREATE INDEX IF NOT EXISTS idx_bedrock_kb_chunks_gin \\n      ON bedrock_integration.bedrock_kb \\n      USING gin (to_tsvector('simple', chunks));\\n      \\n      CREATE INDEX IF NOT EXISTS idx_bedrock_kb_custom_metadata_gin \\n      ON bedrock_integration.bedrock_kb \\n      USING gin (custom_metadata);\\n    \"},\"physicalResourceId\":{\"id\":\"bedrock-text-index-creation\"}}"
+      Delete:
+        Fn::Join:
+          - ""
+          - - '{"service":"RDSDataService","action":"executeStatement","parameters":{"resourceArn":"arn:'
+            - Ref: AWS::Partition
+            - ":rds:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":cluster:"
+            - Ref: AuroraAuroraCluster557FDB85
+            - '","secretArn":"'
+            - Ref: AuroraDatabaseSecret44ABC0E4
+            - '","database":"generative_ai_db","sql":"\n            DROP INDEX IF EXISTS bedrock_integration.idx_bedrock_kb_chunks_gin;\n            DROP INDEX IF EXISTS bedrock_integration.idx_bedrock_kb_custom_metadata_gin;\n          "}}'
+      InstallLatestAwsSdk: false
+    DependsOn:
+      - BedrockRagRdsKnowledgeBaseSetupCreateTextIndexCustomResourcePolicyD0E14699
+      - BedrockRagRdsKnowledgeBaseSetupCreateVectorIndexCustomResourcePolicyB4DA2043
+      - BedrockRagRdsKnowledgeBaseSetupCreateVectorIndex78549695
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/RdsKnowledgeBaseSetup/CreateTextIndex/Resource/Default
+  BedrockRagRdsKnowledgeBaseSetupCreateTextIndexCustomResourcePolicyD0E14699:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - rds-data:BatchExecuteStatement
+              - rds-data:BeginTransaction
+              - rds-data:CommitTransaction
+              - rds-data:ExecuteStatement
+              - rds-data:RollbackTransaction
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":rds:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":cluster:"
+                  - Ref: AuroraAuroraCluster557FDB85
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              - Ref: AuroraDatabaseSecret44ABC0E4
+              - Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+        Version: "2012-10-17"
+      PolicyName: BedrockRagRdsKnowledgeBaseSetupCreateTextIndexCustomResourcePolicyD0E14699
+      Roles:
+        - Ref: AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+    DependsOn:
+      - BedrockRagRdsKnowledgeBaseSetupCreateVectorIndexCustomResourcePolicyB4DA2043
+      - BedrockRagRdsKnowledgeBaseSetupCreateVectorIndex78549695
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/RdsKnowledgeBaseSetup/CreateTextIndex/CustomResourcePolicy/Resource
+  BedrockRagRdsKnowledgeBaseSetupCreateBedrockUserDDAD4800:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        Fn::Join:
+          - ""
+          - - '{"service":"RDSDataService","action":"executeStatement","parameters":{"resourceArn":"arn:'
+            - Ref: AWS::Partition
+            - ":rds:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":cluster:"
+            - Ref: AuroraAuroraCluster557FDB85
+            - '","secretArn":"'
+            - Ref: AuroraDatabaseSecret44ABC0E4
+            - "\",\"database\":\"generative_ai_db\",\"sql\":\"\\n      DO $$\\n      DECLARE\\n        user_password TEXT;\\n      BEGIN\\n        -- Secrets Managerからパスワードを取得（実際にはCustom Resourceで先に取得してパラメータで渡す）\\n        IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'bedrock_user') THEN\\n          CREATE ROLE bedrock_user WITH LOGIN PASSWORD :password;\\n          GRANT USAGE ON SCHEMA bedrock_integration TO bedrock_user;\\n          GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE bedrock_integration.bedrock_kb TO bedrock_user;\\n        END IF;\\n      END\\n      $$;\\n    \",\"parameters\":[{\"name\":\"password\",\"value\":{\"stringValue\":\"{{resolve:secretsmanager:"
+            - Fn::Join:
+                - "-"
+                - - Fn::Select:
+                      - 0
+                      - Fn::Split:
+                          - "-"
+                          - Fn::Select:
+                              - 6
+                              - Fn::Split:
+                                  - ":"
+                                  - Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+                  - Fn::Select:
+                      - 1
+                      - Fn::Split:
+                          - "-"
+                          - Fn::Select:
+                              - 6
+                              - Fn::Split:
+                                  - ":"
+                                  - Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+                  - Fn::Select:
+                      - 2
+                      - Fn::Split:
+                          - "-"
+                          - Fn::Select:
+                              - 6
+                              - Fn::Split:
+                                  - ":"
+                                  - Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+                  - Fn::Select:
+                      - 3
+                      - Fn::Split:
+                          - "-"
+                          - Fn::Select:
+                              - 6
+                              - Fn::Split:
+                                  - ":"
+                                  - Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+                  - Fn::Select:
+                      - 4
+                      - Fn::Split:
+                          - "-"
+                          - Fn::Select:
+                              - 6
+                              - Fn::Split:
+                                  - ":"
+                                  - Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+                  - Fn::Select:
+                      - 5
+                      - Fn::Split:
+                          - "-"
+                          - Fn::Select:
+                              - 6
+                              - Fn::Split:
+                                  - ":"
+                                  - Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+            - :SecretString:password}}"}}]},"physicalResourceId":{"id":"bedrock-user-creation"}}
+      Delete:
+        Fn::Join:
+          - ""
+          - - '{"service":"RDSDataService","action":"executeStatement","parameters":{"resourceArn":"arn:'
+            - Ref: AWS::Partition
+            - ":rds:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":cluster:"
+            - Ref: AuroraAuroraCluster557FDB85
+            - '","secretArn":"'
+            - Ref: AuroraDatabaseSecret44ABC0E4
+            - '","database":"generative_ai_db","sql":"DROP ROLE IF EXISTS bedrock_user;"}}'
+      InstallLatestAwsSdk: false
+    DependsOn:
+      - BedrockRagRdsKnowledgeBaseSetupCreateBedrockUserCustomResourcePolicy4AD47323
+      - BedrockRagRdsKnowledgeBaseSetupCreateTextIndexCustomResourcePolicyD0E14699
+      - BedrockRagRdsKnowledgeBaseSetupCreateTextIndex47AE4787
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/RdsKnowledgeBaseSetup/CreateBedrockUser/Resource/Default
+  BedrockRagRdsKnowledgeBaseSetupCreateBedrockUserCustomResourcePolicy4AD47323:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - rds-data:BatchExecuteStatement
+              - rds-data:BeginTransaction
+              - rds-data:CommitTransaction
+              - rds-data:ExecuteStatement
+              - rds-data:RollbackTransaction
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":rds:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":cluster:"
+                  - Ref: AuroraAuroraCluster557FDB85
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              - Ref: AuroraDatabaseSecret44ABC0E4
+              - Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+        Version: "2012-10-17"
+      PolicyName: BedrockRagRdsKnowledgeBaseSetupCreateBedrockUserCustomResourcePolicy4AD47323
+      Roles:
+        - Ref: AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+    DependsOn:
+      - BedrockRagRdsKnowledgeBaseSetupCreateTextIndexCustomResourcePolicyD0E14699
+      - BedrockRagRdsKnowledgeBaseSetupCreateTextIndex47AE4787
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/RdsKnowledgeBaseSetup/CreateBedrockUser/CustomResourcePolicy/Resource
+  BedrockRagKnowledgeBaseRoleC83D8203:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: bedrock.amazonaws.com
+        Version: "2012-10-17"
+      Description: IAM role for Bedrock Knowledge Base
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/AmazonBedrockFullAccess
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                Effect: Allow
+                Resource:
+                  - Fn::GetAtt:
+                      - RagDocumentsRagDocumentBucket2AF1B294
+                      - Arn
+                  - Fn::Join:
+                      - ""
+                      - - Fn::GetAtt:
+                            - RagDocumentsRagDocumentBucket2AF1B294
+                            - Arn
+                        - /*
+              - Action:
+                  - rds-data:BatchExecuteStatement
+                  - rds-data:BeginTransaction
+                  - rds-data:CommitTransaction
+                  - rds-data:ExecuteStatement
+                  - rds-data:RollbackTransaction
+                Effect: Allow
+                Resource:
+                  Fn::Join:
+                    - ""
+                    - - "arn:"
+                      - Ref: AWS::Partition
+                      - ":rds:"
+                      - Ref: AWS::Region
+                      - ":"
+                      - Ref: AWS::AccountId
+                      - ":cluster:"
+                      - Ref: AuroraAuroraCluster557FDB85
+              - Action:
+                  - secretsmanager:DescribeSecret
+                  - secretsmanager:GetSecretValue
+                Effect: Allow
+                Resource:
+                  Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+              - Action:
+                  - bedrock:InvokeModel
+                  - bedrock:InvokeModelWithResponseStream
+                Effect: Allow
+                Resource:
+                  Fn::Join:
+                    - ""
+                    - - "arn:aws:bedrock:"
+                      - Ref: AWS::Region
+                      - ::foundation-model/amazon.titan-embed-text-v2:0
+            Version: "2012-10-17"
+          PolicyName: BedrockKnowledgeBasePolicy
+      RoleName: bedrock-kb-role-dev
+      Tags:
+        - Key: Component
+          Value: RAG
+        - Key: Environment
+          Value: dev
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Purpose
+          Value: BedrockKnowledgeBase
+        - Key: Service
+          Value: Bedrock-Knowledge-Base
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/KnowledgeBaseRole/Role/Resource
+  BedrockRagKnowledgeBase0C46C23C:
+    Type: AWS::Bedrock::KnowledgeBase
+    Properties:
+      Description: Generative AI RAG Knowledge Base for dev environment
+      KnowledgeBaseConfiguration:
+        Type: VECTOR
+        VectorKnowledgeBaseConfiguration:
+          EmbeddingModelArn:
+            Fn::Join:
+              - ""
+              - - "arn:aws:bedrock:"
+                - Ref: AWS::Region
+                - ::foundation-model/amazon.titan-embed-text-v2:0
+      Name: generative-ai-rag-kb-dev
+      RoleArn:
+        Fn::GetAtt:
+          - BedrockRagKnowledgeBaseRoleC83D8203
+          - Arn
+      StorageConfiguration:
+        RdsConfiguration:
+          CredentialsSecretArn:
+            Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+          DatabaseName: generative_ai_db
+          FieldMapping:
+            MetadataField: metadata
+            PrimaryKeyField: id
+            TextField: chunks
+            VectorField: embedding
+          ResourceArn:
+            Fn::Join:
+              - ""
+              - - "arn:"
+                - Ref: AWS::Partition
+                - ":rds:"
+                - Ref: AWS::Region
+                - ":"
+                - Ref: AWS::AccountId
+                - ":cluster:"
+                - Ref: AuroraAuroraCluster557FDB85
+          TableName: bedrock_kb
+        Type: RDS
+      Tags:
+        Component: RAG
+        Environment: dev
+        ManagedBy: CDK
+        Name: generative-ai-rag-kb-dev
+        Purpose: RAG
+        Service: Bedrock-Knowledge-Base
+    DependsOn:
+      - BedrockRagRdsKnowledgeBaseSetupCreateBedrockUserCustomResourcePolicy4AD47323
+      - BedrockRagRdsKnowledgeBaseSetupCreateBedrockUserDDAD4800
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/KnowledgeBase/KnowledgeBase
+  BedrockRagS3DataSource1DA41911:
+    Type: AWS::Bedrock::DataSource
+    Properties:
+      DataSourceConfiguration:
+        S3Configuration:
+          BucketArn:
+            Fn::GetAtt:
+              - RagDocumentsRagDocumentBucket2AF1B294
+              - Arn
+          InclusionPrefixes:
+            - documents/
+        Type: S3
+      Description: 文書アップロード用S3データソース
+      KnowledgeBaseId:
+        Fn::GetAtt:
+          - BedrockRagKnowledgeBase0C46C23C
+          - KnowledgeBaseId
+      Name: s3-datasource-dev
+      VectorIngestionConfiguration:
+        ChunkingConfiguration:
+          ChunkingStrategy: FIXED_SIZE
+          FixedSizeChunkingConfiguration:
+            MaxTokens: 512
+            OverlapPercentage: 20
+    DependsOn:
+      - BedrockRagKnowledgeBase0C46C23C
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/BedrockRag/S3DataSource/DataSource
+  AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource
+  AWS679f53fac002430cb0da5b7982bd22872D164C4C:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}
+        S3Key: 34a66902956b031404ef497526f619b900363fe7fd65ff02b1de4c30fe10c034.zip
+      Handler: index.handler
+      Role:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+          - Arn
+      Runtime: nodejs22.x
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      Timeout: 300
+    DependsOn:
+      - AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/AWS679f53fac002430cb0da5b7982bd2287/Resource
+      aws:asset:path: asset.34a66902956b031404ef497526f619b900363fe7fd65ff02b1de4c30fe10c034
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  AWS679f53fac002430cb0da5b7982bd2287LogRetentionCE72797A:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - /aws/lambda/
+            - Ref: AWS679f53fac002430cb0da5b7982bd22872D164C4C
+      RetentionInDays: 7
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/AWS679f53fac002430cb0da5b7982bd2287/LogRetention/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:DeleteRetentionPolicy
+              - logs:PutRetentionPolicy
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB
+      Roles:
+        - Ref: LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs22.x
+      Timeout: 900
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}
+        S3Key: 2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d.zip
+      Role:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+          - Arn
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+    DependsOn:
+      - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB
+      - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource
+      aws:asset:path: asset.2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  StaticIP1EIP8B0AA529:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: AvailabilityZone
+          Value: ap-northeast-1a
+        - Key: Description
+          Value: Static IP for NLB in AZ-A
+        - Key: Environment
+          Value: dev
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev-static-ip-1a
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/StaticIP1/EIP
+  StaticIP2EIP651632B5:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: AvailabilityZone
+          Value: ap-northeast-1c
+        - Key: Description
+          Value: Static IP for NLB in AZ-C
+        - Key: Environment
+          Value: dev
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev-static-ip-1c
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/StaticIP2/EIP
+  NetworkLoadBalancer8E753273:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      LoadBalancerAttributes:
+        - Key: deletion_protection.enabled
+          Value: "false"
+      Name: generative-ai-use-cases-dev-nlb
+      Scheme: internet-facing
+      SubnetMappings:
+        - AllocationId:
+            Fn::GetAtt:
+              - StaticIP1EIP8B0AA529
+              - AllocationId
+          SubnetId:
+            Ref: VPCVpcPublicSubnet1Subnet9F2098CA
+        - AllocationId:
+            Fn::GetAtt:
+              - StaticIP2EIP651632B5
+              - AllocationId
+          SubnetId:
+            Ref: VPCVpcPublicSubnet2SubnetF5DA8EB4
+      Subnets:
+        - Ref: VPCVpcPublicSubnet1Subnet9F2098CA
+        - Ref: VPCVpcPublicSubnet2SubnetF5DA8EB4
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+      Type: network
+    DependsOn:
+      - VPCVpcPublicSubnet1DefaultRouteB186CE4C
+      - VPCVpcPublicSubnet1RouteTableAssociation59CB8E6E
+      - VPCVpcPublicSubnet2DefaultRoute26004178
+      - VPCVpcPublicSubnet2RouteTableAssociation397EA2A2
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/NetworkLoadBalancer/Resource
+  DomainARecordC223EFD6:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: Z06924452U2Z12SVXR7YX
+      Name: genu.muew.dev.
+      ResourceRecords:
+        - Ref: StaticIP1EIP8B0AA529
+        - Ref: StaticIP2EIP651632B5
+      TTL: "300"
+      Type: A
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/DomainARecord/Resource
+  NlbAlbIntegrationTargetGroupDF468CE9:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPort: "443"
+      HealthCheckProtocol: TCP
+      HealthyThresholdCount: 2
+      Name: generative-ai-use-cases-dev-alb-tg
+      Port: 443
+      Protocol: TCP
+      Tags:
+        - Key: ManagedBy
+          Value: CDK
+        - Key: Name
+          Value: generative-ai-use-cases-dev-alb-tg
+        - Key: TargetType
+          Value: alb
+      TargetType: alb
+      Targets:
+        - Id:
+            Ref: WebAppALBApplicationLoadBalancerC3702787
+          Port: 443
+      UnhealthyThresholdCount: 2
+      VpcId:
+        Ref: VPCVpcA5FA3038
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/NlbAlbIntegration/TargetGroup/TargetGroup
+  NlbAlbIntegrationListenerCC73AB22:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - TargetGroupArn:
+            Ref: NlbAlbIntegrationTargetGroupDF468CE9
+          Type: forward
+      LoadBalancerArn:
+        Ref: NetworkLoadBalancer8E753273
+      Port: 443
+      Protocol: TCP
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/NlbAlbIntegration/Listener/Listener
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAA/21UTW/bMAz9Lb2r2ppuhx1Tpx2CFZsRd70WjMy4WmTRkKgEheH/PljyV9qe+N4jRVIU7ZVc3fyQX6/g7K9Vebw2ei/bgkEdBZz9S4tqJdvnRonsYJ/zTORhb7Qqwt4i99qMdhQYn2BvcNZnbe09KQ2syU7BInf6BIxzjq1ldBb5JzCe4W0oOrA1M6jXGi2LQXlu1L0tG9KWh9CJFqiC0/z201FoYkMXQix0AIXvUtxv8978hmULF0e3tnLo/Qf9Pslb6xmswnSbGT9CsOr1CevGAGMnFFVWM8n2r0eXE5k+aMIjyIzG1Ng7ZaQbqkHbZUBSOmGg3pcg20LbyiCTfQhWxfFPIDtMYic01LLNyWgV7zygHaXnHO14pdzRQRvshCu9bNMDTqPe3C2FDTDswWNmgmd0KeCCjEk74VE5ZF+DhQqdbIvIh1n3KJkncBXyYh+mgPeeTqDysl2U+wgzaEBpfssdnXSJbrGqXjyAq6DfYX/c4EFbPU7uvUKWQVt0C204W6A76bQFIywUmP6r6JNkFPo+FTrWB62Acbp+Nmux35l2Ag141soQlHswYJW21Wkl23XTmD5Ek30kKO+iL933gi/jtGe0Q8yIF/401Ol5l/STLLuQVuWC/0Y+kzsuO+iEocrL9pGqKfWEH6naIaNNuwlzFQhMXoHRtpLtPMa+ozjgSyWZJwfqqG1VpHPzkl8InfC3sr0L6phSDSiZ+cwFT+QOPHZij6UjdZRtdrC/LJ0NlhX2rrjkwFBQcHHJb1/Ae2Qv170RqNwobEgd0W1rqHDyyR025DWTe4vZXP/r/H4r2/UOFbkyfp4RFchdJ3boYyGRBc9Uz7QP+9Q1Ln5MH+sWDJW2lVAx7sUNgV6uz/5j2hwc1Dh8VH8CN4E7YalE+c9/Oa2+yRv59eqf1/raBcu6RrlL9j82YCVMfQYAAA==
+    Metadata:
+      aws:cdk:path: generative-ai-use-cases-dev/CDKMetadata/Default
+    Condition: CDKMetadataAvailable
+Parameters:
+  SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64
+  BootstrapVersion:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /cdk-bootstrap/hnb659fds/version
+    Description: Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]
+Outputs:
+  VpcId:
+    Description: VPC ID
+    Value:
+      Ref: VPCVpcA5FA3038
+  UserPoolId:
+    Description: Cognito User Pool ID
+    Value:
+      Ref: AuthUserPool8115E87F
+  UserPoolClientId:
+    Description: Cognito User Pool Client ID
+    Value:
+      Ref: AuthUserPoolClient0AA456E4
+  UserPoolDomainName:
+    Description: Cognito User Pool Domain Name
+    Value:
+      Ref: AuthUserPoolDomain97947401
+  CognitoLoginUrl:
+    Description: Cognito Login URL
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: AuthUserPoolDomain97947401
+          - .auth.
+          - Ref: AWS::Region
+          - .amazoncognito.com/login?client_id=
+          - Ref: AuthUserPoolClient0AA456E4
+          - "&response_type=code&scope=openid+email+profile&redirect_uri=https://genu.muew.dev/oauth2/idpresponse"
+  DatabaseClusterEndpoint:
+    Description: Aurora PostgreSQL Cluster Endpoint
+    Value:
+      Fn::GetAtt:
+        - AuroraAuroraCluster557FDB85
+        - Endpoint.Address
+  LoadBalancerDnsName:
+    Description: Application Load Balancer DNS Name
+    Value:
+      Fn::GetAtt:
+        - WebAppALBApplicationLoadBalancerC3702787
+        - DNSName
+  StaticIPAddress1:
+    Description: "Elastic IP Address 1 (AZ-A: ap-northeast-1a)"
+    Value:
+      Ref: StaticIP1EIP8B0AA529
+  StaticIPAddress2:
+    Description: "Elastic IP Address 2 (AZ-C: ap-northeast-1c)"
+    Value:
+      Ref: StaticIP2EIP651632B5
+  StaticIPAddresses:
+    Description: All Static IP Addresses (for firewall whitelist)
+    Value:
+      Fn::Join:
+        - ""
+        - - Ref: StaticIP1EIP8B0AA529
+          - ", "
+          - Ref: StaticIP2EIP651632B5
+  NetworkLoadBalancerDnsName:
+    Description: Network Load Balancer DNS Name
+    Value:
+      Fn::GetAtt:
+        - NetworkLoadBalancer8E753273
+        - DNSName
+  CertificateArn:
+    Description: ACM Certificate ARN
+    Value:
+      Ref: Certificate4E7ABB08
+  NlbAlbTargetGroupArn:
+    Description: NLB to ALB Target Group ARN
+    Value:
+      Ref: NlbAlbIntegrationTargetGroupDF468CE9
+  NlbListenerArn:
+    Description: NLB Listener ARN (Port 443)
+    Value:
+      Ref: NlbAlbIntegrationListenerCC73AB22
+  BastionInstanceId:
+    Description: Bastion Host Instance ID
+    Value:
+      Ref: BastionBastionInstance17613F1A
+  BastionConnectionCommand:
+    Description: Bastion Host Session Manager Connection Command
+    Value:
+      Fn::Join:
+        - ""
+        - - "aws ssm start-session --target "
+          - Ref: BastionBastionInstance17613F1A
+  DatabaseConnectionString:
+    Description: Database Connection String (from Bastion Host)
+    Value:
+      Fn::Join:
+        - ""
+        - - "psql -h "
+          - Fn::GetAtt:
+              - AuroraAuroraCluster557FDB85
+              - Endpoint.Address
+          - " -p 5432 -U postgres -d generative_ai_db"
+  ApplicationUrl:
+    Description: Application URL (Custom Domain)
+    Value: https://genu.muew.dev/
+  FrontendLogGroupName:
+    Description: Frontend Service CloudWatch Log Group Name
+    Value:
+      Ref: WebAppFrontendWorkloadLogGroup39CE0986
+  FrontendLogsConsoleUrl:
+    Description: Frontend Service CloudWatch Logs Console URL
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: AWS::Region
+          - .console.aws.amazon.com/cloudwatch/home?region=
+          - Ref: AWS::Region
+          - "#logsV2:log-groups/log-group/%24%7BToken%5BTOKEN.1718%5D%7D"
+  BackendLogGroupName:
+    Description: Backend Service CloudWatch Log Group Name
+    Value:
+      Ref: WebAppBackendWorkloadLogGroupBF7A2680
+  BackendLogsConsoleUrl:
+    Description: Backend Service CloudWatch Logs Console URL
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: AWS::Region
+          - .console.aws.amazon.com/cloudwatch/home?region=
+          - Ref: AWS::Region
+          - "#logsV2:log-groups/log-group/%24%7BToken%5BTOKEN.1898%5D%7D"
+  RagDocumentsBucketName:
+    Description: RAG Documents S3 Bucket Name
+    Value:
+      Ref: RagDocumentsRagDocumentBucket2AF1B294
+  BedrockKnowledgeBaseId:
+    Description: Bedrock Knowledge Base ID
+    Value:
+      Fn::GetAtt:
+        - BedrockRagKnowledgeBase0C46C23C
+        - KnowledgeBaseId
+  BedrockKnowledgeBaseArn:
+    Description: Bedrock Knowledge Base ARN
+    Value:
+      Fn::GetAtt:
+        - BedrockRagKnowledgeBase0C46C23C
+        - KnowledgeBaseArn
+  BedrockDataSourceId:
+    Description: Bedrock Knowledge Base Data Source ID
+    Value:
+      Fn::GetAtt:
+        - BedrockRagS3DataSource1DA41911
+        - DataSourceId
+  RagVectorStoreInfo:
+    Description: RAG Vector Store Configuration (Aurora PostgreSQL)
+    Value:
+      Fn::Join:
+        - ""
+        - - |-
+            {
+              "clusterArn": "arn:
+          - Ref: AWS::Partition
+          - ":rds:"
+          - Ref: AWS::Region
+          - ":"
+          - Ref: AWS::AccountId
+          - ":cluster:"
+          - Ref: AuroraAuroraCluster557FDB85
+          - |-
+            ",
+              "databaseName": "generative_ai_db",
+              "tableName": "bedrock_kb",
+              "schemaName": "bedrock_integration",
+              "secretArn": "
+          - Ref: BedrockRagRdsKnowledgeBaseSetupBedrockUserSecretA42BF858
+          - |-
+            "
+            }
+Conditions:
+  CDKMetadataAvailable:
+    Fn::Or:
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - af-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-3
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-south-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-3
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-4
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ca-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ca-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-northwest-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-central-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-south-2
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-3
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - il-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - me-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - me-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - sa-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-1
+      - Fn::Equals:
+          - Ref: AWS::Region
+          - us-west-2
+
+41 feature flags are not configured. Run 'cdk flags --unstable=flags' to learn more.

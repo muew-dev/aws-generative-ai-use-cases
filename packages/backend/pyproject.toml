@@ -1,0 +1,140 @@
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = "AWS Generative AI Use Cases Backend API (Python)"
+authors = ["muew <takeda@muew.dev>"]
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.13.7"
+fastapi = "^0.118.2"
+uvicorn = "^0.37.0"
+pydantic = "^2.12.0"
+prisma = "^0.15.0"
+asyncpg = "^0.30.0"
+python-multipart = "^0.0.20"
+python-dotenv = "^1.1.1"
+boto3 = "^1.40.48"
+httpx = "^0.28.1"
+sentry-sdk = "^2.40.0"
+gunicorn = "^23.0.0"
+pydantic-settings = "^2.11.0"
+pgvector = "^0.4.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.2"
+pytest-asyncio = "^1.2.0"
+pytest-httpx = "^0.35.0"
+mypy = "^1.18.2"
+coverage = "^7.10.7"
+boto3-stubs = "^1.40.48"
+taskipy = "^1.14.1"
+ruff = "^0.14.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+python_functions = "test_* it_*"
+addopts = "-s -vv"
+testpaths = [
+  "tests",
+]
+pythonpath = [
+  "src",
+]
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_reexport = true
+warn_redundant_casts = true
+mypy_path = "src"
+explicit_package_bases = true
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+  "tests/*",
+  "src/generated/*",
+  "src/scripts/*",
+  "src/main.py",  # エントリーポイント
+  "src/migrations/*",
+  "*/conftest.py",
+]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "def __repr__",
+  "if self.debug:",
+  "if settings.DEBUG",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "if 0:",
+  "if __name__ == .__main__.:",
+  "class .*\\bProtocol\\):",
+  "@(abc\\.)?abstractmethod",
+]
+show_missing = true
+skip_covered = false
+precision = 2
+sort = "Cover"
+
+[tool.coverage.html]
+directory = "htmlcov"
+title = "AWS Generative AI Use Cases Backend Coverage Report"
+
+[tool.taskipy.tasks]
+lint = "ruff check src"
+format = "ruff format src"
+type-check = "mypy src"
+test = "PYTHONDONTWRITEBYTECODE=1 coverage run -m pytest tests/ -v && coverage report && coverage html"
+test-file = "PYTHONDONTWRITEBYTECODE=1 pytest tests/integration/message/test_streaming_api_integration.py -v"
+test-file-line = "PYTHONDONTWRITEBYTECODE=1 pytest tests/integration/auth/test_authentication_integration.py::TestALBCognitoAuthentication::test_valid_auth_headers_allow_access -v"
+dev = "uvicorn src.main:app --reload --host 0.0.0.0 --port 8000"
+openapi-generate = "python src/scripts/generate_openapi_json.py"
+prisma-generate = "prisma generate"
+
+[tool.ruff]
+target-version = "py313"
+src = ["src"]
+fix = true
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "UP",   # pyupgrade
+    "N",    # pep8-naming
+    "RUF",  # Ruff-specific rules
+    "S",    # flake8-bandit (security)
+]
+ignore = [
+    "S101",  # Use of assert
+    "S104",  # Possible binding to all interfaces (development)
+    "S105",  # Possible hardcoded password
+    "N815",  # mixedCase variable names (OpenAPI compatibility)
+    "B904",  # Exception handling without from (FastAPI security practice)
+    "E501",  # Exception handling without from (FastAPI security practice)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*" = ["S101"]  # Allow assert in tests
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+

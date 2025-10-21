@@ -1,0 +1,62 @@
+[tool.poetry]
+name = "bedrock-test"
+version = "0.1.0"
+description = "Bedrock Connection Test"
+authors = ["muew <takeda@muew.dev>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13.7"
+boto3 = "^1.40.48"
+pydantic = "^2.12.0"
+python-dotenv = "^1.1.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.2"
+pytest-asyncio = "^1.2.0"
+mypy = "^1.18.2"
+boto3-stubs = "^1.40.48"
+ruff = "^0.14.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_reexport = true
+warn_redundant_casts = true
+
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+fix = true
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "UP",   # pyupgrade
+    "N",    # pep8-naming
+    "RUF",  # Ruff-specific rules
+    "S",    # flake8-bandit (security)
+]
+ignore = [
+    "S101",  # Use of assert
+    "S104",  # Possible binding to all interfaces (development)
+    "S105",  # Possible hardcoded password
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true

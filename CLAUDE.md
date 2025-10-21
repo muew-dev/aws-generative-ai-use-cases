@@ -29,22 +29,27 @@ npm run extension:dev
 npm run test
 
 # Run specific tests
-npm run cdk:test              # CDK tests
-npm run web:test              # Frontend tests
-npm run cdk:test:update-snapshot  # Update CDK snapshots
+npm run cdk:test              # CDK tests (新アーキテクチャ)
+npm run frontend:test         # Frontend tests
+npm run backend:test          # Backend tests
+
+# CDK test variants
+npm run cdk:test -- main-stack.test.ts           # Main Stack tests
+npm run cdk:test -- constructs.test.ts           # Individual Constructs tests
+npm run cdk:test:update-snapshot                 # Update snapshots
 
 # Run linting (includes Prettier and ESLint)
 npm run lint
 
-# Test a single file (from packages/cdk or packages/web)
+# Test a single file (from packages/cdk, packages/frontend, or packages/backend)
 npm test -- path/to/test/file.test.ts
 ```
 
 ### Building and Deployment
 
 ```bash
-# Build web application
-npm run web:build
+# Build frontend application
+npm run frontend:build
 
 # Deploy to AWS (regular)
 npm run cdk:deploy
@@ -64,26 +69,33 @@ npm run cdk:destroy
 ### Monorepo Structure
 
 - Uses npm workspaces
-- Main packages: `cdk`, `web`, `types`, `common`
-- Browser extension as separate module
+- Main packages: `backend`, `frontend`, `cdk`, `types`, `common`
 
-### Frontend (`/packages/web`)
+### Frontend (`/packages/frontend`)
 
-- **Stack**: React 18 + TypeScript + Vite
+- **Stack**: Next.js 15 + React 19 + TypeScript
 - **Styling**: Tailwind CSS with custom components
 - **State**: Zustand for state management, SWR for data fetching
-- **Auth**: AWS Amplify with Cognito
-- **i18n**: Supports Japanese, English, Korean (translations in `/public/locales/`)
-- **Key Libraries**: Novel editor, Tiptap, React Router, Radix UI
+- **Auth**: Cognito統一認証
+- **i18n**: Supports Japanese, English, Korean with i18next
+- **Key Libraries**: React Markdown, Lucide React, Class Variance Authority
 
-### Backend (`/packages/cdk`)
+### Backend (`/packages/backend`)
+
+- **Stack**: Python 3.13 + FastAPI + Uvicorn
+- **ORM**: Prisma (Python)
+- **Database**: PostgreSQL (Aurora Serverless v2)
+- **AI/ML**: Amazon Bedrock (Claude 3.5 Sonnet)
+- **Auth**: Cognito統一認証
+- **Container**: Docker + ECS Fargate
+
+### Infrastructure (`/cdk`)
 
 - **Infrastructure**: AWS CDK v2
-- **Runtime**: Node.js Lambda functions (TypeScript)
-- **Database**: DynamoDB
-- **AI/ML**: Amazon Bedrock, Kendra, Knowledge Base
-- **API**: API Gateway with WebSocket support
-- **Storage**: S3 with CloudFront
+- **Compute**: ECS Fargate (FastAPI + Next.js)
+- **Database**: Aurora PostgreSQL Serverless v2
+- **CDN**: CloudFront + S3
+- **Load Balancer**: Application Load Balancer
 
 ### Key Patterns
 

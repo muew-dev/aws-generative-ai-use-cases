@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  # Python Backend API (FastAPI)
+  backend:
+    build:
+      context: ./packages/backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - '8000:8000'
+    environment:
+      - DATABASE_URL=postgresql://pgladmin:pgladmin@db:5432/notifybot_db
+      - 'MOCK_ALB_HEADERS={"x-amzn-oidc-accesstoken":"dev-access-token","x-amzn-oidc-identity":"dev-user-123"}'
+      - AWS_PROFILE=${AWS_PROFILE}
+      - AWS_REGION=ap-northeast-1
+      - BEDROCK_MODEL_ID=anthropic.claude-3-5-sonnet-20240620-v1:0
+      - ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000,http://localhost:8080,http://localhost:8000
+    volumes:
+      - ./packages/backend:/app
+      - ~/.aws:/root/.aws:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      migration:
+        condition: service_completed_successfully
+    networks:
+      - app-network
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+
+  # Frontend (Next.js)
+  frontend:
+    build:
+      context: ./packages/frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_ENDPOINT=http://backend:8000
+      - NEXT_PUBLIC_SKIP_AUTH=true
+      - NEXT_PUBLIC_DEV_USER_ID=dev-user-123
+      - NEXT_PUBLIC_DEV_USER_EMAIL=dev@example.com
+    volumes:
+      - ./packages/frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: notify_bot_db
+    environment:
+      POSTGRES_USER: pgadmin
+      POSTGRES_PASSWORD: pgadmin
+      POSTGRES_DB: notifybot_db
+    ports:
+      - '5433:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U pgadmin -d notifybot_db']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+
+  # Flyway Migration
+  migration:
+    image: flyway/flyway:latest
+    container_name: flyway
+    command: -configFiles=/flyway/conf/local.conf migrate
+    volumes:
+      - ./db/migration/conf:/flyway/conf
+      - ./db/migration:/flyway/sql
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
+    name: notifybot-network
+    driver: bridge

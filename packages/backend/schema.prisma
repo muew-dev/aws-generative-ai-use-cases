@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-py"
+  interface = "asyncio"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @db.Uuid
+  userId      String   @unique @map("user_id")
+  email       String?
+  displayName String?  @map("display_name")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Relations
+  chats    Chat[]
+  messages Message[]
+
+  @@map("users")
+}
+
+model Chat {
+  id        String   @id @db.Uuid
+  chatId    String   @unique @map("chat_id")
+  userId    String   @map("user_id")
+  title     String?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Relations
+  user     User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  messages Message[]
+
+  @@map("chats")
+}
+
+model Message {
+  id        String   @id @db.Uuid
+  messageId String   @unique @map("message_id")
+  chatId    String   @map("chat_id")
+  userId    String   @map("user_id")
+  role      String   @db.VarChar(20) // 'user', 'assistant', 'system'
+  content   String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Relations
+  chat Chat @relation(fields: [chatId], references: [chatId], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("messages")
+}

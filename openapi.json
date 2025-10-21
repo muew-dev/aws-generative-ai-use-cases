@@ -1,0 +1,9 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AWS Generative AI Use Cases API",
+    "description": "Unified API for AWS Generative AI Use Cases - Chat, Message Management, and AI Streaming",
+    "version": "1.0.0"
+  },
+  "paths": {}
+}
